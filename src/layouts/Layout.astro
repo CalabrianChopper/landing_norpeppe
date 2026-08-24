@@ -1,0 +1,260 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, CALABRIA } from '../data/site';
+import { seo, keywords, faq } from '../data/seo';
+import { prossimi, passati } from '../data/eventi';
+import { viaggiMondo } from '../data/viaggiMondo';
+import { totalePaesi, continenti } from '../data/paesi';
+import { formato } from '../data/viaggi';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Polo cromatico di default della pagina. */
+  pole?: 'mondo' | 'kalabria';
+}
+
+const { title = seo.title, description = seo.description, pole = 'mondo' } = Astro.props;
+
+const urlBase = seo.url.replace(/\/$/, '');
+const canonical = `${urlBase}/`;
+const ogImage = `${urlBase}${seo.ogImage}`;
+
+// ---- Dati strutturati (schema.org) ------------------------------------------
+// Un solo grafo: organizzazione, persona, sito, FAQ e le offerte (viaggi ed
+// escursioni) collegate tra loro con @id. È quello che leggono Google e i
+// motori generativi per capire chi sei e cosa offri, e dove.
+const idOrg = `${urlBase}/#organizzazione`;
+const idPersona = `${urlBase}/#giuseppe-lupis`;
+
+const luogoCalabria = {
+  '@type': 'Place',
+  name: 'Calabria',
+  address: { '@type': 'PostalAddress', addressRegion: 'Calabria', addressCountry: 'IT' },
+  geo: { '@type': 'GeoCoordinates', latitude: CALABRIA.lat, longitude: CALABRIA.lon },
+};
+
+const viaggio = (e: { titolo: string; luogo: string; durata: string; sintesi: string; slug: string }, area: 'Calabria' | 'mondo') => ({
+  '@type': 'TouristTrip',
+  name: e.titolo,
+  description: e.sintesi,
+  url: `${canonical}#${area === 'Calabria' ? 'kalabria' : 'calendario'}`,
+  touristType: area === 'Calabria' ? ['trekking in Calabria', 'viaggi in Calabria'] : ['viaggi di gruppo', 'viaggi di gruppo organizzati'],
+  itinerary: { '@type': 'Place', name: e.luogo },
+  provider: { '@id': idOrg },
+  ...(area === 'Calabria' ? { areaServed: luogoCalabria } : {}),
+});
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['TravelAgency', 'Organization'],
+      '@id': idOrg,
+      name: `${site.brand} ${site.brandSub}`,
+      alternateName: ['Xploring Kalabria', 'NorPeppe'],
+      url: canonical,
+      logo: `${urlBase}/images/logo.png`,
+      image: ogImage,
+      description: seo.description,
+      slogan: site.claim,
+      email: site.email,
+      telephone: site.telefono,
+      founder: { '@id': idPersona },
+      areaServed: [luogoCalabria, { '@type': 'Place', name: 'Mondo' }],
+      knowsAbout: [...keywords, 'escursioni in Calabria', 'viaggi avventura'],
+      sameAs: [site.social.instagram, site.social.facebook, site.social.tiktok],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'prenotazioni',
+        telephone: site.telefono,
+        email: site.email,
+        url: site.social.whatsapp,
+        availableLanguage: 'it',
+      },
+      makesOffer: [
+        {
+          '@type': 'Offer',
+          name: 'Viaggi di gruppo organizzati nel mondo',
+          description: `Viaggi di gruppo in ${formato.gruppo}, ${formato.partenzeAnno}, verso ${totalePaesi} paesi in ${continenti.length} continenti già percorsi da NorPeppe.`,
+          url: `${canonical}#mondo`,
+        },
+        {
+          '@type': 'Offer',
+          name: 'Viaggi in Calabria: trekking, escursioni ed eventi',
+          description: `Trekking in Calabria, canyon, rafting, borghi e serate. ${passati.length} uscite già fatte, ${prossimi.length} in arrivo.`,
+          url: `${canonical}#kalabria`,
+          areaServed: luogoCalabria,
+        },
+      ],
+    },
+    {
+      '@type': 'Person',
+      '@id': idPersona,
+      name: seo.persona.nome,
+      alternateName: seo.persona.alias,
+      jobTitle: seo.persona.ruolo,
+      description:
+        'Calabrese, viaggiatore e storyteller. Organizza viaggi di gruppo nel mondo e il calendario Xploring Kalabria di trekking ed escursioni in Calabria.',
+      image: `${urlBase}/images/giuseppe-portrait.jpg`,
+      url: `${canonical}#chi-sono`,
+      homeLocation: luogoCalabria,
+      worksFor: { '@id': idOrg },
+      sameAs: [site.social.instagram, site.social.facebook, site.social.tiktok],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${urlBase}/#sito`,
+      url: canonical,
+      name: `${site.brand} ${site.brandSub}`,
+      inLanguage: seo.lingua,
+      publisher: { '@id': idOrg },
+      keywords: keywords.join(', '),
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#pagina`,
+      url: canonical,
+      name: title,
+      description,
+      inLanguage: seo.lingua,
+      isPartOf: { '@id': `${urlBase}/#sito` },
+      about: { '@id': idOrg },
+      primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${canonical}#faq`,
+      mainEntity: faq.map((f) => ({
+        '@type': 'Question',
+        name: f.domanda,
+        acceptedAnswer: { '@type': 'Answer', text: f.risposta },
+      })),
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${canonical}#viaggi-in-calabria`,
+      name: 'Viaggi in Calabria: trekking ed escursioni Xploring Kalabria',
+      itemListElement: [...prossimi, ...passati].map((e, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: viaggio(e, 'Calabria'),
+      })),
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${canonical}#viaggi-di-gruppo`,
+      name: 'Viaggi di gruppo organizzati nel mondo',
+      itemListElement: viaggiMondo.map((e, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: viaggio(e, 'mondo'),
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={seo.lingua} class={`pole-${pole}`}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(', ')} />
+    <meta name="author" content={`${seo.persona.nome} (${seo.persona.alias})`} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap.xml" />
+
+    <!-- Geo: l'attività ha un luogo fisico, la Calabria. -->
+    <meta name="geo.region" content={seo.geo.regione} />
+    <meta name="geo.placename" content={seo.geo.luogo} />
+    <meta name="geo.position" content={`${seo.geo.lat};${seo.geo.lon}`} />
+    <meta name="ICBM" content={`${seo.geo.lat}, ${seo.geo.lon}`} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={`${site.brand} ${site.brandSub}`} />
+    <meta property="og:locale" content={seo.locale} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Xploring con NorPeppe: viaggi di gruppo nel mondo e viaggi in Calabria" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Caveat:wght@500;600&family=Space+Mono:wght@400;700&display=swap"
+    />
+    <meta name="theme-color" content="#0a0c0b" />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+
+    <!-- Le animazioni allo scroll partono da opacity:0: senza JS resterebbe tutto invisibile. -->
+    <noscript>
+      <style>
+        .reveal,
+        .reveal-stagger > * {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <a href="#contenuto" class="skip">Vai al contenuto</a>
+    <Header />
+    <main id="contenuto">
+      <slot />
+    </main>
+    <Footer />
+
+    <style>
+      .skip {
+        position: absolute;
+        left: 1rem;
+        top: -4rem;
+        z-index: 100;
+        background: var(--color-accent);
+        color: var(--color-accent-ink);
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        letter-spacing: var(--tracking-label);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        transition: top 0.2s ease;
+      }
+      .skip:focus {
+        top: 1rem;
+      }
+    </style>
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      document
+        .querySelectorAll('.reveal, .reveal-stagger')
+        .forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sito one page: un solo URL. ⚠️ Allinea il dominio a src/data/seo.ts -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.xploringkalabria.it/</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.xploringkalabria.it/images/hero-aurora.jpg</image:loc>
+      <image:title>Xploring con NorPeppe: viaggi di gruppo nel mondo e viaggi in Calabria</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.xploringkalabria.it/images/to-calabria.jpg</image:loc>
+      <image:title>Trekking in Calabria con Xploring Kalabria</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.xploringkalabria.it/images/from-calabria.jpg</image:loc>
+      <image:title>Viaggi di gruppo organizzati nel mondo con NorPeppe</image:title>
+    </image:image>
+  </url>
+</urlset>

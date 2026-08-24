@@ -1,0 +1,283 @@
+---
+import { site } from '../data/site';
+import { formattaData, type Evento } from '../data/eventi';
+
+interface Props {
+  evento: Evento;
+  /** 'grande' per i prossimi (si vendono), 'riga' per i passati (si mostrano). */
+  variante?: 'grande' | 'riga';
+}
+
+const { evento, variante = 'grande' } = Astro.props;
+const data = formattaData(evento.data);
+
+const messaggio = encodeURIComponent(
+  `Ciao NorPeppe! Mi interessa "${evento.titolo}". Mi mandi i dettagli?`
+);
+const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
+---
+
+{variante === 'grande' ? (
+  <article class="card">
+    <div
+      class:list={['foto', { 'senza-foto': !evento.immagine }]}
+      style={evento.immagine ? `background-image:url('${evento.immagine}')` : undefined}
+    >
+      <span class="quando">
+        {data ? (
+          <>
+            <span class="giorno display">{data.giorno}</span>
+            <span class="mese">{data.mese}</span>
+          </>
+        ) : (
+          <span class="attesa">{evento.periodo}</span>
+        )}
+      </span>
+    </div>
+
+    <div class="corpo">
+      <p class="luogo mono">{evento.luogo} · {evento.durata}</p>
+      <h3 class="titolo display">{evento.titolo}</h3>
+      <p class="sintesi">{evento.sintesi}</p>
+
+      <ul class="tag">
+        {evento.tag.map((t) => <li>{t}</li>)}
+      </ul>
+
+      <a class="cta" href={scrivi} target="_blank" rel="noopener noreferrer">
+        Voglio esserci <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </article>
+) : (
+  <article class="riga">
+    <span
+      class:list={['thumb', { 'senza-foto': !evento.immagine }]}
+      style={evento.immagine ? `background-image:url('${evento.immagine}')` : undefined}
+      aria-hidden="true"
+    ></span>
+    <span class="riga-corpo">
+      <h3 class="riga-titolo">{evento.titolo}</h3>
+      <p class="riga-luogo mono">{evento.luogo}</p>
+    </span>
+    <ul class="tag tag-riga">
+      {evento.tag.map((t) => <li>{t}</li>)}
+    </ul>
+  </article>
+)}
+
+<style>
+  /* ---------- variante grande ---------- */
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+  }
+
+  .foto {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Finché non arrivano le foto vere: piastra di marca, non una foto a caso. */
+  .foto.senza-foto,
+  .thumb.senza-foto {
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        rgba(255, 122, 60, 0.05) 0 1px,
+        transparent 1px 9px
+      ),
+      linear-gradient(155deg, rgba(255, 122, 60, 0.14), rgba(255, 122, 60, 0.01) 65%),
+      var(--color-bg-sunk);
+    display: grid;
+    place-items: center;
+  }
+
+  /* Piccolo, quindi nitido: il monogramma nasce a 193px di larghezza. */
+  .foto.senza-foto::before,
+  .thumb.senza-foto::before {
+    content: '';
+    width: 58px;
+    aspect-ratio: 193 / 265;
+    background: url('/images/logo-x.png') center / contain no-repeat;
+    opacity: 0.3;
+  }
+
+  .thumb.senza-foto::before {
+    width: 22px;
+    opacity: 0.45;
+  }
+
+  .foto:not(.senza-foto)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(6, 9, 8, 0.5) 0%, transparent 45%);
+  }
+
+  .quando {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.05;
+    background: rgba(6, 9, 8, 0.82);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    padding: 0.4rem 0.7rem;
+  }
+
+  .giorno {
+    font-size: 1.35rem;
+  }
+
+  .mese {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .attesa {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .corpo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.15rem 1.25rem 1.4rem;
+    flex: 1;
+  }
+
+  .luogo {
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+
+  .titolo {
+    font-size: 1.35rem;
+    line-height: 1.05;
+  }
+
+  .sintesi {
+    color: var(--color-text-muted);
+    font-size: 0.97rem;
+  }
+
+  .tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .tag li {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-dim);
+    padding: 0.2rem 0.55rem;
+  }
+
+  .cta {
+    margin-top: 0.7rem;
+    align-self: flex-start;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-accent-dim);
+    padding-bottom: 0.2rem;
+    transition: border-color 0.25s ease;
+  }
+
+  .cta:hover {
+    border-color: var(--color-accent);
+  }
+
+  /* ---------- variante riga (già fatti) ---------- */
+  .riga {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .thumb {
+    width: 56px;
+    height: 56px;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(0.75) brightness(0.75);
+    transition: filter 0.3s ease;
+  }
+
+  .riga:hover .thumb {
+    filter: grayscale(0) brightness(1);
+  }
+
+  .thumb.senza-foto {
+    filter: none;
+  }
+
+  .riga-titolo {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .riga-luogo {
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
+
+  .tag-riga {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .tag-riga li {
+    color: var(--color-text-faint);
+    border-color: var(--color-border);
+  }
+
+  @media (max-width: 560px) {
+    .riga {
+      grid-template-columns: 48px 1fr;
+    }
+    .thumb {
+      width: 48px;
+      height: 48px;
+    }
+    .tag-riga {
+      grid-column: 2;
+    }
+  }
+</style>

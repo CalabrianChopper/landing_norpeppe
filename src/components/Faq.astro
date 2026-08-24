@@ -1,0 +1,123 @@
+---
+import { faq } from '../data/seo';
+
+// Sezione GEO: domande e risposte brevi e concrete, in HTML semplice.
+// È quello che i motori generativi (e i rich result di Google) citano.
+// Lo schema FAQPage è emesso nel Layout dalla stessa lista.
+---
+
+<section class="section faq" id="domande">
+  <div class="wrap grid">
+    <div class="testa reveal">
+      <p class="eyebrow">Domande frequenti</p>
+      <h2 class="display titolo">Viaggi di gruppo<br />e viaggi in Calabria</h2>
+      <p class="lead">
+        Le cose che mi chiedono più spesso, in poche righe. Se manca la tua,
+        scrivimi.
+      </p>
+    </div>
+
+    <div class="elenco reveal-stagger">
+      {faq.map((f, i) => (
+        <details class="voce" open={i === 0}>
+          <summary>
+            <span class="numero mono">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="domanda">{f.domanda}</h3>
+            <span class="segno" aria-hidden="true">+</span>
+          </summary>
+          <p class="risposta">{f.risposta}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.8fr) minmax(300px, 1.2fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .testa {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .titolo {
+    font-size: clamp(2rem, 4.6vw, 3.2rem);
+    margin-block: 0.4rem 1rem;
+  }
+
+  .elenco {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .voce {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  summary {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.1rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .numero {
+    color: var(--color-accent);
+  }
+
+  .domanda {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--color-text);
+    transition: color 0.2s ease;
+  }
+
+  summary:hover .domanda {
+    color: var(--color-accent);
+  }
+
+  .segno {
+    font-family: var(--font-mono);
+    color: var(--color-text-faint);
+    transition: transform 0.25s ease;
+  }
+
+  .voce[open] .segno {
+    transform: rotate(45deg);
+  }
+
+  .risposta {
+    color: var(--color-text-muted);
+    max-width: 62ch;
+    padding: 0 0 1.4rem 3.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .testa {
+      position: static;
+    }
+    .risposta {
+      padding-left: 0;
+    }
+  }
+</style>

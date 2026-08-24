@@ -1,0 +1,126 @@
+---
+import { site } from '../data/site';
+
+const foto = [
+  { tilt: '-3deg', img: '/images/galleria-1.jpg', alt: 'Viaggi di gruppo nel mondo: paesaggio nordico durante un viaggio con NorPeppe' },
+  { tilt: '2deg', img: '/images/galleria-2.jpg', alt: 'Viaggi di gruppo organizzati: escursione del gruppo in cammino' },
+  { tilt: '-1deg', img: '/images/galleria-3.jpg', alt: 'Trekking in Calabria: cascata raggiunta durante un’uscita di Xploring Kalabria', tall: true },
+  { tilt: '3deg', img: '/images/galleria-4.jpg', alt: 'Viaggio di gruppo: bagno in acque termali' },
+  { tilt: '-2deg', img: '/images/galleria-5.jpg', alt: 'Viaggi in Calabria: vicoli di un borgo calabrese' },
+];
+---
+
+<section class="section galleria" id="galleria">
+  <div class="wrap reveal">
+    <div class="testa">
+      <div>
+        <p class="eyebrow">Galleria dei viaggi</p>
+        <h2 class="display titolo">Come è andata</h2>
+      </div>
+      <p class="nota">Le foto sono tutte roba successa davvero, niente stock.</p>
+    </div>
+
+    <div class="striscia">
+      {foto.map((f) => (
+        <figure class={`foto ${f.tall ? 'tall' : ''}`} style={`--tilt:${f.tilt}`}>
+          <img src={f.img} alt={f.alt} loading="lazy" />
+        </figure>
+      ))}
+    </div>
+
+    <div class="cta">
+      <a
+        class="btn btn-ghost"
+        href={site.social.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Tutte le foto su Instagram <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .galleria {
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .testa {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .titolo {
+    font-size: clamp(2rem, 4.6vw, 3.2rem);
+    margin-top: 0.4rem;
+  }
+
+  .nota {
+    color: var(--color-text-muted);
+    max-width: 32ch;
+  }
+
+  .striscia {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    padding-block: 1rem 2rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .striscia::-webkit-scrollbar {
+    display: none;
+  }
+
+  .foto {
+    flex: 0 0 190px;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    transform: rotate(var(--tilt));
+    transition: transform 0.35s ease;
+    scroll-snap-align: start;
+  }
+
+  .foto img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .foto:hover {
+    transform: rotate(0deg) scale(1.03);
+  }
+
+  .foto.tall {
+    flex-basis: 230px;
+  }
+
+  .foto.tall img {
+    aspect-ratio: 3 / 5;
+  }
+
+  .cta {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .striscia {
+      gap: 1rem;
+    }
+    .foto {
+      flex: 0 0 62vw;
+    }
+    .foto.tall {
+      flex-basis: 68vw;
+    }
+  }
+</style>

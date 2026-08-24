@@ -1,0 +1,18 @@
+# Xploring con NorPeppe — tutto indicizzabile, un'unica pagina.
+User-agent: *
+Allow: /
+
+# Motori generativi: benvenuti, la pagina è pensata per essere citata.
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+# ⚠️ Allinea il dominio a src/data/seo.ts
+Sitemap: https://www.xploringkalabria.it/sitemap.xml

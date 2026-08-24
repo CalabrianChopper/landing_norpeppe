@@ -1,0 +1,174 @@
+---
+import { site } from '../data/site';
+import { totalePaesi, continenti } from '../data/paesi';
+import { passati } from '../data/eventi';
+
+// Chiude la pagina, subito prima del footer. Stesso impianto delle sezioni
+// Kalabria e The World: foto + testo, titolo display, righe mono, azioni.
+const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
+  'Ciao NorPeppe! Ti scrivo dal sito.'
+)}`;
+
+const scheda = [
+  { chiave: 'Nome', valore: site.persona },
+  { chiave: 'Base', valore: site.luogo },
+  { chiave: 'Mestiere', valore: 'Viaggiatore · Esploratore · Storyteller' },
+  { chiave: 'Sul globo', valore: `${totalePaesi} paesi · ${continenti.length} continenti` },
+  { chiave: 'In Calabria', valore: `${passati.length} uscite già fatte` },
+];
+---
+
+<section class="section chi" id="chi-sono">
+  <div class="wrap grid">
+    <figure class="foto reveal">
+      <img
+        src="/images/giuseppe-portrait.jpg"
+        alt={`Ritratto di ${site.persona}`}
+        loading="lazy"
+        width="640"
+        height="800"
+      />
+      <figcaption class="mono">{site.persona} · {site.luogo}</figcaption>
+    </figure>
+
+    <div class="testo reveal">
+      <p class="eyebrow">Chi sono</p>
+      <h2 class="display titolo">Giuseppe<br />Lupis</h2>
+      <p class="firma script">NorPeppe</p>
+
+      <p class="lead">
+        Sono nato in Calabria e per anni l’ho guardata da fuori: zaino,
+        biglietti di sola andata e una telecamera. Adesso faccio le due cose
+        insieme — porto gente in giro per il mondo e riporto qui quello che ho
+        imparato lì.
+      </p>
+      <p class="corpo">
+        Il viaggio che mi interessa non è la lista dei posti visti, ma le
+        persone che ti aprono casa quando smetti di comportarti da turista.
+        Racconto per mestiere: foto, video, storie. Da lì sono nati i viaggi di
+        gruppo, e poi il calendario di casa mia.
+      </p>
+
+      <ul class="punti">
+        {scheda.map((r) => (
+          <li>
+            <span class="punto-chiave mono">{r.chiave}</span>
+            <span class="punto-testo">{r.valore}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="azioni">
+        <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
+          Scrivimi su WhatsApp
+        </a>
+        <a
+          class="link-underline"
+          href={site.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Il resto lo racconto su Instagram <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .chi {
+    background: var(--color-bg-sunk);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.1fr minmax(260px, 0.9fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .foto {
+    margin: 0;
+    order: 2;
+  }
+
+  .foto img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+  }
+
+  .foto figcaption {
+    margin-top: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+  }
+
+  .titolo {
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    margin-top: 0.4rem;
+  }
+
+  .firma {
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    color: var(--color-accent);
+    margin-block: -0.2em 1rem;
+  }
+
+  .corpo {
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+  }
+
+  .punti {
+    list-style: none;
+    margin-block: 1.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .punti li {
+    display: grid;
+    grid-template-columns: minmax(96px, 22%) 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .punto-chiave {
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .punto-testo {
+    font-size: 1.02rem;
+    color: var(--color-text);
+  }
+
+  .azioni {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .foto {
+      max-width: 380px;
+      order: -1;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .punti li {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

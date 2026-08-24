@@ -1,0 +1,687 @@
+---
+import { paesiVisitati, totalePaesi, continenti } from '../data/paesi';
+import { CALABRIA } from '../data/site';
+
+const payload = {
+  visitati: Object.fromEntries(paesiVisitati.map((p) => [p.id, p.nome])),
+  calabria: CALABRIA,
+};
+---
+
+<section class="section globo pole-mondo" id="mappa">
+  <div class="wrap grid">
+    <div class="testo reveal">
+      <p class="eyebrow">La mappa dei miei viaggi</p>
+      <h2 class="display titolo">Dove<br />sono<br />stato</h2>
+      <p class="lead">
+        Ogni paese acceso è un posto in cui ho dormito, mangiato e sbagliato
+        strada almeno una volta. Il punto arancione è casa.
+      </p>
+
+      <dl class="conta">
+        <div>
+          <dt class="mono">Paesi</dt>
+          <dd class="display">{totalePaesi}</dd>
+        </div>
+        <div>
+          <dt class="mono">Continenti</dt>
+          <dd class="display">{continenti.length}</dd>
+        </div>
+        <div class="casa">
+          <dt class="mono">Casa</dt>
+          <dd class="display">1</dd>
+        </div>
+      </dl>
+
+      <div class="azioni">
+        <button class="btn" id="vai-calabria" type="button">Portami in Calabria</button>
+        <a class="link-underline" href="#mondo">Dove andiamo insieme</a>
+      </div>
+    </div>
+
+    <div class="globo-col reveal">
+      <div class="globo-box" id="globo-box">
+        <div class="alone" aria-hidden="true"></div>
+        <canvas
+          id="globo-canvas"
+          role="img"
+          aria-label={`Mappamondo con evidenziati i ${totalePaesi} paesi visitati da NorPeppe e un segnaposto sulla Calabria. Trascina per girarlo, oppure usa le frecce.`}
+        ></canvas>
+
+        <!-- Segnaposto Calabria: il link vero, posizionato sopra al punto disegnato. -->
+        <a class="pin" id="pin-calabria" href="#kalabria" hidden>
+          <span class="pin-label">Xploring Kalabria <span aria-hidden="true">→</span></span>
+          <span class="sr-only">Vai alla sezione Xploring Kalabria</span>
+        </a>
+
+        <p class="etichetta" id="globo-etichetta" aria-hidden="true"></p>
+
+        <noscript>
+          <p class="fallback">
+            Attiva JavaScript per girare il mappamondo, oppure vai diretto a
+            <a href="#kalabria">Xploring Kalabria</a>.
+          </p>
+        </noscript>
+      </div>
+
+      <p class="coord mono" id="globo-coord">Trascina il globo per girarlo</p>
+    </div>
+  </div>
+
+  <!-- Il "tuffo": copre la pagina mentre lo zoom entra in Calabria. -->
+  <div class="tuffo" id="tuffo" aria-hidden="true"></div>
+</section>
+
+<!-- Isola di dati: la lista dei paesi passa dal build al globo senza fetch. -->
+<script is:inline type="application/json" id="globo-dati" set:html={JSON.stringify(payload)} />
+
+<style>
+  .globo {
+    position: relative;
+    background:
+      radial-gradient(90% 70% at 78% 40%, rgba(79, 216, 196, 0.07), transparent 70%),
+      var(--color-bg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 34%) 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .titolo {
+    font-size: clamp(2.6rem, 6vw, 4.75rem);
+    margin-block: 0.4rem 1.1rem;
+  }
+
+  .conta {
+    display: flex;
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    margin-block: 1.9rem;
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .conta dt {
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+
+  .conta dd {
+    font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+    line-height: 1;
+    color: var(--c-mondo);
+  }
+
+  .conta .casa dd {
+    color: var(--c-kalabria);
+  }
+
+  .azioni {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .globo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .globo-box {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    aspect-ratio: 1;
+    /* Il trascinamento orizzontale gira il globo, quello verticale scorre la pagina. */
+    touch-action: pan-y;
+  }
+
+  .alone {
+    position: absolute;
+    inset: 4%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(79, 216, 196, 0.16), transparent 62%);
+    filter: blur(26px);
+    pointer-events: none;
+  }
+
+  #globo-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+  }
+
+  #globo-canvas.is-dragging {
+    cursor: grabbing;
+  }
+
+  .pin {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    z-index: 3;
+  }
+
+  /* Senza questa riga `display: grid` batte l'attributo hidden e il pin resta a video. */
+  .pin[hidden] {
+    display: none;
+  }
+
+  /* L'anello pulsa in CSS: così il canvas può stare fermo e non consumare nulla. */
+  .pin::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--c-kalabria);
+    animation: pulsa 2.2s ease-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes pulsa {
+    0% { transform: scale(0.55); opacity: 0.85; }
+    100% { transform: scale(3.2); opacity: 0; }
+  }
+
+  .pin-label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, -6px) scale(0.94);
+    white-space: nowrap;
+    background: var(--c-kalabria);
+    color: var(--c-kalabria-ink);
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.7rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .pin:hover .pin-label,
+  .pin:focus-visible .pin-label {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1);
+  }
+
+  .etichetta {
+    position: absolute;
+    left: 50%;
+    bottom: 0.5rem;
+    transform: translateX(-50%);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-mondo);
+    background: rgba(6, 9, 8, 0.8);
+    padding: 0.3rem 0.75rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .etichetta.is-on {
+    opacity: 1;
+  }
+
+  .coord {
+    text-align: center;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 2rem;
+  }
+
+  .fallback a {
+    color: var(--c-kalabria);
+    border-bottom: 1px solid currentColor;
+  }
+
+  .tuffo {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.9s ease;
+  }
+
+  /* Durante il tuffo l'opacità la guida il JS frame per frame. */
+  .tuffo.is-tuffo {
+    transition: none;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255, 122, 60, 0.55), transparent 55%),
+      var(--c-kalabria-ink);
+  }
+
+  @media (max-width: 940px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .globo-col {
+      order: -1;
+    }
+    .globo-box {
+      max-width: 460px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pin::before {
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+</style>
+
+<script>
+  type Rot = [number, number];
+
+  const box = document.getElementById('globo-box') as HTMLElement | null;
+  const canvas = document.getElementById('globo-canvas') as HTMLCanvasElement | null;
+  const pin = document.getElementById('pin-calabria') as HTMLAnchorElement | null;
+  const etichetta = document.getElementById('globo-etichetta') as HTMLElement | null;
+  const coord = document.getElementById('globo-coord') as HTMLElement | null;
+  const bottone = document.getElementById('vai-calabria') as HTMLButtonElement | null;
+  const tuffo = document.getElementById('tuffo') as HTMLElement | null;
+  const dati = document.getElementById('globo-dati');
+
+  if (box && canvas && dati) {
+    const { visitati, calabria } = JSON.parse(dati.textContent || '{}') as {
+      visitati: Record<string, string>;
+      calabria: { lon: number; lat: number; label: string };
+    };
+
+    const COLORI = {
+      oceanoIn: '#0d1a18',
+      oceanoOut: '#05100e',
+      terra: '#1b2521',
+      terraBordo: 'rgba(244,243,239,0.10)',
+      visitato: 'rgba(79,216,196,0.28)',
+      visitatoBordo: 'rgba(79,216,196,0.7)',
+      visitatoHover: 'rgba(79,216,196,0.62)',
+      reticolo: 'rgba(244,243,239,0.055)',
+      bordoSfera: 'rgba(79,216,196,0.4)',
+      pin: '#ff7a3c',
+    };
+
+    const menoMoto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let avviato = false;
+
+    const avvia = () =>
+      Promise.all([
+        import('d3-geo'),
+        import('topojson-client'),
+        fetch('/data/countries-110m.json').then((r) => r.json()),
+      ]).then(([d3, topo, mondo]: [any, any, any]) => {
+        const ctx = canvas.getContext('2d')!;
+        const tutte = topo.feature(mondo, mondo.objects.countries).features as any[];
+        // Solo i paesi visitati servono per il puntamento: 32 test invece di 177.
+        const accesi = tutte.filter((f) => visitati[String(f.id)]);
+
+        const projection = d3.geoOrthographic().precision(0.4);
+        const path = d3.geoPath(projection, ctx);
+        const reticolo = d3.geoGraticule10();
+        const sfera = { type: 'Sphere' } as any;
+
+        let lato = 0;
+        let raggio = 0;
+
+        // ---- stato ---------------------------------------------------------
+        // Il globo sta fermo. Si muove solo se lo muovi tu: trascinamento,
+        // frecce, o il volo verso la Calabria.
+        const PARTENZA: Rot = [-15, -25];
+        let ora: Rot = [...PARTENZA] as Rot;
+        let mira: Rot = [...PARTENZA] as Rot;
+        let zoom = 1;
+
+        let trascina = false;
+        let ultimoPuntatore: { x: number; y: number } | null = null;
+        let hover: any = null;
+        let interagito = false;
+        let volo: { da: Rot; a: Rot; t0: number; durata: number; poiTuffo?: boolean } | null = null;
+        let discesa: { t0: number; durata: number } | null = null;
+        let inPartenza = false;
+
+        const CENTRO_CALABRIA: Rot = [-calabria.lon, -calabria.lat];
+        const ZOOM_MAX = 5.5;
+
+        const normalizza = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180;
+        const easeInOut = (k: number) =>
+          k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        const easeIn = (k: number) => k * k * k;
+
+        const misura = () => {
+          const r = box.getBoundingClientRect();
+          lato = Math.max(200, Math.min(r.width, r.height));
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(lato * dpr);
+          canvas.height = Math.round(lato * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          raggio = lato / 2 - 6;
+          richiediFrame();
+        };
+
+        const piazzaPin = () => {
+          if (!pin) return;
+          const centro: [number, number] = [-ora[0], -ora[1]];
+          const distanza = d3.geoDistance([calabria.lon, calabria.lat], centro);
+          const p = distanza < Math.PI / 2 - 0.02 ? projection([calabria.lon, calabria.lat]) : null;
+
+          if (!p) {
+            pin.hidden = true;
+            return;
+          }
+
+          // Verso il bordo del globo il pin si smorza: sta girando via.
+          const forza = Math.max(0, Math.min(1, (Math.PI / 2 - distanza) / 0.45));
+
+          ctx.save();
+          ctx.globalAlpha = forza;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 5.5 * Math.min(zoom, 2.2), 0, Math.PI * 2);
+          ctx.fillStyle = COLORI.pin;
+          ctx.shadowColor = COLORI.pin;
+          ctx.shadowBlur = 14;
+          ctx.fill();
+          ctx.restore();
+
+          pin.hidden = false;
+          pin.style.left = `${(p[0] / lato) * 100}%`;
+          pin.style.top = `${(p[1] / lato) * 100}%`;
+          pin.style.opacity = String(forza);
+        };
+
+        const disegna = () => {
+          ctx.clearRect(0, 0, lato, lato);
+          projection.rotate(ora).scale(raggio * zoom).translate([lato / 2, lato / 2]);
+
+          const g = ctx.createRadialGradient(
+            lato * 0.38, lato * 0.34, raggio * 0.1,
+            lato / 2, lato / 2, raggio * zoom
+          );
+          g.addColorStop(0, COLORI.oceanoIn);
+          g.addColorStop(1, COLORI.oceanoOut);
+          ctx.beginPath();
+          path(sfera);
+          ctx.fillStyle = g;
+          ctx.fill();
+
+          ctx.beginPath();
+          path(reticolo);
+          ctx.strokeStyle = COLORI.reticolo;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+
+          ctx.beginPath();
+          path({ type: 'FeatureCollection', features: tutte } as any);
+          ctx.fillStyle = COLORI.terra;
+          ctx.fill();
+          ctx.strokeStyle = COLORI.terraBordo;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+
+          ctx.beginPath();
+          path({ type: 'FeatureCollection', features: accesi } as any);
+          ctx.fillStyle = COLORI.visitato;
+          ctx.fill();
+          ctx.strokeStyle = COLORI.visitatoBordo;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+
+          if (hover) {
+            ctx.beginPath();
+            path(hover);
+            ctx.fillStyle = COLORI.visitatoHover;
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          path(sfera);
+          ctx.strokeStyle = COLORI.bordoSfera;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          piazzaPin();
+        };
+
+        const aggiornaCoord = () => {
+          if (!coord || !interagito) return;
+          const lon = normalizza(-ora[0]);
+          const lat = -ora[1];
+          coord.textContent =
+            `Centro ${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} ` +
+            `${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'O'}`;
+        };
+
+        // ---- ciclo: gira solo quando c'è qualcosa da muovere ----------------
+        let animando = false;
+
+        const richiediFrame = () => {
+          if (animando) return;
+          animando = true;
+          requestAnimationFrame(passo);
+        };
+
+        function passo(t: number) {
+          let ancora = false;
+
+          if (volo) {
+            const k = Math.min(1, (t - volo.t0) / volo.durata);
+            const e = easeInOut(k);
+            const dLon = normalizza(volo.a[0] - volo.da[0]);
+            ora = [volo.da[0] + dLon * e, volo.da[1] + (volo.a[1] - volo.da[1]) * e];
+            mira = [...ora] as Rot;
+            if (k >= 1) {
+              const poi = volo.poiTuffo;
+              volo = null;
+              if (poi) discesa = { t0: t, durata: 950 };
+            }
+            ancora = true;
+          } else {
+            const dLon = normalizza(mira[0] - ora[0]);
+            const dLat = mira[1] - ora[1];
+            if (Math.abs(dLon) > 0.02 || Math.abs(dLat) > 0.02) {
+              ora = [ora[0] + dLon * 0.35, ora[1] + dLat * 0.35];
+              ancora = true;
+            } else if (ora[0] !== mira[0] || ora[1] !== mira[1]) {
+              ora = [...mira] as Rot;
+            }
+          }
+
+          if (discesa) {
+            const k = Math.min(1, (t - discesa.t0) / discesa.durata);
+            zoom = 1 + easeIn(k) * (ZOOM_MAX - 1);
+            if (tuffo) tuffo.style.opacity = String(Math.max(0, (k - 0.45) / 0.55));
+            ancora = true;
+            if (k >= 1) {
+              discesa = null;
+              animando = false;
+              atterra();
+              return;
+            }
+          }
+
+          disegna();
+          aggiornaCoord();
+
+          if (ancora || trascina) requestAnimationFrame(passo);
+          else animando = false;
+        }
+
+        // ---- interazione ----------------------------------------------------
+        const puntaDa = (e: PointerEvent) => {
+          const r = canvas.getBoundingClientRect();
+          return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+        };
+
+        const cercaPaese = (px: number, py: number) => {
+          // Fuori dal disco non c'è niente da cercare.
+          if (Math.hypot(px - 0.5, py - 0.5) * lato > raggio * zoom) return null;
+          const p = projection.invert?.([px * lato, py * lato]);
+          if (!p) return null;
+          return accesi.find((f: any) => d3.geoContains(f, p)) || null;
+        };
+
+        canvas.addEventListener('pointerdown', (e) => {
+          if (inPartenza) return;
+          trascina = true;
+          interagito = true;
+          canvas.classList.add('is-dragging');
+          canvas.setPointerCapture(e.pointerId);
+          ultimoPuntatore = puntaDa(e);
+          richiediFrame();
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+          if (inPartenza) return;
+          const { x, y } = puntaDa(e);
+
+          if (trascina && ultimoPuntatore) {
+            mira = [
+              mira[0] + (x - ultimoPuntatore.x) * 220,
+              Math.max(-80, Math.min(80, mira[1] - (y - ultimoPuntatore.y) * 180)),
+            ];
+            ultimoPuntatore = { x, y };
+            richiediFrame();
+            return;
+          }
+
+          // Senza trascinare il globo non si muove: si illumina solo il paese sotto al cursore.
+          const trovato = cercaPaese(x, y);
+          if (trovato !== hover) {
+            hover = trovato;
+            if (trovato && etichetta) {
+              etichetta.textContent = visitati[String(trovato.id)] || '';
+              etichetta.classList.add('is-on');
+            } else {
+              etichetta?.classList.remove('is-on');
+            }
+            richiediFrame();
+          }
+        });
+
+        const finePresa = () => {
+          if (!trascina) return;
+          trascina = false;
+          ultimoPuntatore = null;
+          canvas.classList.remove('is-dragging');
+        };
+        canvas.addEventListener('pointerup', finePresa);
+        canvas.addEventListener('pointercancel', finePresa);
+
+        canvas.addEventListener('pointerleave', () => {
+          finePresa();
+          if (hover) {
+            hover = null;
+            etichetta?.classList.remove('is-on');
+            richiediFrame();
+          }
+        });
+
+        // Da tastiera il globo si guida con le frecce.
+        canvas.tabIndex = 0;
+        canvas.addEventListener('keydown', (e) => {
+          if (inPartenza) return;
+          const passoTasto = 12;
+          if (e.key === 'ArrowLeft') mira = [mira[0] + passoTasto, mira[1]];
+          else if (e.key === 'ArrowRight') mira = [mira[0] - passoTasto, mira[1]];
+          else if (e.key === 'ArrowUp') mira = [mira[0], Math.min(80, mira[1] + passoTasto)];
+          else if (e.key === 'ArrowDown') mira = [mira[0], Math.max(-80, mira[1] - passoTasto)];
+          else return;
+          e.preventDefault();
+          interagito = true;
+          volo = null;
+          richiediFrame();
+        });
+
+        // ---- il viaggio verso la Calabria ------------------------------------
+        // Punta la Calabria, ci si tuffa dentro, e la pagina cambia.
+        const partiPerLaCalabria = () => {
+          if (inPartenza) return;
+          if (menoMoto) {
+            document.getElementById('kalabria')?.scrollIntoView({ block: 'start' });
+            return;
+          }
+          inPartenza = true;
+          if (bottone) bottone.disabled = true;
+          trascina = false;
+          hover = null;
+          etichetta?.classList.remove('is-on');
+          tuffo?.classList.add('is-tuffo');
+          box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          volo = { da: [...ora] as Rot, a: CENTRO_CALABRIA, t0: performance.now(), durata: 1000, poiTuffo: true };
+          richiediFrame();
+        };
+
+        // A schermo coperto si salta alla sezione, poi lo schermo si riapre
+        // e il globo torna com'era: è una one page, non si cambia pagina.
+        function atterra() {
+          const sezione = document.getElementById('kalabria');
+          if (tuffo) tuffo.style.opacity = '1';
+          sezione?.scrollIntoView({ behavior: 'instant' as ScrollBehavior, block: 'start' });
+          window.setTimeout(() => {
+            tuffo?.classList.remove('is-tuffo');
+            if (tuffo) tuffo.style.opacity = '0';
+            zoom = 1;
+            inPartenza = false;
+            if (bottone) bottone.disabled = false;
+            richiediFrame();
+          }, 250);
+        }
+
+        bottone?.addEventListener('click', partiPerLaCalabria);
+        pin?.addEventListener('click', (e) => {
+          e.preventDefault();
+          partiPerLaCalabria();
+        });
+
+        misura();
+        new ResizeObserver(misura).observe(box);
+      });
+
+    const vedetta = new IntersectionObserver(
+      (voci) => {
+        if (voci.some((v) => v.isIntersecting) && !avviato) {
+          avviato = true;
+          vedetta.disconnect();
+          avvia().catch(() => {
+            if (coord) coord.textContent = 'Mappamondo non disponibile';
+          });
+        }
+      },
+      { rootMargin: '300px' }
+    );
+    vedetta.observe(box);
+  }
+</script>
