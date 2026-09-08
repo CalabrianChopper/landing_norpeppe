@@ -1,9 +1,7 @@
 ---
-import EventoCard from './EventoCard.astro';
 import { prossimi, passati, percheKalabria } from '../data/eventi';
 import { site } from '../data/site';
 
-const inVetrina = prossimi.slice(0, 3);
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   'Ciao NorPeppe! Vorrei essere avvisato sui prossimi eventi in Calabria.'
 )}`;
@@ -36,7 +34,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
           <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
             Fammi sapere le date
           </a>
-          <a class="link-underline" href="#mondo">E se invece vuoi partire lontano</a>
+          <a class="link-underline" href="#calendario-kalabria">Guarda le prossime uscite</a>
         </div>
       </div>
 
@@ -51,27 +49,13 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
         </figcaption>
       </figure>
     </div>
-
-    <div class="testa reveal">
-      <p class="eyebrow">Le prossime uscite</p>
-      <h3 class="display sottotitolo">Trekking ed escursioni in Calabria in arrivo</h3>
-    </div>
-
-    <div class="griglia reveal-stagger">
-      {inVetrina.map((e) => <EventoCard evento={e} />)}
-    </div>
-
-    <div class="coda reveal">
-      <a class="btn" href={scrivi} target="_blank" rel="noopener noreferrer">Voglio esserci alla prossima</a>
-      <a class="link-underline" href="#calendario">Oppure guarda le partenze nel mondo</a>
-    </div>
   </div>
 </section>
 
 <style>
   .kal {
     background:
-      radial-gradient(80% 60% at 10% 0%, rgba(255, 122, 60, 0.08), transparent 70%),
+      radial-gradient(80% 60% at 10% 0%, rgba(210, 113, 43, 0.13), transparent 70%),
       var(--color-bg);
     border-top: 1px solid var(--color-accent-dim);
   }
@@ -81,7 +65,6 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     grid-template-columns: 1.1fr minmax(260px, 0.9fr);
     gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
   .foto {
@@ -98,13 +81,13 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   .foto figcaption {
     margin-top: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     color: var(--color-accent);
   }
 
   .titolo {
-    font-size: clamp(2.4rem, 6vw, 4.2rem);
-    margin-block: 0.4rem 1rem;
+    font-size: clamp(1.75rem, 3.6vw, 2.8rem);
+    margin-block: 0.5rem 1rem;
   }
 
   .punti {
@@ -115,7 +98,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
 
   .punti li {
     display: grid;
-    grid-template-columns: minmax(96px, 22%) 1fr;
+    grid-template-columns: minmax(130px, 27%) 1fr;
     gap: 1rem;
     align-items: baseline;
     padding: 0.75rem 0;
@@ -128,7 +111,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   }
 
   .punto-testo {
-    font-size: 1.02rem;
+    font-size: 0.97rem;
     color: var(--color-text);
   }
 
@@ -137,29 +120,6 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     align-items: center;
     gap: 1.75rem;
     flex-wrap: wrap;
-  }
-
-  .testa {
-    margin-bottom: 1.5rem;
-  }
-
-  .sottotitolo {
-    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-    margin-top: 0.3rem;
-  }
-
-  .griglia {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 1.25rem;
-  }
-
-  .coda {
-    display: flex;
-    align-items: center;
-    gap: 1.75rem;
-    flex-wrap: wrap;
-    margin-top: 2rem;
   }
 
   @media (max-width: 900px) {

@@ -8,8 +8,9 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
 ---
 
 <section class="hero" id="home">
+  <div class="foto-fondo" aria-hidden="true"></div>
   <div class="aurora" aria-hidden="true"></div>
-  <div class="vignette" aria-hidden="true"></div>
+  <div class="velo" aria-hidden="true"></div>
 
   <div class="stage">
     <img class="mark" src="/images/logo-x.png" alt="Logo Xploring Kalabria" width="193" height="265" />
@@ -63,9 +64,18 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     justify-content: center;
     padding: 7rem var(--pad-inline) 4.5rem;
     overflow: hidden;
-    background:
-      linear-gradient(180deg, rgba(5, 8, 7, 0.55) 0%, rgba(6, 10, 9, 0.72) 60%, var(--color-bg) 100%),
-      url('/images/hero-aurora.jpg') center/cover no-repeat;
+    background: var(--color-bg);
+  }
+
+  /* La foto notturna resta, ma velata: sulla carta panna diventa una filigrana
+     verde-oliva, non un fondale scuro. */
+  .foto-fondo {
+    position: absolute;
+    inset: 0;
+    background: url('/images/hero-aurora.jpg') center / cover no-repeat;
+    filter: grayscale(0.45) sepia(0.6) brightness(1.55) contrast(0.66);
+    opacity: 0.32;
+    pointer-events: none;
   }
 
   .aurora {
@@ -74,20 +84,23 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     background: linear-gradient(
       120deg,
       transparent 20%,
-      rgba(79, 216, 196, 0.4) 45%,
-      rgba(120, 235, 180, 0.22) 60%,
+      rgba(110, 122, 58, 0.3) 45%,
+      rgba(210, 113, 43, 0.16) 60%,
       transparent 80%
     );
     filter: blur(48px);
     animation: drift 16s ease-in-out infinite alternate;
-    mix-blend-mode: screen;
+    mix-blend-mode: multiply;
     pointer-events: none;
   }
 
-  .vignette {
+  /* Dissolvenza verso la carta: in basso la sezione deve finire in panna piena. */
+  .velo {
     position: absolute;
     inset: 0;
-    background: radial-gradient(120% 80% at 50% 40%, transparent 40%, rgba(4, 6, 5, 0.75) 100%);
+    background:
+      radial-gradient(115% 80% at 50% 38%, rgba(243, 231, 206, 0.5) 30%, rgba(243, 231, 206, 0.86) 100%),
+      linear-gradient(180deg, transparent 40%, rgba(243, 231, 206, 0.9) 78%, var(--color-bg) 100%);
     pointer-events: none;
   }
 
@@ -107,11 +120,12 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     text-align: center;
   }
 
+  /* Il monogramma nasce bianco: qui va riportato all'inchiostro. */
   .mark {
     width: clamp(52px, 6vw, 74px);
     height: auto;
-    opacity: 0.92;
-    filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.6));
+    filter: brightness(0) saturate(100%);
+    opacity: 0.86;
     animation: markIn 1s ease both;
   }
 
@@ -123,29 +137,27 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   }
 
   .wordmark {
-    font-size: clamp(3rem, 11vw, 7.5rem);
-    letter-spacing: 0.1em;
-    /* Anton è già stretto: l'aria tra le lettere fa il resto. */
-    text-indent: 0.1em;
-    line-height: 0.9;
-    text-shadow: 0 6px 40px rgba(0, 0, 0, 0.65);
+    font-size: clamp(2.1rem, 7vw, 5rem);
+    /* Alfa Slab One riempie già: niente aria in più fra le lettere. */
+    letter-spacing: 0.01em;
+    text-indent: 0.01em;
+    line-height: 1;
+    color: var(--color-text);
     animation: markIn 1s 0.1s ease both;
   }
 
   .sub {
-    font-size: clamp(1.4rem, 3.4vw, 2.2rem);
-    color: var(--c-mondo);
+    font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+    color: var(--c-kalabria-deep);
     margin-top: -0.1em;
-    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
     animation: markIn 1s 0.2s ease both;
   }
 
   .claim {
     margin-top: 1.1rem;
-    font-size: clamp(1.05rem, 2vw, 1.35rem);
-    color: var(--color-text);
+    font-size: clamp(0.98rem, 1.6vw, 1.15rem);
+    color: var(--color-text-muted);
     letter-spacing: 0.02em;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.75);
     animation: markIn 1s 0.3s ease both;
   }
 
@@ -170,11 +182,13 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     flex-direction: column;
     gap: 0.55rem;
     padding: clamp(1.2rem, 2.5vw, 1.75rem);
-    background: rgba(6, 9, 8, 0.62);
+    background: rgba(251, 244, 227, 0.78);
     backdrop-filter: blur(8px);
     border: 1px solid var(--color-accent-dim);
+    box-shadow: var(--shadow-soft);
     overflow: hidden;
-    transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+    transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   /* Il colore del polo entra dal basso: è la porta che si apre. */
@@ -183,7 +197,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     position: absolute;
     inset: auto 0 0 0;
     height: 2px;
-    background: var(--color-accent);
+    background: var(--color-accent-bright);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s ease;
@@ -192,7 +206,8 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   .door:hover,
   .door:focus-visible {
     border-color: var(--color-accent);
-    background: rgba(8, 12, 10, 0.78);
+    background: rgba(251, 244, 227, 0.95);
+    box-shadow: var(--shadow-lift);
     transform: translateY(-3px);
   }
 
@@ -203,24 +218,24 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
 
   .door-meta {
     color: var(--color-accent);
-    opacity: 0.85;
   }
 
   .door-title {
-    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
-    line-height: 0.95;
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+    line-height: 1.02;
+    color: var(--color-text);
   }
 
   .door-desc {
     color: var(--color-text-muted);
-    font-size: 0.98rem;
+    font-size: 0.93rem;
     max-width: 34ch;
   }
 
   .door-cta {
     margin-top: 0.35rem;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--color-accent);

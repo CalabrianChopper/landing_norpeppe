@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site, CALABRIA } from '../data/site';
 import { seo, keywords, faq } from '../data/seo';
-import { prossimi, passati } from '../data/eventi';
+import { prossimi, passati, urlEvento, type Evento } from '../data/eventi';
 import { viaggiMondo } from '../data/viaggiMondo';
 import { totalePaesi, continenti } from '../data/paesi';
 import { formato } from '../data/viaggi';
@@ -14,13 +14,31 @@ interface Props {
   description?: string;
   /** Polo cromatico di default della pagina. */
   pole?: 'mondo' | 'kalabria';
+  /** Percorso della pagina a partire dalla radice, es. '/kalabria/tiriolo/'. */
+  path?: string;
+  /** Immagine per Open Graph, se diversa da quella di default. */
+  immagine?: string;
+  /**
+   * Nodi schema.org specifici della pagina. Organizzazione, persona e sito
+   * ci sono sempre; questi si aggiungono. Se non passi niente valgono quelli
+   * della home (pagina, FAQ e i due elenchi di viaggi).
+   */
+  nodi?: unknown[];
 }
 
-const { title = seo.title, description = seo.description, pole = 'mondo' } = Astro.props;
+const {
+  title = seo.title,
+  description = seo.description,
+  pole = 'mondo',
+  path = '/',
+  immagine,
+  nodi,
+} = Astro.props;
 
 const urlBase = seo.url.replace(/\/$/, '');
-const canonical = `${urlBase}/`;
-const ogImage = `${urlBase}${seo.ogImage}`;
+const home = `${urlBase}/`;
+const canonical = `${urlBase}${path}`;
+const ogImage = `${urlBase}${immagine ?? seo.ogImage}`;
 
 // ---- Dati strutturati (schema.org) ------------------------------------------
 // Un solo grafo: organizzazione, persona, sito, FAQ e le offerte (viaggi ed
@@ -36,26 +54,31 @@ const luogoCalabria = {
   geo: { '@type': 'GeoCoordinates', latitude: CALABRIA.lat, longitude: CALABRIA.lon },
 };
 
-const viaggio = (e: { titolo: string; luogo: string; durata: string; sintesi: string; slug: string }, area: 'Calabria' | 'mondo') => ({
+// Le uscite calabresi con una pagina propria puntano lì: è l'indirizzo che
+// vogliamo far indicizzare. Le altre restano ancorate alla sezione.
+const viaggio = (e: Evento, area: 'Calabria' | 'mondo') => {
+  const pagina = area === 'Calabria' ? urlEvento(e) : undefined;
+  const ancora = area === 'Calabria' ? 'calendario-kalabria' : 'calendario';
+  return {
   '@type': 'TouristTrip',
   name: e.titolo,
   description: e.sintesi,
-  url: `${canonical}#${area === 'Calabria' ? 'kalabria' : 'calendario'}`,
+  url: pagina ? `${urlBase}${pagina}` : `${home}#${ancora}`,
   touristType: area === 'Calabria' ? ['trekking in Calabria', 'viaggi in Calabria'] : ['viaggi di gruppo', 'viaggi di gruppo organizzati'],
   itinerary: { '@type': 'Place', name: e.luogo },
   provider: { '@id': idOrg },
   ...(area === 'Calabria' ? { areaServed: luogoCalabria } : {}),
-});
+  };
+};
 
-const schema = {
-  '@context': 'https://schema.org',
-  '@graph': [
+// Nodi sempre presenti: chi siamo, chi sono io, che sito è questo.
+const nodiSempre = [
     {
       '@type': ['TravelAgency', 'Organization'],
       '@id': idOrg,
       name: `${site.brand} ${site.brandSub}`,
       alternateName: ['Xploring Kalabria', 'NorPeppe'],
-      url: canonical,
+      url: home,
       logo: `${urlBase}/images/logo.png`,
       image: ogImage,
       description: seo.description,
@@ -79,13 +102,13 @@ const schema = {
           '@type': 'Offer',
           name: 'Viaggi di gruppo organizzati nel mondo',
           description: `Viaggi di gruppo in ${formato.gruppo}, ${formato.partenzeAnno}, verso ${totalePaesi} paesi in ${continenti.length} continenti già percorsi da NorPeppe.`,
-          url: `${canonical}#mondo`,
+          url: `${home}#mondo`,
         },
         {
           '@type': 'Offer',
           name: 'Viaggi in Calabria: trekking, escursioni ed eventi',
           description: `Trekking in Calabria, canyon, rafting, borghi e serate. ${passati.length} uscite già fatte, ${prossimi.length} in arrivo.`,
-          url: `${canonical}#kalabria`,
+          url: `${home}#kalabria`,
           areaServed: luogoCalabria,
         },
       ],
@@ -99,7 +122,7 @@ const schema = {
       description:
         'Calabrese, viaggiatore e storyteller. Organizza viaggi di gruppo nel mondo e il calendario Xploring Kalabria di trekking ed escursioni in Calabria.',
       image: `${urlBase}/images/giuseppe-portrait.jpg`,
-      url: `${canonical}#chi-sono`,
+      url: home,
       homeLocation: luogoCalabria,
       worksFor: { '@id': idOrg },
       sameAs: [site.social.instagram, site.social.facebook, site.social.tiktok],
@@ -107,23 +130,29 @@ const schema = {
     {
       '@type': 'WebSite',
       '@id': `${urlBase}/#sito`,
-      url: canonical,
+      url: home,
       name: `${site.brand} ${site.brandSub}`,
       inLanguage: seo.lingua,
       publisher: { '@id': idOrg },
       keywords: keywords.join(', '),
     },
-    {
-      '@type': 'WebPage',
-      '@id': `${canonical}#pagina`,
-      url: canonical,
-      name: title,
-      description,
-      inLanguage: seo.lingua,
-      isPartOf: { '@id': `${urlBase}/#sito` },
-      about: { '@id': idOrg },
-      primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
-    },
+];
+
+// La pagina vera e propria, uguale per tutte.
+const nodoPagina = {
+  '@type': 'WebPage',
+  '@id': `${canonical}#pagina`,
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: seo.lingua,
+  isPartOf: { '@id': `${urlBase}/#sito` },
+  about: { '@id': idOrg },
+  primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
+};
+
+// Quello che sta solo sulla home: FAQ e i due elenchi di viaggi.
+const nodiHome = [
     {
       '@type': 'FAQPage',
       '@id': `${canonical}#faq`,
@@ -153,7 +182,11 @@ const schema = {
         item: viaggio(e, 'mondo'),
       })),
     },
-  ],
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [...nodiSempre, nodoPagina, ...(nodi ?? nodiHome)],
 };
 ---
 
@@ -195,9 +228,9 @@ const schema = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Caveat:wght@500;600&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Archivo:ital,wdth,wght@0,125,400..700;1,125,400..700&display=swap"
     />
-    <meta name="theme-color" content="#0a0c0b" />
+    <meta name="theme-color" content="#F3E7CE" />
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 
@@ -232,7 +265,7 @@ const schema = {
         font-weight: 600;
         letter-spacing: var(--tracking-label);
         text-transform: uppercase;
-        font-size: 0.8rem;
+        font-size: 0.74rem;
         transition: top 0.2s ease;
       }
       .skip:focus {

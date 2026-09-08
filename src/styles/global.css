@@ -1,60 +1,95 @@
 /* ==========================================================================
    Xploring con NorPeppe — sistema di base
-   Due poli: il Mondo (freddo, aurora, teal) e la Kalabria (caldo, sole, ambra).
-   Ogni sezione dichiara il suo polo con .pole-mondo / .pole-kalabria e tutto
-   quello che sta dentro (bottoni, eyebrow, bordi, glow) si adegua da solo.
+   Modalità chiara su carta panna. Due poli: il Mondo (oliva) e la Kalabria
+   (arancio). Ogni sezione dichiara il suo polo con .pole-mondo / .pole-kalabria
+   e tutto quello che sta dentro (bottoni, eyebrow, bordi, filetti) si adegua
+   da solo.
+
+   Palette di marca
+     Panna       #F3E7CE   Inchiostro  #241C15
+     Arancio     #D2712B   Oliva       #6E7A3A
+   Su panna l'arancio e l'oliva pieni non reggono il testo piccolo: per scrivere
+   si usa la variante "profonda" (-deep), il pieno resta per campiture, filetti
+   e segni grafici.
    ========================================================================== */
 
 :root {
-  /* Fondali */
-  --color-bg: #0a0c0b;
-  --color-bg-raised: #121513;
-  --color-bg-sunk: #060807;
+  /* Fondali — tre gradazioni della stessa carta */
+  --color-bg: #f3e7ce;
+  --color-bg-raised: #fbf4e3;
+  --color-bg-sunk: #e8d8b6;
 
-  /* Polo MONDO */
-  --c-mondo: #4fd8c4;
-  --c-mondo-dim: #2f6f65;
-  --c-mondo-ink: #04120f;
+  /* Polo MONDO — oliva */
+  --c-mondo: #6e7a3a;
+  --c-mondo-deep: #56612c;
+  --c-mondo-dim: #b7b68b;
+  --c-mondo-soft: #e3ddc0;
+  --c-mondo-ink: #f6f0e0;
 
-  /* Polo KALABRIA */
-  --c-kalabria: #ff7a3c;
-  --c-kalabria-dim: #7d3d1f;
-  --c-kalabria-ink: #1a0a03;
+  /* Polo KALABRIA — arancio */
+  --c-kalabria: #d2712b;
+  --c-kalabria-deep: #a24e17;
+  --c-kalabria-dim: #e4b285;
+  --c-kalabria-soft: #f6ddc2;
+  --c-kalabria-ink: #fdf6e8;
 
-  /* Accento attivo — è questo che le sezioni riscrivono */
-  --color-accent: var(--c-mondo);
+  /* Accento attivo — è questo che le sezioni riscrivono.
+     --color-accent scrive e borda, --color-accent-bright campisce. */
+  --color-accent: var(--c-mondo-deep);
+  --color-accent-bright: var(--c-mondo);
   --color-accent-dim: var(--c-mondo-dim);
+  --color-accent-soft: var(--c-mondo-soft);
   --color-accent-ink: var(--c-mondo-ink);
 
   /* Testo */
-  --color-text: #f4f3ef;
-  --color-text-muted: #a8aca9;
-  --color-text-faint: #858b88;
-  --color-border: rgba(244, 243, 239, 0.14);
-  --color-border-strong: rgba(244, 243, 239, 0.28);
+  --color-text: #241c15;
+  --color-text-muted: #5f5245;
+  --color-text-faint: #6f6152;
+  --color-border: rgba(36, 28, 21, 0.15);
+  --color-border-strong: rgba(36, 28, 21, 0.32);
 
-  /* Tipografia */
-  --font-display: 'Anton', 'Arial Narrow', sans-serif;
-  --font-script: 'Caveat', cursive;
-  --font-body: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, 'Courier New', monospace;
+  /* Rilievo: sulla carta la profondità la fa l'ombra, non il fondo scuro. */
+  --shadow-soft: 0 1px 2px rgba(36, 28, 21, 0.05), 0 8px 24px rgba(36, 28, 21, 0.07);
+  --shadow-lift: 0 2px 4px rgba(36, 28, 21, 0.06), 0 16px 36px rgba(36, 28, 21, 0.12);
 
-  --tracking-label: 0.18em;
+  /* Tipografia — due sole voci.
+     Titoli: Alfa Slab One, slab pesante da manifesto di viaggio.
+     Tutto il resto: Sinar Grotesk Expanded. Essendo a licenza commerciale
+     (Tokotype) qui non è caricato: al suo posto arriva Archivo in larghezza
+     125 (Expanded), che è il grottesco più vicino su Google Fonts. Appena i
+     file con licenza web sono in public/fonts, basta aggiungere le @font-face:
+     il nome è già primo nello stack e subentra da solo.
+     Le vecchie variabili -script e -mono restano come alias dei ruoli
+     (firma e dati), così i componenti non cambiano. */
+  --font-display: 'Alfa Slab One', 'Rockwell', 'Bookman Old Style', Georgia, serif;
+  --font-body: 'Sinar Grotesk Expanded', 'Archivo', 'Archivo Expanded',
+    'Segoe UI', system-ui, sans-serif;
+  --font-script: var(--font-body);
+  --font-mono: var(--font-body);
+
+  /* L'espanso è già largo di suo: la spaziatura delle etichette cala. */
+  --tracking-label: 0.1em;
 
   /* Ritmo verticale */
   --pad-section: clamp(3.5rem, 8vw, 7rem);
   --pad-inline: clamp(1.25rem, 5vw, 5rem);
+
+  color-scheme: light;
 }
 
 .pole-mondo {
-  --color-accent: var(--c-mondo);
+  --color-accent: var(--c-mondo-deep);
+  --color-accent-bright: var(--c-mondo);
   --color-accent-dim: var(--c-mondo-dim);
+  --color-accent-soft: var(--c-mondo-soft);
   --color-accent-ink: var(--c-mondo-ink);
 }
 
 .pole-kalabria {
-  --color-accent: var(--c-kalabria);
+  --color-accent: var(--c-kalabria-deep);
+  --color-accent-bright: var(--c-kalabria);
   --color-accent-dim: var(--c-kalabria-dim);
+  --color-accent-soft: var(--c-kalabria-soft);
   --color-accent-ink: var(--c-kalabria-ink);
 }
 
@@ -67,14 +102,17 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  background: var(--color-bg);
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.5;
+  /* Archivo serve la larghezza Expanded solo se la si chiede. */
+  font-stretch: expanded;
+  font-size: 16px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -94,28 +132,35 @@ a {
 .display {
   font-family: var(--font-display);
   text-transform: uppercase;
-  line-height: 0.92;
-  letter-spacing: 0.01em;
+  /* Alfa Slab One ha un occhio grande e grazie pesanti: vuole più aria in
+     verticale e nessuna spaziatura in più fra le lettere. */
+  line-height: 0.98;
+  letter-spacing: -0.005em;
   font-weight: 400;
 }
 
+/* La firma: senza il corsivo manoscritto resta il corsivo del grottesco. */
 .script {
   font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 500;
   text-transform: none;
+  letter-spacing: -0.01em;
 }
 
 /* Dati, coordinate, indici: la voce da taccuino di viaggio. */
 .mono {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   color: var(--color-text-faint);
 }
 
 .eyebrow {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.76rem;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--color-accent);
@@ -123,7 +168,7 @@ a {
 
 .lead {
   color: var(--color-text-muted);
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
   max-width: 46ch;
 }
 
@@ -137,13 +182,14 @@ a {
   color: var(--color-accent);
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  padding: 0.85em 1.6em;
+  padding: 0.95em 1.7em;
   background: transparent;
   cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .btn:hover {
@@ -154,10 +200,12 @@ a {
 .btn-solid {
   background: var(--color-accent);
   color: var(--color-accent-ink);
+  box-shadow: var(--shadow-soft);
 }
 
 .btn-solid:hover {
-  filter: brightness(1.12);
+  filter: brightness(1.1);
+  box-shadow: var(--shadow-lift);
 }
 
 .btn-ghost {
@@ -174,7 +222,7 @@ a {
 .link-underline {
   display: inline-block;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--color-accent);

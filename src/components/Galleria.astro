@@ -57,8 +57,8 @@ const foto = [
   }
 
   .titolo {
-    font-size: clamp(2rem, 4.6vw, 3.2rem);
-    margin-top: 0.4rem;
+    font-size: clamp(1.5rem, 3vw, 2.3rem);
+    margin-top: 0.5rem;
   }
 
   .nota {
@@ -80,12 +80,16 @@ const foto = [
     display: none;
   }
 
+  /* Stampe sparse sul tavolo: cornice di carta e ombra corta. */
   .foto {
     flex: 0 0 190px;
     margin: 0;
+    padding: 0.45rem;
+    background: var(--color-bg-raised);
     border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-soft);
     transform: rotate(var(--tilt));
-    transition: transform 0.35s ease;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
     scroll-snap-align: start;
   }
 
@@ -97,6 +101,7 @@ const foto = [
 
   .foto:hover {
     transform: rotate(0deg) scale(1.03);
+    box-shadow: var(--shadow-lift);
   }
 
   .foto.tall {

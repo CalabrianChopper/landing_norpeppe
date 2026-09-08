@@ -79,7 +79,7 @@ const payload = {
   .globo {
     position: relative;
     background:
-      radial-gradient(90% 70% at 78% 40%, rgba(79, 216, 196, 0.07), transparent 70%),
+      radial-gradient(90% 70% at 78% 40%, rgba(110, 122, 58, 0.1), transparent 70%),
       var(--color-bg);
     border-top: 1px solid var(--color-border);
   }
@@ -92,7 +92,7 @@ const payload = {
   }
 
   .titolo {
-    font-size: clamp(2.6rem, 6vw, 4.75rem);
+    font-size: clamp(1.8rem, 3.8vw, 3rem);
     margin-block: 0.4rem 1.1rem;
   }
 
@@ -111,13 +111,13 @@ const payload = {
   }
 
   .conta dd {
-    font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
     line-height: 1;
-    color: var(--c-mondo);
+    color: var(--c-mondo-deep);
   }
 
   .conta .casa dd {
-    color: var(--c-kalabria);
+    color: var(--c-kalabria-deep);
   }
 
   .azioni {
@@ -147,7 +147,7 @@ const payload = {
     position: absolute;
     inset: 4%;
     border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%, rgba(79, 216, 196, 0.16), transparent 62%);
+    background: radial-gradient(circle at 50% 50%, rgba(110, 122, 58, 0.22), transparent 62%);
     filter: blur(26px);
     pointer-events: none;
   }
@@ -190,7 +190,7 @@ const payload = {
     height: 14px;
     margin: -7px 0 0 -7px;
     border-radius: 50%;
-    border: 1.5px solid var(--c-kalabria);
+    border: 1.5px solid var(--c-kalabria-deep);
     animation: pulsa 2.2s ease-out infinite;
     pointer-events: none;
   }
@@ -206,11 +206,11 @@ const payload = {
     left: 50%;
     transform: translate(-50%, -6px) scale(0.94);
     white-space: nowrap;
-    background: var(--c-kalabria);
+    background: var(--c-kalabria-deep);
     color: var(--c-kalabria-ink);
     font-weight: 700;
-    font-size: 0.74rem;
-    letter-spacing: 0.1em;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.4rem 0.7rem;
     opacity: 0;
@@ -231,11 +231,11 @@ const payload = {
     transform: translateX(-50%);
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--c-mondo);
-    background: rgba(6, 9, 8, 0.8);
+    color: var(--c-mondo-ink);
+    background: var(--c-mondo-deep);
     padding: 0.3rem 0.75rem;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -248,7 +248,7 @@ const payload = {
 
   .coord {
     text-align: center;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -263,7 +263,7 @@ const payload = {
   }
 
   .fallback a {
-    color: var(--c-kalabria);
+    color: var(--c-kalabria-deep);
     border-bottom: 1px solid currentColor;
   }
 
@@ -280,8 +280,8 @@ const payload = {
   .tuffo.is-tuffo {
     transition: none;
     background:
-      radial-gradient(circle at 50% 50%, rgba(255, 122, 60, 0.55), transparent 55%),
-      var(--c-kalabria-ink);
+      radial-gradient(circle at 50% 50%, rgba(210, 113, 43, 0.6), transparent 55%),
+      var(--c-kalabria-soft);
   }
 
   @media (max-width: 940px) {
@@ -323,16 +323,17 @@ const payload = {
     };
 
     const COLORI = {
-      oceanoIn: '#0d1a18',
-      oceanoOut: '#05100e',
-      terra: '#1b2521',
-      terraBordo: 'rgba(244,243,239,0.10)',
-      visitato: 'rgba(79,216,196,0.28)',
-      visitatoBordo: 'rgba(79,216,196,0.7)',
-      visitatoHover: 'rgba(79,216,196,0.62)',
-      reticolo: 'rgba(244,243,239,0.055)',
-      bordoSfera: 'rgba(79,216,196,0.4)',
-      pin: '#ff7a3c',
+      // Mappa da carta: oceano panna scurita, terre chiare, paesi visitati oliva.
+      oceanoIn: '#e4d9be',
+      oceanoOut: '#cfc0a0',
+      terra: '#f7f0de',
+      terraBordo: 'rgba(36,28,21,0.18)',
+      visitato: 'rgba(110,122,58,0.45)',
+      visitatoBordo: 'rgba(86,97,44,0.9)',
+      visitatoHover: 'rgba(110,122,58,0.7)',
+      reticolo: 'rgba(36,28,21,0.10)',
+      bordoSfera: 'rgba(86,97,44,0.5)',
+      pin: '#d2712b',
     };
 
     const menoMoto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

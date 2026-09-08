@@ -74,13 +74,13 @@ const social = [
     <div class="panel scelte">
       <p class="eyebrow">Da dove vuoi cominciare</p>
 
-      <a class="scelta pole-mondo" href="#mondo">
+      <a class="scelta pole-mondo" href="/#mondo">
         <span class="scelta-titolo display">Parto nel mondo</span>
         <span class="scelta-nota">Viaggi di gruppo, piccoli, con me dentro</span>
         <span class="freccia" aria-hidden="true">→</span>
       </a>
 
-      <a class="scelta pole-kalabria" href="#kalabria">
+      <a class="scelta pole-kalabria" href="/#kalabria">
         <span class="scelta-titolo display">Resto in Calabria</span>
         <span class="scelta-nota">Eventi ed escursioni tutto l’anno</span>
         <span class="freccia" aria-hidden="true">→</span>
@@ -111,7 +111,7 @@ const social = [
 <style>
   .footer {
     background: var(--color-bg-raised);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border-strong);
   }
 
   .split {
@@ -124,19 +124,19 @@ const social = [
   }
 
   .contatti {
-    background: linear-gradient(160deg, #16201d 0%, #0b100e 100%);
+    background: linear-gradient(160deg, var(--c-mondo-soft) 0%, #f2ebd6 100%);
   }
 
   .scelte {
-    background: linear-gradient(200deg, #1d150f 0%, #0d0a07 100%);
+    background: linear-gradient(200deg, var(--c-kalabria-soft) 0%, #f8ecd7 100%);
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
   }
 
   .titolo {
-    font-size: clamp(1.8rem, 4vw, 2.75rem);
-    margin-block: 0.35rem 1rem;
+    font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+    margin-block: 0.45rem 1rem;
   }
 
   .corpo {
@@ -160,7 +160,7 @@ const social = [
   }
 
   .dettagli a:hover {
-    color: var(--c-mondo);
+    color: var(--c-mondo-deep);
   }
 
   .socials {
@@ -171,7 +171,7 @@ const social = [
   .social-link {
     width: 34px;
     height: 34px;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-border-strong);
     border-radius: 50%;
     display: grid;
     place-items: center;
@@ -187,8 +187,8 @@ const social = [
 
   .social-link:hover {
     color: var(--c-mondo-ink);
-    background-color: var(--c-mondo);
-    border-color: var(--c-mondo);
+    background-color: var(--c-mondo-deep);
+    border-color: var(--c-mondo-deep);
     transform: translateY(-3px);
   }
 
@@ -199,25 +199,28 @@ const social = [
     align-items: center;
     gap: 0.25rem 1rem;
     padding: 1.1rem 1.25rem;
+    background: rgba(251, 244, 227, 0.55);
     border: 1px solid var(--color-accent-dim);
-    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
   .scelta:hover {
     border-color: var(--color-accent);
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-raised);
+    box-shadow: var(--shadow-soft);
     transform: translateX(4px);
   }
 
   .scelta-titolo {
-    font-size: 1.5rem;
-    line-height: 1;
+    font-size: 1.15rem;
+    line-height: 1.05;
   }
 
   .scelta-nota {
     grid-column: 1;
     color: var(--color-text-muted);
-    font-size: 0.92rem;
+    font-size: 0.87rem;
   }
 
   .freccia {
@@ -238,7 +241,7 @@ const social = [
     gap: 1rem;
     flex-wrap: wrap;
     padding: 1rem clamp(1.25rem, 5vw, 3rem);
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     color: var(--color-text-faint);
     border-top: 1px solid var(--color-border);
   }

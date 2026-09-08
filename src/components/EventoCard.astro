@@ -6,19 +6,25 @@ interface Props {
   evento: Evento;
   /** 'grande' per i prossimi (si vendono), 'riga' per i passati (si mostrano). */
   variante?: 'grande' | 'riga';
+  /**
+   * Pagina dell'uscita. Se c'è, tutta la scheda porta lì; se manca, la scheda
+   * apre WhatsApp col messaggio già scritto.
+   */
+  href?: string;
 }
 
-const { evento, variante = 'grande' } = Astro.props;
+const { evento, variante = 'grande', href } = Astro.props;
 const data = formattaData(evento.data);
 
 const messaggio = encodeURIComponent(
   `Ciao NorPeppe! Mi interessa "${evento.titolo}". Mi mandi i dettagli?`
 );
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
+const destinazione = href ?? scrivi;
 ---
 
 {variante === 'grande' ? (
-  <article class="card">
+  <article class:list={['card', { 'card-link': !!href }]}>
     <div
       class:list={['foto', { 'senza-foto': !evento.immagine }]}
       style={evento.immagine ? `background-image:url('${evento.immagine}')` : undefined}
@@ -44,8 +50,13 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
         {evento.tag.map((t) => <li>{t}</li>)}
       </ul>
 
-      <a class="cta" href={scrivi} target="_blank" rel="noopener noreferrer">
-        Voglio esserci <span aria-hidden="true">→</span>
+      <a
+        class="cta"
+        href={destinazione}
+        target={href ? undefined : '_blank'}
+        rel={href ? undefined : 'noopener noreferrer'}
+      >
+        {href ? 'Scopri l’uscita' : 'Voglio esserci'} <span aria-hidden="true">→</span>
       </a>
     </div>
   </article>
@@ -73,12 +84,30 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
     flex-direction: column;
     background: var(--color-bg-raised);
     border: 1px solid var(--color-border);
-    transition: border-color 0.3s ease, transform 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .card:hover {
     border-color: var(--color-accent);
+    box-shadow: var(--shadow-lift);
     transform: translateY(-4px);
+  }
+
+  /* Quando l'uscita ha una pagina, cliccabile è tutta la scheda: il link della
+     coda si allarga fin sopra il bordo, senza annidare ancore nel titolo. */
+  .card-link {
+    position: relative;
+  }
+
+  .card-link .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .card-link:focus-within {
+    border-color: var(--color-accent);
   }
 
   .foto {
@@ -95,35 +124,42 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
     background:
       repeating-linear-gradient(
         -45deg,
-        rgba(255, 122, 60, 0.05) 0 1px,
+        color-mix(in srgb, var(--color-accent) 14%, transparent) 0 1px,
         transparent 1px 9px
       ),
-      linear-gradient(155deg, rgba(255, 122, 60, 0.14), rgba(255, 122, 60, 0.01) 65%),
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-accent-bright) 26%, transparent),
+        color-mix(in srgb, var(--color-accent-bright) 4%, transparent) 65%
+      ),
       var(--color-bg-sunk);
     display: grid;
     place-items: center;
   }
 
-  /* Piccolo, quindi nitido: il monogramma nasce a 193px di larghezza. */
+  /* Il monogramma è bianco su trasparente: lo si usa come maschera per
+     tingerlo del colore del polo. Piccolo, quindi nitido: nasce a 193px. */
   .foto.senza-foto::before,
   .thumb.senza-foto::before {
     content: '';
     width: 58px;
     aspect-ratio: 193 / 265;
-    background: url('/images/logo-x.png') center / contain no-repeat;
-    opacity: 0.3;
+    background: var(--color-accent-bright);
+    -webkit-mask: url('/images/logo-x.png') center / contain no-repeat;
+    mask: url('/images/logo-x.png') center / contain no-repeat;
+    opacity: 0.45;
   }
 
   .thumb.senza-foto::before {
     width: 22px;
-    opacity: 0.45;
+    opacity: 0.6;
   }
 
   .foto:not(.senza-foto)::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(6, 9, 8, 0.5) 0%, transparent 45%);
+    background: linear-gradient(180deg, rgba(243, 231, 206, 0.85) 0%, transparent 45%);
   }
 
   .quando {
@@ -135,7 +171,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
     flex-direction: column;
     align-items: center;
     line-height: 1.05;
-    background: rgba(6, 9, 8, 0.82);
+    background: rgba(251, 244, 227, 0.92);
     backdrop-filter: blur(4px);
     border: 1px solid var(--color-accent);
     color: var(--color-accent);
@@ -143,20 +179,20 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
   }
 
   .giorno {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
   }
 
   .mese {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .attesa {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -174,13 +210,13 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
   }
 
   .titolo {
-    font-size: 1.35rem;
-    line-height: 1.05;
+    font-size: 1.1rem;
+    line-height: 1.1;
   }
 
   .sintesi {
     color: var(--color-text-muted);
-    font-size: 0.97rem;
+    font-size: 0.92rem;
   }
 
   .tag {
@@ -193,9 +229,9 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
   }
 
   .tag li {
-    font-size: 0.75rem;
+    font-size: 0.66rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-accent);
     border: 1px solid var(--color-accent-dim);
@@ -206,7 +242,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
     margin-top: 0.7rem;
     align-self: flex-start;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--color-accent);
@@ -234,12 +270,12 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
     height: 56px;
     background-size: cover;
     background-position: center;
-    filter: grayscale(0.75) brightness(0.75);
+    filter: grayscale(0.8) contrast(0.9) brightness(1.06);
     transition: filter 0.3s ease;
   }
 
   .riga:hover .thumb {
-    filter: grayscale(0) brightness(1);
+    filter: none;
   }
 
   .thumb.senza-foto {
@@ -249,8 +285,8 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
   .riga-titolo {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 1.05rem;
-    line-height: 1.2;
+    font-size: 0.97rem;
+    line-height: 1.25;
   }
 
   .riga-luogo {

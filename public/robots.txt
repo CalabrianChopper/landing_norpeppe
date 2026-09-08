@@ -1,4 +1,4 @@
-# Xploring con NorPeppe — tutto indicizzabile, un'unica pagina.
+# Xploring con NorPeppe — tutto indicizzabile: la home e le pagine delle uscite.
 User-agent: *
 Allow: /
 
