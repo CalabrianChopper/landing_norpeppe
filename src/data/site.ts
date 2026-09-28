@@ -7,6 +7,15 @@ export const site = {
   claim: 'Il mondo è grande. La Calabria è casa.',
   persona: 'Giuseppe Lupis',
   email: 'giuseppelupis1997@gmail.com',
+  /** Dove arrivano le prenotazioni delle uscite in Calabria (via FormSubmit). */
+  emailPrenotazioni: 'xploringkalabria@gmail.com',
+  /**
+   * L'indirizzo a cui il form spedisce, su formsubmit.co.
+   * TODO SICUREZZA: dopo l'attivazione FormSubmit manda una stringa casuale
+   * (es. 'a1b2c3d4e5...'): mettila qui al posto della mail, così l'indirizzo
+   * vero non compare nel codice della pagina e non lo raccolgono gli spammer.
+   */
+  formsubmitId: 'xploringkalabria@gmail.com',
   telefono: '+39 320 417 0356',
   telefonoRaw: '393204170356',
   luogo: 'Calabria, Italia',

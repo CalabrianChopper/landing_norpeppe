@@ -1,7 +1,7 @@
 ---
 // Il calendario, uguale per i due poli: schede delle uscite in arrivo,
 // elenco di quelle già fatte. Cambiano i dati e i testi, non la forma.
-// Solo la Calabria passa `conPagina`: lì ogni uscita in arrivo ha la sua pagina.
+// Solo la Calabria passa `conPagina`: lì ogni uscita, in arrivo o già fatta, ha la sua pagina.
 import EventoCard from './EventoCard.astro';
 import { urlEvento, type Evento } from '../data/eventi';
 
@@ -19,7 +19,7 @@ interface Props {
   /** Riga in coda alle schede in arrivo, accanto al bottone. */
   notaProssimi: string;
   cta: { label: string; href: string };
-  /** Se vero, le schede in arrivo portano alla loro pagina invece che a WhatsApp. */
+  /** Se vero, schede e righe portano alla pagina dell'uscita invece che a WhatsApp. */
   conPagina?: boolean;
 }
 
@@ -97,7 +97,9 @@ const idPassati = `pannello-${id}-passati`;
     <div class="pannello" id={idPassati} role="tabpanel" aria-labelledby={`tab-${id}-passati`} hidden>
       <p class="nota nota-alta">{notaPassati}</p>
       <div class="elenco reveal">
-        {passati.map((e) => <EventoCard evento={e} variante="riga" />)}
+        {passati.map((e) => (
+          <EventoCard evento={e} variante="riga" href={conPagina ? urlEvento(e) : undefined} />
+        ))}
       </div>
     </div>
   </div>

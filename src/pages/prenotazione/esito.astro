@@ -1,0 +1,214 @@
+---
+// Dove si arriva dopo aver inviato una prenotazione: dice se è andata o no.
+// Legge dall'indirizzo ?stato=ok|errore&evento=<slug>&motivo=<motivo>, ma non
+// stampa mai quei valori così come sono: lo slug deve essere un'uscita vera e
+// il motivo uno di quelli previsti, altrimenti si ignorano.
+// Senza JavaScript si vede il successo: ci si arriva solo dal rimando di
+// FormSubmit, che rimanda qui soltanto quando l'invio è andato.
+import Layout from '../../layouts/Layout.astro';
+import { prossimi, formattaData } from '../../data/eventi';
+import { site } from '../../data/site';
+
+const uscite = Object.fromEntries(
+  prossimi.map((e) => {
+    const d = formattaData(e.data);
+    return [
+      e.slug,
+      {
+        titolo: e.titolo,
+        quando: d ? `${d.giorno} ${d.mese}` : e.periodo ?? '',
+        luogo: e.luogo,
+        pagina: `/kalabria/${e.slug}/`,
+      },
+    ];
+  })
+);
+
+const mailto = `mailto:${site.emailPrenotazioni}`;
+---
+
+<Layout
+  title="Prenotazione | Xploring Kalabria"
+  description="Esito della prenotazione di un'uscita Xploring Kalabria."
+  pole="kalabria"
+  path="/prenotazione/esito/"
+  nodi={[]}
+  noindex
+>
+  <section class="esito section" data-uscite={JSON.stringify(uscite)}>
+    <div class="wrap-narrow">
+      <!-- Successo: visibile di default, per chi arriva senza JavaScript. -->
+      <div class="riquadro ok" data-stato="ok">
+        <span class="icona" aria-hidden="true">✓</span>
+        <p class="eyebrow">Prenotazione inviata</p>
+        <h1 class="display titolo">Ci vediamo sul sentiero!</h1>
+        <p class="uscita mono" hidden></p>
+        <p class="testo">
+          Abbiamo ricevuto la tua richiesta. Ti scriviamo noi per confermare il posto.
+        </p>
+        <p class="nota-mail">
+          Riceverai una mail con orario e punto di incontro esatti il giorno prima dell’evento.
+        </p>
+        <div class="azioni">
+          <a class="btn btn-solid" href="/#calendario-kalabria">Guarda le altre uscite</a>
+          <a class="link-underline torna-uscita" href="/#calendario-kalabria" hidden>
+            Torna all’uscita
+          </a>
+        </div>
+      </div>
+
+      <div class="riquadro errore" data-stato="errore" hidden>
+        <span class="icona" aria-hidden="true">!</span>
+        <p class="eyebrow">Prenotazione non inviata</p>
+        <h1 class="display titolo">Qualcosa è andato storto</h1>
+        <p class="uscita mono" hidden></p>
+        <p class="testo motivo">
+          La prenotazione non è partita. I dati che avevi scritto sono ancora nel modulo:
+          riprova tra qualche minuto.
+        </p>
+        <div class="azioni">
+          <a class="btn btn-solid riprova" href="/#calendario-kalabria">Riprova</a>
+          <a class="link-underline" href={mailto}>Oppure scrivici a {site.emailPrenotazioni}</a>
+        </div>
+      </div>
+
+      <div class="riquadro vuoto" data-stato="vuoto" hidden>
+        <p class="eyebrow">Prenotazioni</p>
+        <h1 class="display titolo">Nessuna prenotazione in corso</h1>
+        <p class="testo">Scegli un’uscita dal calendario e prenota da lì.</p>
+        <div class="azioni">
+          <a class="btn btn-solid" href="/#calendario-kalabria">Vai al calendario</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .esito {
+    min-height: 70vh;
+    padding-top: calc(3.5rem + clamp(3rem, 6vw, 5rem));
+    background:
+      radial-gradient(80% 60% at 10% 0%, rgba(210, 113, 43, 0.13), transparent 70%),
+      var(--color-bg);
+  }
+
+  .riquadro {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-accent-dim);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .riquadro[hidden] {
+    display: none;
+  }
+
+  .icona {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-accent-ink);
+    background: var(--color-accent);
+  }
+
+  .errore {
+    border-color: #a3261a;
+  }
+
+  .errore .icona {
+    background: #a3261a;
+    color: #fff;
+  }
+
+  .titolo {
+    font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  }
+
+  .uscita {
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .testo {
+    color: var(--color-text-muted);
+    max-width: 52ch;
+  }
+
+  .nota-mail {
+    padding: 0.8rem 1rem;
+    border-left: 3px solid var(--color-accent-bright);
+    background: var(--color-bg-sunk);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .azioni {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+  }
+</style>
+
+<script>
+  import { MOTIVI, type Motivo } from '../../data/prenotazione';
+
+  type Uscita = { titolo: string; quando: string; luogo: string; pagina: string };
+
+  const TESTI: Record<Motivo, string> = {
+    attivazione:
+      'Il modulo di prenotazione non è ancora attivo. Ce ne occupiamo subito: nel frattempo scrivici per mail.',
+    rete: 'Sembra che la connessione sia caduta. Controlla di essere online e riprova.',
+    tempo: 'Il servizio ci ha messo troppo a rispondere. Riprova tra qualche minuto.',
+    server: 'Il servizio di invio ha dato un errore. Riprova tra qualche minuto.',
+  };
+
+  const sezione = document.querySelector<HTMLElement>('section.esito');
+  if (sezione) {
+    const q = new URLSearchParams(location.search);
+    const uscite: Record<string, Uscita> = JSON.parse(sezione.dataset.uscite ?? '{}');
+
+    // Solo valori noti: niente di quello che arriva dall'indirizzo finisce in pagina.
+    const stato = q.get('stato') === 'ok' ? 'ok' : q.get('stato') === 'errore' ? 'errore' : 'vuoto';
+    const slug = q.get('evento') ?? '';
+    const uscita = Object.hasOwn(uscite, slug) ? uscite[slug] : null;
+    const m = q.get('motivo');
+    const motivo = (MOTIVI as readonly string[]).includes(m ?? '') ? (m as Motivo) : 'server';
+
+    sezione.querySelectorAll<HTMLElement>('[data-stato]').forEach((el) => {
+      el.hidden = el.dataset.stato !== stato;
+    });
+
+    const attivo = sezione.querySelector<HTMLElement>(`[data-stato="${stato}"]`)!;
+
+    if (uscita) {
+      const riga = attivo.querySelector<HTMLElement>('.uscita');
+      if (riga) {
+        riga.textContent = `${uscita.titolo} · ${uscita.quando} · ${uscita.luogo}`;
+        riga.hidden = false;
+      }
+      const torna = attivo.querySelector<HTMLAnchorElement>('.torna-uscita');
+      if (torna) {
+        torna.href = uscita.pagina;
+        torna.hidden = false;
+      }
+      const riprova = attivo.querySelector<HTMLAnchorElement>('.riprova');
+      if (riprova) riprova.href = `${uscita.pagina}prenota/`;
+    }
+
+    if (stato === 'errore') {
+      attivo.querySelector<HTMLElement>('.motivo')!.textContent = TESTI[motivo];
+      document.title = 'Prenotazione non inviata | Xploring Kalabria';
+    } else if (stato === 'ok') {
+      document.title = 'Prenotazione inviata | Xploring Kalabria';
+    }
+  }
+</script>

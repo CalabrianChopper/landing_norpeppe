@@ -24,6 +24,8 @@ interface Props {
    * della home (pagina, FAQ e i due elenchi di viaggi).
    */
   nodi?: unknown[];
+  /** Pagine di servizio (prenotazione, esito): fuori dai motori di ricerca. */
+  noindex?: boolean;
 }
 
 const {
@@ -33,6 +35,7 @@ const {
   path = '/',
   immagine,
   nodi,
+  noindex = false,
 } = Astro.props;
 
 const urlBase = seo.url.replace(/\/$/, '');
@@ -199,7 +202,10 @@ const schema = {
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords.join(', ')} />
     <meta name="author" content={`${seo.persona.nome} (${seo.persona.alias})`} />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+    />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap.xml" />

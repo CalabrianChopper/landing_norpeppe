@@ -4,8 +4,8 @@
 
 /**
  * Il racconto lungo di un'uscita: è quello che riempie la sua pagina.
- * Solo le uscite in Calabria ancora da fare ce l'hanno — i viaggi nel mondo
- * restano alla card, e chi è interessato scrive.
+ * Ogni uscita in Calabria ha la sua pagina; se `dettaglio` manca, la pagina
+ * si arrangia con la sintesi della card. I viaggi nel mondo restano alla card.
  */
 export type DettaglioEvento = {
   /** Frase d'apertura della pagina, sotto il titolo. Una riga, non di più. */
@@ -20,6 +20,8 @@ export type DettaglioEvento = {
   incluso?: string[];
   /** Cosa mettere nello zaino. */
   portare?: string[];
+  /** Avviso in chiusura della pagina, prima del bottone. */
+  nota?: string;
 };
 
 export type Evento = {
@@ -42,8 +44,8 @@ export type Evento = {
    */
   immagine?: string;
   /**
-   * Se c'è, l'evento ha una pagina tutta sua sotto /kalabria/<slug>/ e la card
-   * porta lì invece che su WhatsApp.
+   * Il racconto della pagina /kalabria/<slug>/. Ogni uscita in Calabria ha la
+   * sua pagina comunque: senza `dettaglio` mostra solo la sintesi.
    * ⚠️ DA CONFERMARE CON GIUSEPPE ⚠️ ritrovi, orari, dislivelli, quote e cosa
    * è incluso qui sotto sono una traccia scritta sul posto giusto ma non
    * verificata: vanno sostituiti con i dati veri prima di andare online.
@@ -54,15 +56,116 @@ export type Evento = {
 export const eventi: Evento[] = [
   // ─── PROSSIMI ────────────────────────────────────────────────────────────
   {
+    slug: 'xploring-day-cascate-faggi-lupo',
+    titolo: 'Xploring Day: Cascate dei Faggi e del Lupo',
+    luogo: 'Villaggio Buturo, Sila Piccola (CZ)',
+    data: '2026-10-10',
+    durata: 'Circa 5 ore',
+    tag: ['Trekking', 'Cascate', 'Gratuito'],
+    sintesi:
+      'Anello di 7 km nei boschi della Sila Piccola, fino a due cascate. Evento gratuito: il nostro grazie alla Community.',
+    stato: 'prossimo',
+    dettaglio: {
+      occhiello: 'Evento gratuito: un anello tra due cascate della Sila Piccola, per festeggiare insieme la Community.',
+      racconto: [
+        'Evento gratuito! È lo Xploring Day: il giorno in cui Xploring Kalabria ti ringrazia di far parte di questa folle Community.',
+        'Si parte da Villaggio Buturo, nella Sila Piccola, per un anello di circa 7 km che tocca la Cascata dei Faggi e la Cascata del Lupo. Un percorso medio-facile, con 350 metri di dislivello, pensato per camminare insieme senza fretta.',
+      ],
+      scheda: [
+        { chiave: 'Quando', valore: 'Sabato 10 ottobre, inizio ore 10.00' },
+        { chiave: 'Durata', valore: 'Circa 5 ore' },
+        { chiave: 'Lunghezza', valore: 'Circa 7 km' },
+        { chiave: 'Tipo', valore: 'Anello' },
+        { chiave: 'Dislivello', valore: '350 metri positivi / negativi' },
+        { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+        { chiave: 'Quota', valore: 'Gratuito' },
+      ],
+      portare: [
+        'Abbigliamento outdoor a strati (maglia, pile, giacca a vento)',
+        'Scarpe da trekking',
+        'Acqua (almeno 1,5 litri)',
+        'Occhiali, cappellino e crema solare',
+      ],
+      nota: 'Riceverai una mail con orario e punto di incontro esatti il giorno prima dell’evento.',
+    },
+  },
+  {
+    slug: 'pausa-sul-monte-scirocco',
+    titolo: 'Pausa sul Monte: Monte Scirocco',
+    luogo: 'Monte Scirocco, Aspromonte (RC)',
+    data: '2026-10-17',
+    durata: 'Circa 6 ore',
+    tag: ['Trekking', 'Aspromonte'],
+    sintesi:
+      'Un anello di 7 km in Aspromonte, per fermarsi un giorno in quota. Percorso medio-facile.',
+    stato: 'prossimo',
+    dettaglio: {
+      occhiello: 'Una giornata per staccare e prendersi una pausa, in cima all’Aspromonte.',
+      racconto: [
+        'Pausa sul Monte è esattamente quello che dice: una giornata per fermarsi, lontano dal rumore, sul Monte Scirocco in Aspromonte.',
+        'Il percorso è un anello di circa 7 km con 500 metri di dislivello totale, di difficoltà medio-facile. Si parte alle 10.00 e si sta fuori circa sei ore, con il tempo giusto per le soste.',
+      ],
+      scheda: [
+        { chiave: 'Quando', valore: 'Sabato 17 ottobre, inizio ore 10.00' },
+        { chiave: 'Durata', valore: 'Circa 6 ore' },
+        { chiave: 'Lunghezza', valore: 'Circa 7 km' },
+        { chiave: 'Tipo', valore: 'Anello' },
+        { chiave: 'Dislivello', valore: '500 metri totali' },
+        { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+      ],
+      portare: [
+        'Abbigliamento outdoor a strati (maglia, pile, giacca a vento)',
+        'Scarpe da trekking',
+        'Acqua (almeno 1,5 litri)',
+        'Occhiali, cappellino e crema solare',
+      ],
+      nota: 'Riceverai una mail con orario e punto di incontro esatti il giorno prima dell’evento.',
+    },
+  },
+  {
+    slug: 'foliage-monte-covello',
+    titolo: 'Foliage sul Monte Covello',
+    luogo: 'Monte Covello, Girifalco (CZ)',
+    data: '2026-10-31',
+    durata: 'Circa 6 ore',
+    tag: ['Trekking', 'Foliage', 'Sentiero Italia'],
+    sintesi:
+      'I colori dell’autunno sulle orme del Sentiero Italia: anello di 9 km sul Monte Covello.',
+    stato: 'prossimo',
+    dettaglio: {
+      occhiello: 'Sulle orme del Sentiero Italia, dentro i colori dell’autunno.',
+      racconto: [
+        'A fine ottobre il bosco del Monte Covello cambia colore. Lo attraversiamo seguendo un tratto del Sentiero Italia, il grande cammino che percorre tutta la penisola.',
+        'Il percorso è un anello di circa 9 km con 700 metri di dislivello totale, di difficoltà medio-facile. Si parte alle 10.00 e si sta fuori circa sei ore.',
+      ],
+      scheda: [
+        { chiave: 'Quando', valore: 'Sabato 31 ottobre, inizio ore 10.00' },
+        { chiave: 'Durata', valore: 'Circa 6 ore' },
+        { chiave: 'Lunghezza', valore: '9 km' },
+        { chiave: 'Tipo', valore: 'Anello' },
+        { chiave: 'Dislivello', valore: '700 metri totali' },
+        { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+      ],
+      portare: [
+        'Abbigliamento outdoor a strati (maglia, pile, giacca a vento)',
+        'Scarpe da trekking',
+        'Acqua (almeno 1,5 litri)',
+        'Occhiali, cappellino e crema solare',
+      ],
+      nota: 'Riceverai una mail con orario e punto di incontro esatti il giorno prima dell’evento.',
+    },
+  },
+  // ─── GIÀ FATTI ───────────────────────────────────────────────────────────
+  {
     slug: 'cascata-del-litrello',
     titolo: 'Escursione alla Cascata del Litrello',
     luogo: 'Zagarise (CZ)', // TODO CONFERMARE il comune di partenza
-    periodo: 'Data in definizione',
+    periodo: 'Edizione conclusa',
     durata: 'Mezza giornata',
     tag: ['Trekking', 'Acqua'],
     sintesi:
       "Un sentiero dentro il bosco, l'acqua che si sente molto prima di vedersi, poi la cascata tutta insieme. Percorso adatto anche a chi cammina poco.",
-    stato: 'prossimo',
+    stato: 'passato',
     dettaglio: {
       occhiello: 'Mezza giornata nella Presila catanzarese, per chi non ha mai camminato con noi.',
       racconto: [
@@ -102,12 +205,12 @@ export const eventi: Evento[] = [
     slug: 'pollino-rafting-tenda',
     titolo: 'Rafting, river trekking e notte in tenda sul Pollino',
     luogo: 'Parco Nazionale del Pollino (CS)',
-    periodo: 'Data in definizione',
+    periodo: 'Edizione conclusa',
     durata: 'Due giorni, una notte',
     tag: ['Rafting', 'River trekking', 'Campo'],
     sintesi:
       'Si scende il fiume in gommone, si risale a piedi dentro la gola, si monta il campo e si dorme lì. Il format più selvatico della stagione.',
-    stato: 'prossimo',
+    stato: 'passato',
     dettaglio: {
       occhiello: 'Due giorni dentro le gole del Lao, con la notte in tenda sul greto del fiume.',
       racconto: [
@@ -150,12 +253,12 @@ export const eventi: Evento[] = [
     slug: 'tiriolo-urban-trekking-dj-set',
     titolo: 'Urban trekking e DJ set a Tiriolo',
     luogo: 'Tiriolo (CZ)',
-    periodo: 'Data in definizione',
+    periodo: 'Edizione conclusa',
     durata: 'Dal pomeriggio a notte',
     tag: ['Borghi', 'Musica'],
     sintesi:
       'Il paese da cui si vedono due mari nello stesso sguardo. Si cammina tra i vicoli fino al tramonto, poi si resta a ballare.',
-    stato: 'prossimo',
+    stato: 'passato',
     dettaglio: {
       occhiello: 'Dal pomeriggio a notte fonda nel paese che guarda lo Ionio e il Tirreno insieme.',
       racconto: [
@@ -189,8 +292,6 @@ export const eventi: Evento[] = [
       ],
     },
   },
-
-  // ─── GIÀ FATTI ───────────────────────────────────────────────────────────
   {
     slug: 'canyon-valli-cupe',
     titolo: 'Canyon Valli Cupe',
@@ -251,12 +352,12 @@ export const eventi: Evento[] = [
 export const prossimi = eventi.filter((e) => e.stato === 'prossimo');
 export const passati = eventi.filter((e) => e.stato === 'passato');
 
-/** Le uscite che hanno una pagina tutta loro: da qui nascono le rotte. */
-export const conPagina = eventi.filter((e) => !!e.dettaglio);
+/** Le uscite che hanno una pagina tutta loro: da qui nascono le rotte. Tutte. */
+export const conPagina = eventi;
 
-/** L'indirizzo della pagina di un'uscita, o niente se non ce l'ha. */
+/** L'indirizzo della pagina di un'uscita in Calabria. */
 export function urlEvento(e: Evento) {
-  return e.dettaglio ? `/kalabria/${e.slug}/` : undefined;
+  return `/kalabria/${e.slug}/`;
 }
 
 /** '2026-09-14' → { giorno: '14', mese: 'Set' } */

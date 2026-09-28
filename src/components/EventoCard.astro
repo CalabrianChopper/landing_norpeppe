@@ -61,14 +61,14 @@ const destinazione = href ?? scrivi;
     </div>
   </article>
 ) : (
-  <article class="riga">
+  <article class:list={['riga', { 'riga-link': !!href }]}>
     <span
       class:list={['thumb', { 'senza-foto': !evento.immagine }]}
       style={evento.immagine ? `background-image:url('${evento.immagine}')` : undefined}
       aria-hidden="true"
     ></span>
     <span class="riga-corpo">
-      <h3 class="riga-titolo">{evento.titolo}</h3>
+      <h3 class="riga-titolo">{href ? <a href={href}>{evento.titolo}</a> : evento.titolo}</h3>
       <p class="riga-luogo mono">{evento.luogo}</p>
     </span>
     <ul class="tag tag-riga">
@@ -276,6 +276,22 @@ const destinazione = href ?? scrivi;
 
   .riga:hover .thumb {
     filter: none;
+  }
+
+  /* Come per le schede: il link del titolo copre tutta la riga. */
+  .riga-link {
+    position: relative;
+  }
+
+  .riga-link .riga-titolo a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .riga-link:hover .riga-titolo,
+  .riga-link:focus-within .riga-titolo {
+    color: var(--color-accent);
   }
 
   .thumb.senza-foto {

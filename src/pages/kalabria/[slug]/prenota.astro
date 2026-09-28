@@ -1,0 +1,383 @@
+---
+// Il modulo di prenotazione di un'uscita in Calabria in arrivo.
+// Il sito è statico: l'invio passa da FormSubmit (formsubmit.co), gratuito e
+// senza account, che gira la richiesta per mail a `site.emailPrenotazioni`.
+// Com'è andata lo racconta /prenotazione/esito/.
+// ⚠️ La prima volta FormSubmit manda a quell'indirizzo una mail di attivazione:
+// finché non si clicca il link lì dentro, le prenotazioni non arrivano.
+import Layout from '../../../layouts/Layout.astro';
+import { prossimi, formattaData, type Evento } from '../../../data/eventi';
+import { site } from '../../../data/site';
+import { seo } from '../../../data/seo';
+import { LIMITI } from '../../../data/prenotazione';
+
+export function getStaticPaths() {
+  return prossimi.map((evento) => ({
+    params: { slug: evento.slug },
+    props: { evento },
+  }));
+}
+
+interface Props {
+  evento: Evento;
+}
+
+const { evento } = Astro.props;
+const data = formattaData(evento.data);
+const quando = data ? `${data.giorno} ${data.mese}` : evento.periodo;
+
+const paginaEvento = `/kalabria/${evento.slug}/`;
+const path = `${paginaEvento}prenota/`;
+const endpoint = `https://formsubmit.co/${site.formsubmitId}`;
+// Senza JavaScript il form parte con un POST normale e FormSubmit rimanda qui.
+const esitoOk = `${seo.url.replace(/\/$/, '')}/prenotazione/esito/?stato=ok&evento=${evento.slug}`;
+---
+
+<Layout
+  title={`Prenota: ${evento.titolo} | Xploring Kalabria`}
+  description={`Prenota il tuo posto per ${evento.titolo}, ${evento.luogo}.`}
+  pole="kalabria"
+  path={path}
+  immagine={evento.immagine}
+  nodi={[]}
+  noindex
+>
+  <section class="prenotazione section">
+    <div class="wrap-narrow">
+      <nav class="briciole" aria-label="Dove ti trovi">
+        <a href="/#calendario-kalabria">Trekking ed escursioni in Calabria</a>
+        <span aria-hidden="true">/</span>
+        <a href={paginaEvento}>{evento.titolo}</a>
+        <span aria-hidden="true">/</span>
+        <span class="qui">Prenota</span>
+      </nav>
+
+      <p class="eyebrow">Prenotazione</p>
+      <h1 class="display titolo">{evento.titolo}</h1>
+      <p class="riepilogo mono">{quando} · {evento.luogo} · {evento.durata}</p>
+
+      <form
+        class="modulo"
+        action={endpoint}
+        method="POST"
+        data-endpoint={`https://formsubmit.co/ajax/${site.formsubmitId}`}
+        data-evento={evento.titolo}
+        data-quando={quando}
+        data-slug={evento.slug}
+      >
+        <!-- Campi di servizio di FormSubmit. `_subject` lo riscrive lo script
+             con nome, cognome ed evento; questo è il valore se JS non c'è. -->
+        <input type="hidden" name="_subject" value={`Prenotazione – ${evento.titolo}`} />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value={esitoOk} />
+        <input type="hidden" name="Evento" value={`${evento.titolo} (${quando})`} />
+        <!-- Trappola per i bot: un umano non la vede e non la compila. -->
+        <input type="text" name="_honey" class="trappola" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="coppia">
+          <label>
+            <span class="etichetta mono">Nome *</span>
+            <input type="text" name="Nome" required maxlength={LIMITI.nome} autocomplete="given-name" />
+          </label>
+          <label>
+            <span class="etichetta mono">Cognome *</span>
+            <input type="text" name="Cognome" required maxlength={LIMITI.nome} autocomplete="family-name" />
+          </label>
+        </div>
+
+        <div class="coppia">
+          <label>
+            <span class="etichetta mono">Email *</span>
+            <input type="email" name="email" required maxlength={LIMITI.email} autocomplete="email" />
+          </label>
+          <label>
+            <span class="etichetta mono">Telefono</span>
+            <input
+              type="tel"
+              name="Telefono"
+              maxlength={LIMITI.telefono}
+              pattern="[0-9+\(\)\. \-]{6,30}"
+              title="Solo numeri, spazi e i simboli + ( ) - ."
+              autocomplete="tel"
+            />
+          </label>
+        </div>
+
+        <label>
+          <span class="etichetta mono">Note</span>
+          <textarea
+            name="Note"
+            rows="5"
+            maxlength={LIMITI.note}
+            placeholder="Quante persone siete, allergie, domande sul percorso…"></textarea>
+        </label>
+
+        <label class="consenso">
+          <input type="checkbox" name="consenso" required />
+          <span>
+            Acconsento all'uso dei miei dati solo per gestire questa prenotazione. I dati
+            arrivano per mail tramite il servizio FormSubmit e non vengono usati per altro.
+          </span>
+        </label>
+
+        <p class="nota-mail">
+          Riceverai una mail con orario e punto di incontro esatti il giorno prima dell’evento.
+        </p>
+
+        <div class="invio">
+          <button class="btn btn-solid" type="submit">Invia la prenotazione</button>
+          <a class="link-underline" href={paginaEvento}>Torna all’uscita</a>
+        </div>
+
+        <p class="avviso" role="alert" hidden></p>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .prenotazione {
+    padding-top: calc(3.5rem + clamp(3rem, 6vw, 5rem));
+    background:
+      radial-gradient(80% 60% at 10% 0%, rgba(210, 113, 43, 0.13), transparent 70%),
+      var(--color-bg);
+  }
+
+  .briciole {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--color-text-faint);
+    margin-bottom: 1.75rem;
+  }
+
+  .briciole a {
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-accent-dim);
+  }
+
+  .titolo {
+    font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+    margin-block: 0.5rem 0.75rem;
+  }
+
+  .riepilogo {
+    text-transform: uppercase;
+    color: var(--color-accent);
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .modulo {
+    display: grid;
+    gap: 1.1rem;
+    margin-top: 2rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-accent-dim);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .coppia {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.1rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .etichetta {
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    padding: 0.7rem 0.8rem;
+    border-radius: 0;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+    border-color: var(--color-accent);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .consenso {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .consenso input {
+    margin-top: 0.25rem;
+    accent-color: var(--color-accent);
+  }
+
+  .trappola {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .nota-mail {
+    padding: 0.8rem 1rem;
+    border-left: 3px solid var(--color-accent-bright);
+    background: var(--color-bg-sunk);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .invio {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .avviso {
+    font-weight: 600;
+    color: #a3261a;
+  }
+</style>
+
+<script>
+  import {
+    LIMITI,
+    pulisci,
+    pulisciNome,
+    emailValida,
+    urlEsito,
+    motivoDaRisposta,
+    type Motivo,
+  } from '../../../data/prenotazione';
+
+  // Invio senza lasciare la pagina, poi si va alla pagina d'esito. Se lo
+  // script non gira, il form parte con un POST normale verso FormSubmit.
+  const form = document.querySelector<HTMLFormElement>('form.modulo');
+  if (form) {
+    const { slug = '', evento = '', quando = '', endpoint = '' } = form.dataset;
+    const avviso = form.querySelector<HTMLElement>('.avviso')!;
+    const bottone = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const caricata = Date.now();
+    const chiaveBozza = `bozza-prenotazione:${slug}`;
+    const campi = ['Nome', 'Cognome', 'email', 'Telefono', 'Note'] as const;
+    let inviando = false;
+
+    // Se l'invio precedente è fallito, i dati tornano al loro posto.
+    try {
+      const bozza = JSON.parse(sessionStorage.getItem(chiaveBozza) ?? 'null');
+      if (bozza) {
+        for (const c of campi) {
+          const el = form.elements.namedItem(c) as HTMLInputElement | null;
+          if (el && typeof bozza[c] === 'string') el.value = bozza[c];
+        }
+      }
+    } catch {}
+
+    // Tornando indietro dalla pagina d'esito il browser può ripescare la pagina
+    // com'era, col bottone ancora bloccato su "Invio in corso".
+    const etichetta = bottone.textContent;
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      inviando = false;
+      bottone.disabled = false;
+      bottone.textContent = etichetta;
+    });
+
+    const segnala = (testo: string) => {
+      avviso.textContent = testo;
+      avviso.hidden = false;
+    };
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      if (inviando) return;
+      avviso.hidden = true;
+
+      const fd = new FormData(form);
+
+      // Bot: trappola compilata o form spedito in meno di tre secondi. Gli si
+      // mostra il successo senza spedire niente, così non riprova.
+      if (fd.get('_honey') || Date.now() - caricata < 3000) {
+        location.assign(urlEsito('ok', slug));
+        return;
+      }
+
+      const dati = {
+        Nome: pulisciNome(fd.get('Nome'), LIMITI.nome),
+        Cognome: pulisciNome(fd.get('Cognome'), LIMITI.nome),
+        email: pulisci(fd.get('email'), LIMITI.email),
+        Telefono: pulisci(fd.get('Telefono'), LIMITI.telefono),
+        Note: pulisci(fd.get('Note'), LIMITI.note, true),
+      };
+
+      if (!dati.Nome || !dati.Cognome) return segnala('Scrivi nome e cognome.');
+      if (!emailValida(dati.email)) return segnala('Controlla l’indirizzo email.');
+
+      try {
+        sessionStorage.setItem(chiaveBozza, JSON.stringify(dati));
+      } catch {}
+
+      inviando = true;
+      bottone.disabled = true;
+      bottone.textContent = 'Invio in corso…';
+
+      const scadenza = new AbortController();
+      const timer = setTimeout(() => scadenza.abort(), 15000);
+      let motivo: Motivo | null;
+      try {
+        const risposta = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            ...dati,
+            Evento: `${evento} (${quando})`,
+            _subject: `${dati.Nome} ${dati.Cognome} – ${evento}`,
+            _replyto: dati.email,
+            _template: 'table',
+            _captcha: 'false',
+          }),
+          signal: scadenza.signal,
+        });
+        const json = await risposta.json().catch(() => ({}));
+        motivo = motivoDaRisposta(risposta.ok, json);
+      } catch (e) {
+        motivo = e instanceof DOMException && e.name === 'AbortError' ? 'tempo' : 'rete';
+      } finally {
+        clearTimeout(timer);
+      }
+
+      if (!motivo) {
+        try {
+          sessionStorage.removeItem(chiaveBozza);
+        } catch {}
+      }
+      location.assign(motivo ? urlEsito('errore', slug, motivo) : urlEsito('ok', slug));
+    });
+  }
+</script>

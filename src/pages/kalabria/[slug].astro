@@ -1,7 +1,7 @@
 ---
 // La pagina di una singola uscita in Calabria.
-// Nasce da `dettaglio` in src/data/eventi.ts: se un evento non ce l'ha, la
-// rotta non viene generata e la sua scheda continua a puntare su WhatsApp.
+// Nasce da `dettaglio` in src/data/eventi.ts. Ogni uscita ha la sua pagina:
+// se `dettaglio` manca, il racconto è la sintesi della card.
 import Layout from '../../layouts/Layout.astro';
 import EventoCard from '../../components/EventoCard.astro';
 import { conPagina, prossimi, formattaData, urlEvento, type Evento } from '../../data/eventi';
@@ -20,12 +20,19 @@ interface Props {
 }
 
 const { evento } = Astro.props;
-const d = evento.dettaglio!;
+const d = evento.dettaglio ?? {
+  occhiello: evento.sintesi,
+  racconto: [],
+  scheda: [],
+};
+const conclusa = evento.stato === 'passato';
 const data = formattaData(evento.data);
 const quando = data ? `${data.giorno} ${data.mese}` : evento.periodo;
 
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
-  `Ciao NorPeppe! Ho letto la pagina di "${evento.titolo}". Mi mandi i dettagli e le date?`
+  conclusa
+    ? `Ciao NorPeppe! Ho letto di "${evento.titolo}". Avvisami se lo rifate!`
+    : `Ciao NorPeppe! Ho letto la pagina di "${evento.titolo}". Mi mandi i dettagli e le date?`
 )}`;
 
 // Le altre uscite in arrivo, per non lasciare la pagina senza uscite.
@@ -136,6 +143,7 @@ const nodi = [
           </section>
         )}
 
+        {d.scheda.length > 0 && (
         <section class="blocco">
           <h2 class="display sottotitolo">In breve</h2>
           <dl class="scheda">
@@ -147,6 +155,7 @@ const nodi = [
             ))}
           </dl>
         </section>
+        )}
 
         {(d.incluso || d.portare) && (
           <section class="blocco due-colonne">
@@ -169,14 +178,23 @@ const nodi = [
           </section>
         )}
 
+        {d.nota && <p class="nota-finale">{d.nota}</p>}
+
         <aside class="prenota">
           <p class="prenota-testo">
-            I posti sono contati e le date escono qui e sui social. Scrivimi:
-            rispondo io, e ti dico subito se c'è ancora spazio.
+            {conclusa
+              ? 'Questa uscita si è già fatta. Scrivimi se vuoi sapere quando la rifacciamo.'
+              : 'I posti sono contati: prenota il tuo posto, ti rispondiamo noi per confermare.'}
           </p>
-          <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
-            Voglio esserci
-          </a>
+          <div class="prenota-azioni">
+            {conclusa ? (
+              <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
+                Avvisami
+              </a>
+            ) : (
+              <a class="btn btn-solid" href={`${path}prenota/`}>Prenota</a>
+            )}
+          </div>
         </aside>
       </div>
     </div>
@@ -400,6 +418,14 @@ const nodi = [
     background: var(--color-accent-bright);
   }
 
+  .nota-finale {
+    margin-top: clamp(2rem, 4vw, 2.75rem);
+    padding: 0.9rem 1.1rem;
+    border-left: 3px solid var(--color-accent-bright);
+    background: var(--color-bg-sunk);
+    font-weight: 600;
+  }
+
   .prenota {
     display: flex;
     align-items: center;
@@ -411,6 +437,13 @@ const nodi = [
     background: var(--color-bg-raised);
     border: 1px solid var(--color-accent-dim);
     box-shadow: var(--shadow-soft);
+  }
+
+  .prenota-azioni {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
   }
 
   .prenota-testo {
