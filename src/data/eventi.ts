@@ -51,12 +51,19 @@ export type Evento = {
    * verificata: vanno sostituiti con i dati veri prima di andare online.
    */
   dettaglio?: DettaglioEvento;
+  /**
+   * Link al Google Form di prenotazione. Il bottone "Prenota" della pagina
+   * apre questo form in una nuova scheda: il sito non prende prenotazioni dirette.
+   * Se manca, il bottone porta a WhatsApp.
+   */
+  prenotazione?: string;
 };
 
 export const eventi: Evento[] = [
   // ─── PROSSIMI ────────────────────────────────────────────────────────────
   {
     slug: 'xploring-day-cascate-faggi-lupo',
+    prenotazione: 'https://forms.gle/ucQJ2tiWs69L4k3y8',
     titolo: 'Xploring Day: Cascate dei Faggi e del Lupo',
     luogo: 'Villaggio Buturo, Sila Piccola (CZ)',
     data: '2026-10-10',
@@ -91,6 +98,7 @@ export const eventi: Evento[] = [
   },
   {
     slug: 'pausa-sul-monte-scirocco',
+    prenotazione: 'https://forms.gle/R5WpUW4HN9ovUQoF9',
     titolo: 'Pausa sul Monte: Monte Scirocco',
     luogo: 'Monte Scirocco, Aspromonte (RC)',
     data: '2026-10-17',
@@ -124,6 +132,7 @@ export const eventi: Evento[] = [
   },
   {
     slug: 'foliage-monte-covello',
+    prenotazione: 'https://forms.gle/R5WpUW4HN9ovUQoF9',
     titolo: 'Foliage sul Monte Covello',
     luogo: 'Monte Covello, Girifalco (CZ)',
     data: '2026-10-31',
