@@ -3,10 +3,9 @@
 
 export const site = {
   brand: 'Xploring',
-  brandSub: 'con NorPeppe',
   claim: 'Il mondo è grande. La Calabria è casa.',
   persona: 'Giuseppe Lupis',
-  email: 'giuseppelupis1997@gmail.com',
+  email: 'xploringkalabria@gmail.com',
   telefono: '+39 320 417 0356',
   telefonoRaw: '393204170356',
   luogo: 'Calabria, Italia',

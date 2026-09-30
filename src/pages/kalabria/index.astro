@@ -1,0 +1,39 @@
+---
+// Xploring Kalabria: solo la Calabria. La pagina finisce col calendario delle
+// uscite, così chi arriva qui non si ritrova in mezzo ai viaggi nel mondo.
+import Layout from '../../layouts/Layout.astro';
+import KalabriaHome from '../../components/KalabriaHome.astro';
+import Calendario from '../../components/Calendario.astro';
+import { site } from '../../data/site';
+import { prossimi, passati } from '../../data/eventi';
+
+const wa = (testo: string) =>
+  `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(testo)}`;
+---
+
+<Layout
+  title="Trekking ed escursioni in Calabria | Xploring Kalabria"
+  description="Xploring Kalabria: trekking, canyon, cascate, borghi e serate in Calabria. Il calendario delle prossime uscite di gruppo, con posti contati."
+  pole="kalabria"
+  path="/kalabria/"
+  immagine="/images/to-calabria.jpg"
+  elenco="kalabria"
+>
+  <KalabriaHome />
+  <Calendario
+    id="calendario-kalabria"
+    pole="kalabria"
+    eyebrow="Il calendario in Calabria"
+    titolo="Trekking ed escursioni in Calabria"
+    intro="Le date escono qui e sui social, e i posti sono contati. Ogni uscita in arrivo ha la sua pagina, con ritrovo, difficoltà e cosa mettere nello zaino."
+    prossimi={prossimi}
+    passati={passati}
+    notaProssimi="Aprine una per leggere com'è fatta la giornata. Se ti convince, il modulo per prenotare è in fondo alla sua pagina."
+    notaPassati="Dove siamo già stati. Se una di queste uscite ti interessa, dimmelo: si rifà quando c'è un gruppo."
+    cta={{
+      label: 'Voglio esserci alla prossima',
+      href: wa('Ciao Xploring! Vorrei essere avvisato sui prossimi eventi in Calabria.'),
+    }}
+    conPagina
+  />
+</Layout>

@@ -1,4 +1,4 @@
-// Sitemap generata dai dati: la home più una pagina per ogni uscita in
+// Sitemap generata dai dati: home, /kalabria/, /mondo/ e una pagina per ogni uscita in
 // Calabria che ha il suo `dettaglio`. Aggiungi un evento e compare da sola.
 import type { APIRoute } from 'astro';
 import { seo } from '../data/seo';
@@ -8,9 +8,7 @@ const base = seo.url.replace(/\/$/, '');
 const oggi = new Date().toISOString().slice(0, 10);
 
 const immaginiHome = [
-  ['/images/hero-aurora.jpg', 'Xploring con NorPeppe: viaggi di gruppo nel mondo e viaggi in Calabria'],
-  ['/images/to-calabria.jpg', 'Trekking in Calabria con Xploring Kalabria'],
-  ['/images/from-calabria.jpg', 'Viaggi di gruppo organizzati nel mondo con NorPeppe'],
+  ['/images/hero-aurora.jpg', 'Xploring: viaggi di gruppo nel mondo e viaggi in Calabria'],
 ];
 
 const esc = (s: string) =>
@@ -32,6 +30,21 @@ ${immaginiHome
   )
   .join('\n')}
   </url>`,
+    ...[
+      ['/kalabria/', '/images/to-calabria.jpg', 'Trekking ed escursioni in Calabria con Xploring Kalabria'],
+      ['/mondo/', '/images/from-calabria.jpg', 'Viaggi di gruppo organizzati nel mondo con Xploring'],
+    ].map(
+      ([pagina, src, titolo]) => `  <url>
+    <loc>${base}${pagina}</loc>
+    <lastmod>${oggi}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>${base}${src}</image:loc>
+      <image:title>${esc(titolo)}</image:title>
+    </image:image>
+  </url>`
+    ),
     ...conPagina.map(
       (e) => `  <url>
     <loc>${base}/kalabria/${e.slug}/</loc>

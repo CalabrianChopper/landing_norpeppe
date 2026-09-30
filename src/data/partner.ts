@@ -1,5 +1,5 @@
 // Rete Xploring Kalabria: esperienze prenotabili tutto l'anno,
-// gestite dai partner locali. Funzionano anche senza NorPeppe in loco.
+// gestite dai partner locali. Funzionano anche senza Giuseppe in loco.
 
 export type Partner = {
   slug: string;

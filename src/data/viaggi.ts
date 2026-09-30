@@ -8,7 +8,7 @@ export const formato = {
   partenzeAnno: '4 partenze l’anno',
 };
 
-/** Il "plus" di partire con NorPeppe invece che con un catalogo. */
+/** Il "plus" di partire con Xploring invece che con un catalogo. */
 export const perche = [
   {
     chiave: 'Il gruppo',

@@ -17,7 +17,7 @@ const { evento, variante = 'grande', href } = Astro.props;
 const data = formattaData(evento.data);
 
 const messaggio = encodeURIComponent(
-  `Ciao NorPeppe! Mi interessa "${evento.titolo}". Mi mandi i dettagli?`
+  `Ciao Xploring! Mi interessa "${evento.titolo}". Mi mandi i dettagli?`
 );
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
 const destinazione = href ?? scrivi;

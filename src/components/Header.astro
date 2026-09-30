@@ -1,21 +1,20 @@
 ---
-// Il menu salta fra le sezioni della home. Gli indirizzi partono da '/' perché
-// l'intestazione sta anche sulle pagine delle singole uscite.
+// Il menu porta alle tre pagine: home, Calabria e mondo.
+// `id` è la sezione che, se sta nella pagina aperta, accende la voce.
 const sezioni = [
-  { label: 'La mappa', id: 'mappa' },
-  { label: 'Xploring Kalabria', id: 'kalabria' },
-  { label: 'Uscite in Calabria', id: 'calendario-kalabria' },
-  { label: 'Xploring the World', id: 'mondo' },
-  { label: 'Partenze nel mondo', id: 'calendario' },
-  { label: 'Galleria', id: 'galleria' },
-  { label: 'Domande', id: 'domande' },
+  { label: 'La mappa', href: '/#mappa', id: 'mappa' },
+  { label: 'Xploring Kalabria', href: '/kalabria/', id: 'kalabria' },
+  { label: 'Uscite in Calabria', href: '/kalabria/#calendario-kalabria', id: 'calendario-kalabria' },
+  { label: 'Xploring the World', href: '/mondo/', id: 'mondo' },
+  { label: 'Partenze nel mondo', href: '/mondo/#calendario', id: 'calendario' },
+  { label: 'Galleria', href: '/#galleria', id: 'galleria' },
+  { label: 'Domande', href: '/#domande', id: 'domande' },
 ];
 ---
 
 <header class="header" id="header">
-  <a href="/#home" class="brand" aria-label="Xploring con NorPeppe — inizio pagina">
+  <a href="/#home" class="brand" aria-label="Xploring — inizio pagina">
     <span class="brand-main display">Xploring</span>
-    <span class="brand-sub script">con NorPeppe</span>
   </a>
 
   <div class="right">
@@ -35,7 +34,7 @@ const sezioni = [
   <nav class="nav-panel" id="nav-panel" aria-label="Sezioni della pagina">
     <ul class="sezioni">
       {sezioni.map((l) => (
-        <li><a href={`/#${l.id}`} data-sezione={l.id}>{l.label}</a></li>
+        <li><a href={l.href} data-sezione={l.id}>{l.label}</a></li>
       ))}
     </ul>
   </nav>

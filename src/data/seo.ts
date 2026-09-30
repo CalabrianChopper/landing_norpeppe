@@ -19,11 +19,11 @@ export const seo = {
   url: 'https://www.xploringkalabria.it',
 
   // ≤ 60 caratteri: le due keyword principali per prime.
-  title: 'Viaggi di gruppo e viaggi in Calabria | Xploring con NorPeppe',
+  title: 'Viaggi di gruppo e viaggi in Calabria | Xploring',
 
   // ≤ 155 caratteri, con le 4 keyword e una promessa concreta.
   description:
-    'Viaggi di gruppo organizzati nel mondo e viaggi in Calabria con NorPeppe: trekking in Calabria, canyon, borghi e partenze in piccoli gruppi da 8 a 14 persone.',
+    'Viaggi di gruppo organizzati nel mondo e viaggi in Calabria con Xploring: trekking in Calabria, canyon, borghi e partenze in piccoli gruppi da 8 a 14 persone.',
 
   ogImage: '/images/hero-aurora.jpg',
   locale: 'it_IT',
@@ -39,7 +39,6 @@ export const seo = {
 
   persona: {
     nome: site.persona,
-    alias: 'NorPeppe',
     ruolo: 'Viaggiatore, esploratore e storyteller',
   },
 } as const;
@@ -51,14 +50,14 @@ export const seo = {
  */
 export const faq = [
   {
-    domanda: 'Come funzionano i viaggi di gruppo con NorPeppe?',
+    domanda: 'Come funzionano i viaggi di gruppo con Xploring?',
     risposta:
-      'I viaggi di gruppo con NorPeppe sono viaggi organizzati in piccoli gruppi da 8 a 14 persone, verso mete che Giuseppe Lupis ha già percorso di persona. Voli, spostamenti, guide locali e imprevisti sono a carico dell’organizzazione: chi parte porta solo lo zaino. Si prenota con un messaggio su WhatsApp, una chiamata senza impegno e un acconto.',
+      'I viaggi di gruppo con Xploring sono viaggi organizzati in piccoli gruppi da 8 a 14 persone, verso mete che Giuseppe Lupis ha già percorso di persona. Voli, spostamenti, guide locali e imprevisti sono a carico dell’organizzazione: chi parte porta solo lo zaino. Si prenota con un messaggio su WhatsApp, una chiamata senza impegno e un acconto.',
   },
   {
     domanda: 'Cosa sono i viaggi in Calabria di Xploring Kalabria?',
     risposta:
-      'Xploring Kalabria è il calendario di viaggi in Calabria ed escursioni di NorPeppe: trekking nei canyon, cascate, rafting sul Pollino, notti in tenda, borghi e serate con DJ set. Ogni uscita è un gruppo aperto a chiunque, con posti contati; le date escono sul sito e sui social.',
+      'Xploring Kalabria è il calendario di viaggi in Calabria ed escursioni di Xploring: trekking nei canyon, cascate, rafting sul Pollino, notti in tenda, borghi e serate con DJ set. Ogni uscita è un gruppo aperto a chiunque, con posti contati; le date escono sul sito e sui social.',
   },
   {
     domanda: 'Serve essere allenati per fare trekking in Calabria con Xploring Kalabria?',
@@ -68,15 +67,15 @@ export const faq = [
   {
     domanda: 'Quante persone partecipano ai viaggi di gruppo organizzati?',
     risposta:
-      `I viaggi di gruppo organizzati da NorPeppe hanno tra ${formato.gruppo.replace('–', ' e ')}, con ${formato.partenzeAnno}. Il numero è scelto per poter entrare in una casa, sedersi a un tavolo solo o prendere una barca piccola nei posti visitati.`,
+      `I viaggi di gruppo organizzati da Xploring hanno tra ${formato.gruppo.replace('–', ' e ')}, con ${formato.partenzeAnno}. Il numero è scelto per poter entrare in una casa, sedersi a un tavolo solo o prendere una barca piccola nei posti visitati.`,
   },
   {
     domanda: 'Dove si va con i viaggi di gruppo nel mondo?',
     risposta:
-      `Le mete dei viaggi di gruppo nel mondo sono paesi che NorPeppe ha già visitato: al momento ${totalePaesi} paesi in ${continenti.length} continenti, con una forte presenza del Nord Europa (Norvegia, Islanda, Lapponia) e itinerari nati dalle persone conosciute sul posto.`,
+      `Le mete dei viaggi di gruppo nel mondo sono paesi già visitati da Giuseppe Lupis: al momento ${totalePaesi} paesi in ${continenti.length} continenti, con una forte presenza del Nord Europa (Norvegia, Islanda, Lapponia) e itinerari nati dalle persone conosciute sul posto.`,
   },
   {
-    domanda: 'Come si prenota un viaggio o un’escursione con NorPeppe?',
+    domanda: 'Come si prenota un viaggio o un’escursione con Xploring?',
     risposta:
       `Si scrive su WhatsApp al ${site.telefono} o via email a ${site.email}. Per i viaggi di gruppo nel mondo segue una chiamata con costi, ritmo e difficoltà, poi l’acconto blocca il posto. Per le escursioni in Calabria basta prenotare il singolo evento e presentarsi al punto di ritrovo.`,
   },

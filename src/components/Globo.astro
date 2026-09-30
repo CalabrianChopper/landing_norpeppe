@@ -1,9 +1,10 @@
 ---
-import { paesiVisitati, totalePaesi, continenti } from '../data/paesi';
+import { nomiPerId, isole, totalePaesi, continenti } from '../data/paesi';
 import { CALABRIA } from '../data/site';
 
 const payload = {
-  visitati: Object.fromEntries(paesiVisitati.map((p) => [p.id, p.nome])),
+  visitati: nomiPerId,
+  isole,
   calabria: CALABRIA,
 };
 ---
@@ -35,7 +36,7 @@ const payload = {
 
       <div class="azioni">
         <button class="btn" id="vai-calabria" type="button">Portami in Calabria</button>
-        <a class="link-underline" href="#mondo">Dove andiamo insieme</a>
+        <a class="link-underline" href="/mondo/">Dove andiamo insieme</a>
       </div>
     </div>
 
@@ -45,13 +46,13 @@ const payload = {
         <canvas
           id="globo-canvas"
           role="img"
-          aria-label={`Mappamondo con evidenziati i ${totalePaesi} paesi visitati da NorPeppe e un segnaposto sulla Calabria. Trascina per girarlo, oppure usa le frecce.`}
+          aria-label={`Mappamondo con evidenziati i ${totalePaesi} paesi già visitati e un segnaposto sulla Calabria. Trascina per girarlo, oppure usa le frecce.`}
         ></canvas>
 
         <!-- Segnaposto Calabria: il link vero, posizionato sopra al punto disegnato. -->
-        <a class="pin" id="pin-calabria" href="#kalabria" hidden>
+        <a class="pin" id="pin-calabria" href="/kalabria/" hidden>
           <span class="pin-label">Xploring Kalabria <span aria-hidden="true">→</span></span>
-          <span class="sr-only">Vai alla sezione Xploring Kalabria</span>
+          <span class="sr-only">Vai alla pagina Xploring Kalabria</span>
         </a>
 
         <p class="etichetta" id="globo-etichetta" aria-hidden="true"></p>
@@ -59,7 +60,7 @@ const payload = {
         <noscript>
           <p class="fallback">
             Attiva JavaScript per girare il mappamondo, oppure vai diretto a
-            <a href="#kalabria">Xploring Kalabria</a>.
+            <a href="/kalabria/">Xploring Kalabria</a>.
           </p>
         </noscript>
       </div>
@@ -317,8 +318,9 @@ const payload = {
   const dati = document.getElementById('globo-dati');
 
   if (box && canvas && dati) {
-    const { visitati, calabria } = JSON.parse(dati.textContent || '{}') as {
+    const { visitati, isole, calabria } = JSON.parse(dati.textContent || '{}') as {
       visitati: Record<string, string>;
+      isole: { nome: string; lon: number; lat: number }[];
       calabria: { lon: number; lat: number; label: string };
     };
 
@@ -460,11 +462,26 @@ const payload = {
           ctx.lineWidth = 0.8;
           ctx.stroke();
 
-          if (hover) {
+          if (hover && hover.type === 'Feature') {
             ctx.beginPath();
             path(hover);
             ctx.fillStyle = COLORI.visitatoHover;
             ctx.fill();
+          }
+
+          // Le isole troppo piccole per la mappa: un pallino oliva.
+          const centroVista: [number, number] = [-ora[0], -ora[1]];
+          for (const isola of isole) {
+            if (d3.geoDistance([isola.lon, isola.lat], centroVista) > Math.PI / 2 - 0.02) continue;
+            const p = projection([isola.lon, isola.lat]);
+            if (!p) continue;
+            ctx.beginPath();
+            ctx.arc(p[0], p[1], (hover === isola ? 4.2 : 3) * Math.min(zoom, 2.2), 0, Math.PI * 2);
+            ctx.fillStyle = hover === isola ? COLORI.visitatoBordo : COLORI.visitato;
+            ctx.fill();
+            ctx.strokeStyle = COLORI.visitatoBordo;
+            ctx.lineWidth = 1;
+            ctx.stroke();
           }
 
           ctx.beginPath();
@@ -546,9 +563,17 @@ const payload = {
           return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
         };
 
-        const cercaPaese = (px: number, py: number) => {
+        const cercaPaese = (px: number, py: number): any => {
           // Fuori dal disco non c'è niente da cercare.
           if (Math.hypot(px - 0.5, py - 0.5) * lato > raggio * zoom) return null;
+          // Prima le isole: un pallino a meno di 9 px dal cursore.
+          const centroVista: [number, number] = [-ora[0], -ora[1]];
+          const vicina = isole.find((isola) => {
+            if (d3.geoDistance([isola.lon, isola.lat], centroVista) > Math.PI / 2 - 0.02) return false;
+            const q = projection([isola.lon, isola.lat]);
+            return !!q && Math.hypot(q[0] - px * lato, q[1] - py * lato) < 9;
+          });
+          if (vicina) return vicina;
           const p = projection.invert?.([px * lato, py * lato]);
           if (!p) return null;
           return accesi.find((f: any) => d3.geoContains(f, p)) || null;
@@ -583,7 +608,8 @@ const payload = {
           if (trovato !== hover) {
             hover = trovato;
             if (trovato && etichetta) {
-              etichetta.textContent = visitati[String(trovato.id)] || '';
+              etichetta.textContent =
+                trovato.type === 'Feature' ? visitati[String(trovato.id)] || '' : trovato.nome;
               etichetta.classList.add('is-on');
             } else {
               etichetta?.classList.remove('is-on');
@@ -631,7 +657,7 @@ const payload = {
         const partiPerLaCalabria = () => {
           if (inPartenza) return;
           if (menoMoto) {
-            document.getElementById('kalabria')?.scrollIntoView({ block: 'start' });
+            window.location.href = '/kalabria/';
             return;
           }
           inPartenza = true;
@@ -645,21 +671,25 @@ const payload = {
           richiediFrame();
         };
 
-        // A schermo coperto si salta alla sezione, poi lo schermo si riapre
-        // e il globo torna com'era: è una one page, non si cambia pagina.
+        // A schermo coperto si apre la pagina della Calabria.
         function atterra() {
-          const sezione = document.getElementById('kalabria');
           if (tuffo) tuffo.style.opacity = '1';
-          sezione?.scrollIntoView({ behavior: 'instant' as ScrollBehavior, block: 'start' });
-          window.setTimeout(() => {
-            tuffo?.classList.remove('is-tuffo');
-            if (tuffo) tuffo.style.opacity = '0';
-            zoom = 1;
-            inPartenza = false;
-            if (bottone) bottone.disabled = false;
-            richiediFrame();
-          }, 250);
+          window.location.href = '/kalabria/';
         }
+
+        // Se si torna indietro col browser, la pagina può riapparire dalla
+        // cache ancora coperta: si riapre lo schermo e il globo torna com'era.
+        window.addEventListener('pageshow', (e) => {
+          if (!e.persisted) return;
+          tuffo?.classList.remove('is-tuffo');
+          if (tuffo) tuffo.style.opacity = '0';
+          zoom = 1;
+          discesa = null;
+          volo = null;
+          inPartenza = false;
+          if (bottone) bottone.disabled = false;
+          richiediFrame();
+        });
 
         bottone?.addEventListener('click', partiPerLaCalabria);
         pin?.addEventListener('click', (e) => {

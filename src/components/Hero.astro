@@ -3,7 +3,7 @@ import { site, CALABRIA } from '../data/site';
 import { totalePaesi, continenti } from '../data/paesi';
 
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
-  'Ciao NorPeppe! Vorrei informazioni sui prossimi viaggi ed eventi.'
+  'Ciao Xploring! Vorrei informazioni sui prossimi viaggi ed eventi.'
 )}`;
 ---
 
@@ -17,7 +17,6 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
 
     <h1 class="lockup">
       <span class="wordmark display">Xploring</span>
-      <span class="sub script">con NorPeppe</span>
       <span class="sr-only">— viaggi di gruppo nel mondo e viaggi in Calabria</span>
     </h1>
 
@@ -28,7 +27,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     </a>
 
     <div class="doors">
-      <a class="door pole-mondo" href="#mondo">
+      <a class="door pole-mondo" href="/mondo/">
         <span class="door-meta mono">{totalePaesi} paesi · {continenti.length} continenti</span>
         <span class="door-title display">Viaggi di gruppo<br />nel mondo</span>
         <span class="door-desc">
@@ -37,7 +36,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
         <span class="door-cta">Scopri i viaggi <span aria-hidden="true">→</span></span>
       </a>
 
-      <a class="door pole-kalabria" href="#kalabria">
+      <a class="door pole-kalabria" href="/kalabria/">
         <span class="door-meta mono">38°54′N 16°30′E · {CALABRIA.label}</span>
         <span class="door-title display">Xploring<br />Kalabria</span>
         <span class="door-desc">

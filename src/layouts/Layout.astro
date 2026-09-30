@@ -26,6 +26,8 @@ interface Props {
   nodi?: unknown[];
   /** Pagine di servizio: fuori dai motori di ricerca. */
   noindex?: boolean;
+  /** Quale elenco di viaggi emettere come ItemList: Calabria o mondo. Senza, la FAQ della home. */
+  elenco?: 'kalabria' | 'mondo';
 }
 
 const {
@@ -36,6 +38,7 @@ const {
   immagine,
   nodi,
   noindex = false,
+  elenco,
 } = Astro.props;
 
 const urlBase = seo.url.replace(/\/$/, '');
@@ -61,12 +64,12 @@ const luogoCalabria = {
 // vogliamo far indicizzare. Le altre restano ancorate alla sezione.
 const viaggio = (e: Evento, area: 'Calabria' | 'mondo') => {
   const pagina = area === 'Calabria' ? urlEvento(e) : undefined;
-  const ancora = area === 'Calabria' ? 'calendario-kalabria' : 'calendario';
+  const ancora = area === 'Calabria' ? 'kalabria/#calendario-kalabria' : 'mondo/#calendario';
   return {
   '@type': 'TouristTrip',
   name: e.titolo,
   description: e.sintesi,
-  url: pagina ? `${urlBase}${pagina}` : `${home}#${ancora}`,
+  url: pagina ? `${urlBase}${pagina}` : `${home}${ancora}`,
   touristType: area === 'Calabria' ? ['trekking in Calabria', 'viaggi in Calabria'] : ['viaggi di gruppo', 'viaggi di gruppo organizzati'],
   itinerary: { '@type': 'Place', name: e.luogo },
   provider: { '@id': idOrg },
@@ -79,8 +82,8 @@ const nodiSempre = [
     {
       '@type': ['TravelAgency', 'Organization'],
       '@id': idOrg,
-      name: `${site.brand} ${site.brandSub}`,
-      alternateName: ['Xploring Kalabria', 'NorPeppe'],
+      name: site.brand,
+      alternateName: ['Xploring Kalabria'],
       url: home,
       logo: `${urlBase}/images/logo.png`,
       image: ogImage,
@@ -104,14 +107,14 @@ const nodiSempre = [
         {
           '@type': 'Offer',
           name: 'Viaggi di gruppo organizzati nel mondo',
-          description: `Viaggi di gruppo in ${formato.gruppo}, ${formato.partenzeAnno}, verso ${totalePaesi} paesi in ${continenti.length} continenti già percorsi da NorPeppe.`,
-          url: `${home}#mondo`,
+          description: `Viaggi di gruppo in ${formato.gruppo}, ${formato.partenzeAnno}, verso ${totalePaesi} paesi in ${continenti.length} continenti già percorsi da Giuseppe Lupis.`,
+          url: `${home}mondo/`,
         },
         {
           '@type': 'Offer',
           name: 'Viaggi in Calabria: trekking, escursioni ed eventi',
           description: `Trekking in Calabria, canyon, rafting, borghi e serate. ${passati.length} uscite già fatte, ${prossimi.length} in arrivo.`,
-          url: `${home}#kalabria`,
+          url: `${home}kalabria/`,
           areaServed: luogoCalabria,
         },
       ],
@@ -120,7 +123,6 @@ const nodiSempre = [
       '@type': 'Person',
       '@id': idPersona,
       name: seo.persona.nome,
-      alternateName: seo.persona.alias,
       jobTitle: seo.persona.ruolo,
       description:
         'Calabrese, viaggiatore e storyteller. Organizza viaggi di gruppo nel mondo e il calendario Xploring Kalabria di trekking ed escursioni in Calabria.',
@@ -134,7 +136,7 @@ const nodiSempre = [
       '@type': 'WebSite',
       '@id': `${urlBase}/#sito`,
       url: home,
-      name: `${site.brand} ${site.brandSub}`,
+      name: site.brand,
       inLanguage: seo.lingua,
       publisher: { '@id': idOrg },
       keywords: keywords.join(', '),
@@ -154,8 +156,8 @@ const nodoPagina = {
   primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
 };
 
-// Quello che sta solo sulla home: FAQ e i due elenchi di viaggi.
-const nodiHome = [
+// Home: la FAQ. Le pagine Calabria e mondo: il loro elenco di viaggi.
+const nodiFaq = [
     {
       '@type': 'FAQPage',
       '@id': `${canonical}#faq`,
@@ -165,6 +167,9 @@ const nodiHome = [
         acceptedAnswer: { '@type': 'Answer', text: f.risposta },
       })),
     },
+];
+
+const nodiKalabria = [
     {
       '@type': 'ItemList',
       '@id': `${canonical}#viaggi-in-calabria`,
@@ -175,6 +180,9 @@ const nodiHome = [
         item: viaggio(e, 'Calabria'),
       })),
     },
+];
+
+const nodiMondo = [
     {
       '@type': 'ItemList',
       '@id': `${canonical}#viaggi-di-gruppo`,
@@ -189,7 +197,11 @@ const nodiHome = [
 
 const schema = {
   '@context': 'https://schema.org',
-  '@graph': [...nodiSempre, nodoPagina, ...(nodi ?? nodiHome)],
+  '@graph': [
+    ...nodiSempre,
+    nodoPagina,
+    ...(nodi ?? (elenco === 'kalabria' ? nodiKalabria : elenco === 'mondo' ? nodiMondo : nodiFaq)),
+  ],
 };
 ---
 
@@ -218,13 +230,13 @@ const schema = {
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={`${site.brand} ${site.brandSub}`} />
+    <meta property="og:site_name" content={site.brand} />
     <meta property="og:locale" content={seo.locale} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content="Xploring con NorPeppe: viaggi di gruppo nel mondo e viaggi in Calabria" />
+    <meta property="og:image:alt" content="Xploring: viaggi di gruppo nel mondo e viaggi in Calabria" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

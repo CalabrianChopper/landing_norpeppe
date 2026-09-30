@@ -1,6 +1,6 @@
-# Xploring con NorPeppe
+# Xploring
 
-Sito di Giuseppe Lupis (NorPeppe). Due attività, due percorsi:
+Sito di Giuseppe Lupis (brand Xploring / Xploring Kalabria). Due attività, due percorsi:
 
 - **Viaggi di gruppo nel mondo** → `/viaggi`
 - **Xploring Kalabria** (eventi e partner locali) → `/kalabria`

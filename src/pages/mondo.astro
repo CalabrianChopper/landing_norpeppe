@@ -1,0 +1,37 @@
+---
+// Xploring the World: solo i viaggi di gruppo nel mondo.
+import Layout from '../layouts/Layout.astro';
+import MondoHome from '../components/MondoHome.astro';
+import Calendario from '../components/Calendario.astro';
+import { site } from '../data/site';
+import { prossimiMondo, passatiMondo } from '../data/viaggiMondo';
+
+const wa = (testo: string) =>
+  `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(testo)}`;
+---
+
+<Layout
+  title="Viaggi di gruppo organizzati nel mondo | Xploring"
+  description="Xploring the World: viaggi di gruppo organizzati in piccoli gruppi, verso mete già percorse di persona. Le prossime partenze e i viaggi già fatti."
+  pole="mondo"
+  path="/mondo/"
+  immagine="/images/from-calabria.jpg"
+  elenco="mondo"
+>
+  <MondoHome />
+  <Calendario
+    id="calendario"
+    pole="mondo"
+    eyebrow="Il calendario nel mondo"
+    titolo="Prossimi viaggi di gruppo organizzati"
+    intro="Le partenze si formano quando c'è il gruppo. Qui trovi dove si va e dove siamo già stati: scegli, scrivimi, e vediamo se la data combacia."
+    prossimi={prossimiMondo}
+    passati={passatiMondo}
+    notaProssimi="Le date escono quando il gruppo c'è. Scrivimi e ti avviso appena si apre una partenza."
+    notaPassati="Dove siamo già stati. Se una di queste mete ti interessa, dimmelo: si riparte quando c'è un gruppo."
+    cta={{
+      label: 'Avvisami sulle partenze',
+      href: wa('Ciao Xploring! Avvisami quando escono le date dei prossimi viaggi nel mondo.'),
+    }}
+  />
+</Layout>

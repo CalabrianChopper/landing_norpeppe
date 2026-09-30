@@ -31,8 +31,8 @@ const quando = data ? `${data.giorno} ${data.mese}` : evento.periodo;
 
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   conclusa
-    ? `Ciao NorPeppe! Ho letto di "${evento.titolo}". Avvisami se lo rifate!`
-    : `Ciao NorPeppe! Ho letto la pagina di "${evento.titolo}". Mi mandi i dettagli e le date?`
+    ? `Ciao Xploring! Ho letto di "${evento.titolo}". Avvisami se lo rifate!`
+    : `Ciao Xploring! Ho letto la pagina di "${evento.titolo}". Mi mandi i dettagli e le date?`
 )}`;
 
 // Le altre uscite in arrivo, per non lasciare la pagina senza uscite.
@@ -67,7 +67,7 @@ const nodi = [
         '@type': 'ListItem',
         position: 2,
         name: 'Trekking ed escursioni in Calabria',
-        item: `${urlBase}/#calendario-kalabria`,
+        item: `${urlBase}/kalabria/`,
       },
       { '@type': 'ListItem', position: 3, name: evento.titolo },
     ],
@@ -87,7 +87,7 @@ const nodi = [
     <header class="testa section">
       <div class="wrap-narrow">
         <nav class="briciole" aria-label="Dove ti trovi">
-          <a href="/#calendario-kalabria">Trekking ed escursioni in Calabria</a>
+          <a href="/kalabria/#calendario-kalabria">Trekking ed escursioni in Calabria</a>
           <span aria-hidden="true">/</span>
           <span class="qui">{evento.titolo}</span>
         </nav>
@@ -216,7 +216,7 @@ const nodi = [
           <div class="griglia">
             {altre.map((e) => <EventoCard evento={e} href={urlEvento(e)} />)}
           </div>
-          <a class="link-underline torna" href="/#calendario-kalabria">
+          <a class="link-underline torna" href="/kalabria/#calendario-kalabria">
             Torna al calendario della Calabria
           </a>
         </div>

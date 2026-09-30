@@ -1,59 +1,17 @@
 ---
+// La home: presentazione, mappamondo, galleria e domande.
+// Calabria e mondo hanno ciascuno la sua pagina (/kalabria/ e /mondo/),
+// così non si mescolano scorrendo.
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Globo from '../components/Globo.astro';
-import KalabriaHome from '../components/KalabriaHome.astro';
-import Calendario from '../components/Calendario.astro';
-import MondoHome from '../components/MondoHome.astro';
 import Galleria from '../components/Galleria.astro';
 import Faq from '../components/Faq.astro';
-import { site } from '../data/site';
-import { prossimi, passati } from '../data/eventi';
-import { prossimiMondo, passatiMondo } from '../data/viaggiMondo';
-
-const wa = (testo: string) =>
-  `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(testo)}`;
 ---
 
 <Layout>
   <Hero />
   <Globo />
-
-  <KalabriaHome />
-  <Calendario
-    id="calendario-kalabria"
-    pole="kalabria"
-    eyebrow="Il calendario in Calabria"
-    titolo="Trekking ed escursioni in Calabria"
-    intro="Le date escono qui e sui social, e i posti sono contati. Ogni uscita in arrivo ha la sua pagina, con ritrovo, difficoltà e cosa mettere nello zaino."
-    prossimi={prossimi}
-    passati={passati}
-    notaProssimi="Aprine una per leggere com'è fatta la giornata. Se ti convince, si prenota con un messaggio."
-    notaPassati="Dove siamo già stati. Se una di queste uscite ti interessa, dimmelo: si rifà quando c'è un gruppo."
-    cta={{
-      label: 'Voglio esserci alla prossima',
-      href: wa('Ciao NorPeppe! Vorrei essere avvisato sui prossimi eventi in Calabria.'),
-    }}
-    conPagina
-  />
-
-  <MondoHome />
-  <Calendario
-    id="calendario"
-    pole="mondo"
-    eyebrow="Il calendario nel mondo"
-    titolo="Prossimi viaggi di gruppo organizzati"
-    intro="Le partenze si formano quando c'è il gruppo. Qui trovi dove si va e dove siamo già stati: scegli, scrivimi, e vediamo se la data combacia."
-    prossimi={prossimiMondo}
-    passati={passatiMondo}
-    notaProssimi="Le date escono quando il gruppo c'è. Scrivimi e ti avviso appena si apre una partenza."
-    notaPassati="Dove siamo già stati. Se una di queste mete ti interessa, dimmelo: si riparte quando c'è un gruppo."
-    cta={{
-      label: 'Avvisami sulle partenze',
-      href: wa('Ciao NorPeppe! Avvisami quando escono le date dei prossimi viaggi nel mondo.'),
-    }}
-  />
-
   <Galleria />
   <Faq />
 </Layout>
