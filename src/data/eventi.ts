@@ -32,6 +32,10 @@ export type Evento = {
   data?: string;
   /** Usato al posto della data, es. 'Data in definizione' o 'Estate 2025'. */
   periodo?: string;
+  /** Ultimo giorno, per le uscite di più giorni consecutivi (es. 12–13 settembre). */
+  dataFine?: string;
+  /** Altre edizioni della stessa uscita (es. Valli Cupe: 11 e 18 luglio). */
+  altreDate?: string[];
   durata: string;
   tag: string[];
   sintesi: string;
@@ -167,9 +171,9 @@ export const eventi: Evento[] = [
   // ─── GIÀ FATTI ───────────────────────────────────────────────────────────
   {
     slug: 'cascata-del-litrello',
-    titolo: 'Escursione alla Cascata del Litrello',
-    luogo: 'Zagarise (CZ)', // TODO CONFERMARE il comune di partenza
-    periodo: 'Edizione conclusa',
+    titolo: 'Hike alla Cascata del Litrello',
+    luogo: 'Sila Piccola (CZ)',
+    data: '2026-08-20',
     durata: 'Mezza giornata',
     tag: ['Trekking', 'Acqua'],
     sintesi:
@@ -212,9 +216,9 @@ export const eventi: Evento[] = [
   },
   {
     slug: 'pollino-rafting-tenda',
-    titolo: 'Rafting, river trekking e notte in tenda sul Pollino',
+    titolo: 'Weekend tra rafting e tenda sul Pollino',
     luogo: 'Parco Nazionale del Pollino (CS)',
-    periodo: 'Edizione conclusa',
+    data: '2026-08-22',
     durata: 'Due giorni, una notte',
     tag: ['Rafting', 'River trekking', 'Campo'],
     sintesi:
@@ -262,7 +266,7 @@ export const eventi: Evento[] = [
     slug: 'tiriolo-urban-trekking-dj-set',
     titolo: 'Urban trekking e DJ set a Tiriolo',
     luogo: 'Tiriolo (CZ)',
-    periodo: 'Edizione conclusa',
+    data: '2026-08-23',
     durata: 'Dal pomeriggio a notte',
     tag: ['Borghi', 'Musica'],
     sintesi:
@@ -305,7 +309,8 @@ export const eventi: Evento[] = [
     slug: 'canyon-valli-cupe',
     titolo: 'Canyon Valli Cupe',
     luogo: 'Sersale (CZ)',
-    periodo: 'Edizione conclusa',
+    data: '2026-07-11',
+    altreDate: ['2026-07-18'],
     durata: 'Giornata intera',
     tag: ['Canyon', 'Riserva'],
     sintesi:
@@ -314,20 +319,21 @@ export const eventi: Evento[] = [
   },
   {
     slug: 'bagni-di-guida',
-    titolo: 'Bagni di Guida',
-    luogo: 'Cerchiara di Calabria (CS)', // TODO CONFERMARE il comune
-    periodo: 'Edizione conclusa',
+    titolo: 'Bagni di Guida, tra Terme e Cianotipia',
+    luogo: 'Bivongi (RC)',
+    data: '2026-07-19',
     durata: 'Giornata intera',
-    tag: ['Terme naturali', 'Pollino'],
+    tag: ['Terme naturali', 'Cianotipia'],
     sintesi:
-      'Acqua sulfurea che esce calda dalla roccia in mezzo a una gola. Ci si arriva a piedi e si resta a mollo.',
+      'Le acque sulfuree dei Bagni di Guida, a Bivongi, e un laboratorio di cianotipia: si stampa con la luce del sole.',
     stato: 'passato',
   },
   {
     slug: 'serra-san-bruno-forest-bathing',
-    titolo: 'Serra San Bruno e Forest Bathing al Bosco Archiforo',
+    // ⚠️ DA CONFERMARE: abbinata al 25/07 "Il Bosco che cura a Serra San Bruno".
+    titolo: 'Il Bosco che cura a Serra San Bruno',
     luogo: 'Serra San Bruno (VV)',
-    periodo: 'Edizione conclusa',
+    data: '2026-07-25',
     durata: 'Giornata intera',
     tag: ['Forest bathing', 'Boschi'],
     sintesi:
@@ -336,11 +342,12 @@ export const eventi: Evento[] = [
   },
   {
     slug: 'ferriere-di-mongiana',
-    titolo: 'Ferriere di Mongiana',
+    // ⚠️ DA CONFERMARE: abbinata al 07/07 "Serre calabre tra storia, hike e forest bathing".
+    titolo: 'Serre calabre tra storia, hike e forest bathing',
     luogo: 'Mongiana (VV)',
-    periodo: 'Edizione conclusa',
-    durata: 'Mezza giornata',
-    tag: ['Storia', 'Archeologia industriale'],
+    data: '2026-07-07',
+    durata: 'Giornata intera',
+    tag: ['Storia', 'Forest bathing'],
     sintesi:
       'Le fonderie borboniche nel cuore delle Serre: la Calabria che produceva acciaio, raccontata dove è successo.',
     stato: 'passato',
@@ -349,17 +356,85 @@ export const eventi: Evento[] = [
     slug: 'montauro-borgo-dj-set',
     titolo: 'Esplorazione del borgo di Montauro e DJ set in terrazza',
     luogo: 'Montauro (CZ)',
-    periodo: 'Edizione conclusa',
+    data: '2026-08-07',
     durata: 'Dal pomeriggio a notte',
     tag: ['Borghi', 'Musica'],
     sintesi:
       'Vicoli, portali di granito e cortili aperti. Al calare del sole il set parte da una terrazza che guarda il golfo.',
     stato: 'passato',
   },
+
+  // ─── Già fatti, aggiunti il 01/10/2026 ───
+  // ⚠️ DA COMPLETARE: luogo, durata e sintesi sono una traccia minima.
+  {
+    slug: 'hike-monte-tiriolo',
+    titolo: 'Hike sul Monte Tiriolo',
+    luogo: 'Tiriolo (CZ)',
+    data: '2026-04-12',
+    durata: 'Mezza giornata',
+    tag: ['Trekking'],
+    sintesi: 'La prima uscita della stagione: si sale sul Monte Tiriolo, dove nelle giornate pulite si vedono i due mari.',
+    stato: 'passato',
+  },
+  {
+    slug: 'star-trek-tiriolo',
+    titolo: 'Star Trek a Tiriolo, hike e stelle',
+    luogo: 'Tiriolo (CZ)',
+    data: '2026-06-27',
+    durata: 'Dal tramonto a notte',
+    tag: ['Trekking', 'Stelle'],
+    sintesi: 'Si cammina fino in quota al calare del sole e si resta lassù, al buio, a guardare il cielo.',
+    stato: 'passato',
+  },
+  {
+    slug: 'trekking-notturno-aspromonte',
+    titolo: 'Trekking notturno in Aspromonte',
+    luogo: 'Aspromonte (RC)',
+    data: '2026-08-27',
+    durata: 'Serata e notte',
+    tag: ['Trekking', 'Notturno'],
+    sintesi: 'Si cammina con il buio e le frontali accese, nel silenzio dell’Aspromonte.',
+    stato: 'passato',
+  },
+  {
+    slug: 'nardodipace-megaliti-yoga',
+    titolo: 'Nardodipace tra megaliti e yoga',
+    luogo: 'Nardodipace (VV)',
+    data: '2026-09-06',
+    durata: 'Giornata intera',
+    tag: ['Megaliti', 'Yoga'],
+    sintesi: 'I megaliti di Nardodipace nei boschi delle Serre, e una sessione di yoga in mezzo alle pietre.',
+    stato: 'passato',
+  },
+  {
+    slug: 'kalabria-coast-to-coast',
+    titolo: 'Kalabria Coast to Coast',
+    luogo: 'Dal Tirreno allo Ionio',
+    data: '2026-09-12',
+    dataFine: '2026-09-13',
+    durata: 'Due giorni',
+    tag: ['Trekking', 'Più giorni'],
+    sintesi: 'Due giorni a piedi da un mare all’altro: la Calabria attraversata dal Tirreno allo Ionio.',
+    stato: 'passato',
+  },
 ];
 
-export const prossimi = eventi.filter((e) => e.stato === 'prossimo');
-export const passati = eventi.filter((e) => e.stato === 'passato');
+const perData = (a: Evento, b: Evento) => (a.data ?? '9999').localeCompare(b.data ?? '9999');
+
+/** In arrivo: dalla più vicina. */
+export const prossimi = eventi.filter((e) => e.stato === 'prossimo').sort(perData);
+/** Già fatti: dal più recente al più vecchio. */
+export const passati = eventi.filter((e) => e.stato === 'passato').sort((a, b) => perData(b, a));
+
+/**
+ * La prossima uscita con un modulo d'iscrizione: la più vicina a oggi.
+ * ⚠️ Il sito è statico: "oggi" è il giorno della build. Dopo ogni uscita
+ * si sposta l'evento fra i già fatti e si rifà la build.
+ */
+export const prossimaIscrizione = (() => {
+  const oggi = new Date().toISOString().slice(0, 10);
+  return prossimi.find((e) => e.prenotazione && (!e.data || e.data >= oggi));
+})();
 
 /** Le uscite che hanno una pagina tutta loro: da qui nascono le rotte. Tutte. */
 export const conPagina = eventi;
@@ -367,6 +442,26 @@ export const conPagina = eventi;
 /** L'indirizzo della pagina di un'uscita in Calabria. */
 export function urlEvento(e: Evento) {
   return `/kalabria/${e.slug}/`;
+}
+
+/**
+ * La data in breve per l'elenco e la pagina: '27 Giu', '12–13 Set', '11 e 18 Lug'.
+ * Se manca la data, il testo di `periodo`.
+ */
+export function quandoBreve(e: Evento) {
+  const d = formattaData(e.data);
+  if (!d) return e.periodo ?? '';
+  const g = (x: { giorno: string }) => String(Number(x.giorno));
+  if (e.dataFine) {
+    const f = formattaData(e.dataFine);
+    if (f) return f.mese === d.mese ? `${g(d)}–${g(f)} ${d.mese}` : `${g(d)} ${d.mese} – ${g(f)} ${f.mese}`;
+  }
+  const altre = (e.altreDate ?? []).map((x) => formattaData(x)).filter((x) => !!x) as { giorno: string; mese: string }[];
+  if (altre.length && altre.every((x) => x.mese === d.mese)) {
+    const giorni = [g(d), ...altre.map(g)];
+    return `${giorni.slice(0, -1).join(', ')} e ${giorni.at(-1)} ${d.mese}`;
+  }
+  return `${g(d)} ${d.mese}`;
 }
 
 /** '2026-09-14' → { giorno: '14', mese: 'Set' } */

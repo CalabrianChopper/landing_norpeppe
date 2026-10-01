@@ -62,7 +62,7 @@ export const faq = [
   {
     domanda: 'Serve essere allenati per fare trekking in Calabria con Xploring Kalabria?',
     risposta:
-      'No. Il trekking in Calabria di Xploring Kalabria è pensato per chi ha voglia di camminare e stare in gruppo, non per atleti. Quando un percorso è impegnativo viene indicato prima, in modo chiaro. Molte uscite, come la Cascata del Litrello, sono adatte anche a chi cammina poco.',
+      'No. Il trekking in Calabria di Xploring Kalabria è pensato per chi ha voglia di camminare e stare in gruppo, non per atleti. Quando un percorso è impegnativo viene indicato prima, in modo chiaro. Molte uscite sono adatte anche a chi cammina poco.',
   },
   {
     domanda: 'Quante persone partecipano ai viaggi di gruppo organizzati?',

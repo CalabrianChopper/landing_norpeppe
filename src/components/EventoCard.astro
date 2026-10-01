@@ -1,6 +1,6 @@
 ---
 import { site } from '../data/site';
-import { formattaData, type Evento } from '../data/eventi';
+import { formattaData, quandoBreve, type Evento } from '../data/eventi';
 
 interface Props {
   evento: Evento;
@@ -69,7 +69,7 @@ const destinazione = href ?? scrivi;
     ></span>
     <span class="riga-corpo">
       <h3 class="riga-titolo">{href ? <a href={href}>{evento.titolo}</a> : evento.titolo}</h3>
-      <p class="riga-luogo mono">{evento.luogo}</p>
+      <p class="riga-luogo mono">{evento.data ? `${quandoBreve(evento)} · ` : ''}{evento.luogo}</p>
     </span>
     <ul class="tag tag-riga">
       {evento.tag.map((t) => <li>{t}</li>)}

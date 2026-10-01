@@ -4,7 +4,7 @@
 // se `dettaglio` manca, il racconto è la sintesi della card.
 import Layout from '../../layouts/Layout.astro';
 import EventoCard from '../../components/EventoCard.astro';
-import { conPagina, prossimi, formattaData, urlEvento, type Evento } from '../../data/eventi';
+import { conPagina, prossimi, quandoBreve, urlEvento, type Evento } from '../../data/eventi';
 import { site, CALABRIA } from '../../data/site';
 import { seo } from '../../data/seo';
 
@@ -26,8 +26,7 @@ const d = evento.dettaglio ?? {
   scheda: [],
 };
 const conclusa = evento.stato === 'passato';
-const data = formattaData(evento.data);
-const quando = data ? `${data.giorno} ${data.mese}` : evento.periodo;
+const quando = quandoBreve(evento);
 
 const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   conclusa
@@ -181,11 +180,17 @@ const nodi = [
         {d.nota && <p class="nota-finale">{d.nota}</p>}
 
         <aside class="prenota">
-          <p class="prenota-testo">
-            {conclusa
-              ? 'Questa uscita si è già fatta. Scrivimi se vuoi sapere quando la rifacciamo.'
-              : 'I posti sono contati: prenota il tuo posto, ti rispondiamo noi per confermare.'}
-          </p>
+          {conclusa ? (
+            <p class="prenota-testo">
+              Questa uscita si è già fatta. Scrivimi se vuoi sapere quando la rifacciamo.
+            </p>
+          ) : (
+            <p class="prenota-testo">
+              Una volta compilato il form, l’iscrizione è da ritenersi <strong>CONFERMATA</strong>.
+              <br />
+              Vuoi disdire? Scrivici su <a href={`mailto:${site.email}`}>{site.email}</a>
+            </p>
+          )}
           <div class="prenota-azioni">
             {conclusa ? (
               <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
@@ -456,6 +461,17 @@ const nodi = [
   .prenota-testo {
     color: var(--color-text-muted);
     max-width: 44ch;
+  }
+
+  .prenota-testo strong {
+    color: var(--color-text);
+    letter-spacing: 0.02em;
+  }
+
+  .prenota-testo a {
+    color: var(--color-accent-bright);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .altre {
