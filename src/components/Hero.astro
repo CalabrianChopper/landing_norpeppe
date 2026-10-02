@@ -2,9 +2,6 @@
 import { site, CALABRIA } from '../data/site';
 import { totalePaesi, continenti } from '../data/paesi';
 
-const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
-  'Ciao Xploring! Vorrei informazioni sui prossimi viaggi ed eventi.'
-)}`;
 ---
 
 <section class="hero" id="home">
@@ -21,10 +18,6 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
     </h1>
 
     <p class="claim">{site.claim}</p>
-
-    <a class="btn btn-solid cta" href={scrivi} target="_blank" rel="noopener noreferrer">
-      Scrivimi su WhatsApp
-    </a>
 
     <div class="doors">
       <a class="door pole-mondo" href="/mondo/">
@@ -48,7 +41,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
   </div>
 
   <a class="scroll-cue" href="#mappa">
-    <span class="mono">Dove sono stato</span>
+    <span class="mono">Dove siamo stati</span>
     <span class="chevron" aria-hidden="true">⌄</span>
   </a>
 </section>

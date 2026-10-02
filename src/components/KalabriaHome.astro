@@ -2,9 +2,6 @@
 import { prossimi, passati, percheKalabria } from '../data/eventi';
 import { site } from '../data/site';
 
-const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
-  'Ciao Xploring! Vorrei essere avvisato sui prossimi eventi in Calabria.'
-)}`;
 ---
 
 <section class="section kal pole-kalabria" id="kalabria">
@@ -16,7 +13,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
         <h2 class="display titolo">Xploring<br />Kalabria</h2>
         <p class="lead">
           Trekking in Calabria dentro i canyon, notti in tenda, borghi aperti col DJ set in
-          terrazza. Non è promozione turistica: è la mia regione fatta a piedi,
+          terrazza. Non è promozione turistica: è la nostra regione fatta a piedi,
           con chi ha voglia di venire. Ogni uscita è un gruppo aperto: si
           scrive, si prenota, ci si trova al punto di ritrovo.
         </p>
@@ -31,10 +28,7 @@ const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
         </ul>
 
         <div class="azioni">
-          <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
-            Fammi sapere le date
-          </a>
-          <a class="link-underline" href="#calendario-kalabria">Guarda le prossime uscite</a>
+          <a class="btn btn-solid" href="#calendario-kalabria">Guarda le prossime uscite</a>
         </div>
       </div>
 

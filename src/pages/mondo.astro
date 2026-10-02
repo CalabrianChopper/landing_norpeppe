@@ -3,11 +3,9 @@
 import Layout from '../layouts/Layout.astro';
 import MondoHome from '../components/MondoHome.astro';
 import Calendario from '../components/Calendario.astro';
-import { site } from '../data/site';
+import { scriviMail } from '../data/site';
 import { prossimiMondo, passatiMondo } from '../data/viaggiMondo';
 
-const wa = (testo: string) =>
-  `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(testo)}`;
 ---
 
 <Layout
@@ -24,14 +22,14 @@ const wa = (testo: string) =>
     pole="mondo"
     eyebrow="Il calendario nel mondo"
     titolo="Prossimi viaggi di gruppo organizzati"
-    intro="Le partenze si formano quando c'è il gruppo. Qui trovi dove si va e dove siamo già stati: scegli, scrivimi, e vediamo se la data combacia."
+    intro="Le partenze si formano quando c'è il gruppo. Qui trovi dove si va e dove siamo già stati: scegli, scrivici, e vediamo se la data combacia."
     prossimi={prossimiMondo}
     passati={passatiMondo}
-    notaProssimi="Le date escono quando il gruppo c'è. Scrivimi e ti avviso appena si apre una partenza."
-    notaPassati="Dove siamo già stati. Se una di queste mete ti interessa, dimmelo: si riparte quando c'è un gruppo."
+    notaProssimi="Le date escono quando il gruppo c'è. Scrivici e ti avvisiamo appena si apre una partenza."
+    notaPassati="Dove siamo già stati. Se una di queste mete ti interessa, scrivici: si riparte quando c'è un gruppo."
     cta={{
-      label: 'Avvisami sulle partenze',
-      href: wa('Ciao Xploring! Avvisami quando escono le date dei prossimi viaggi nel mondo.'),
+      label: 'Avvisatemi sulle partenze',
+      href: scriviMail('Avvisatemi sulle prossime partenze nel mondo'),
     }}
   />
 </Layout>

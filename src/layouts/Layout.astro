@@ -90,7 +90,6 @@ const nodiSempre = [
       description: seo.description,
       slogan: site.claim,
       email: site.email,
-      telephone: site.telefono,
       founder: { '@id': idPersona },
       areaServed: [luogoCalabria, { '@type': 'Place', name: 'Mondo' }],
       knowsAbout: [...keywords, 'escursioni in Calabria', 'viaggi avventura'],
@@ -98,16 +97,14 @@ const nodiSempre = [
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'prenotazioni',
-        telephone: site.telefono,
         email: site.email,
-        url: site.social.whatsapp,
         availableLanguage: 'it',
       },
       makesOffer: [
         {
           '@type': 'Offer',
           name: 'Viaggi di gruppo organizzati nel mondo',
-          description: `Viaggi di gruppo in ${formato.gruppo}, ${formato.partenzeAnno}, verso ${totalePaesi} paesi in ${continenti.length} continenti già percorsi da Giuseppe Lupis.`,
+          description: `Viaggi di gruppo in ${formato.gruppo}, ${formato.partenzeAnno}, verso ${totalePaesi} paesi in ${continenti.length} continenti già percorsi di persona.`,
           url: `${home}mondo/`,
         },
         {
@@ -213,7 +210,7 @@ const schema = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords.join(', ')} />
-    <meta name="author" content={`${seo.persona.nome} (${seo.persona.alias})`} />
+    <meta name="author" content={site.brand} />
     <meta
       name="robots"
       content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'}

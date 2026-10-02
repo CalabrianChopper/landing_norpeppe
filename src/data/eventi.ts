@@ -58,7 +58,7 @@ export type Evento = {
   /**
    * Link al Google Form di prenotazione. Il bottone "Prenota" della pagina
    * apre questo form in una nuova scheda: il sito non prende prenotazioni dirette.
-   * Se manca, il bottone porta a WhatsApp.
+   * Se manca, il bottone apre una mail.
    */
   prenotazione?: string;
 };
@@ -90,6 +90,7 @@ export const eventi: Evento[] = [
         { chiave: 'Dislivello', valore: '350 metri positivi / negativi' },
         { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
         { chiave: 'Quota', valore: 'Gratuito' },
+        { chiave: 'Età', valore: '18+' },
       ],
       portare: [
         'Abbigliamento outdoor a strati (maglia, pile, giacca a vento)',
@@ -124,6 +125,7 @@ export const eventi: Evento[] = [
         { chiave: 'Tipo', valore: 'Anello' },
         { chiave: 'Dislivello', valore: '500 metri totali' },
         { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+        { chiave: 'Età', valore: '18+' },
       ],
       portare: [
         'Abbigliamento outdoor a strati (maglia, pile, giacca a vento)',
@@ -158,6 +160,7 @@ export const eventi: Evento[] = [
         { chiave: 'Tipo', valore: 'Anello' },
         { chiave: 'Dislivello', valore: '700 metri totali' },
         { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+        { chiave: 'Età', valore: '18+' },
       ],
       portare: [
         'Abbigliamento outdoor a strati (maglia, pile, giacca a vento)',
@@ -185,7 +188,7 @@ export const eventi: Evento[] = [
         'La cascata del Litrello non si vede finché non ci sei sopra. Prima la senti: un rumore basso che cresce mentre scendi e che a un certo punto copre le voci, così l’ultimo tratto lo si fa in silenzio senza mettersi d’accordo.',
         'Il sentiero parte dall’alto e scende dentro la forra. Sono poco più di venti minuti su un fondo di foglie e radici che d’inverno tiene l’umido: non serve allenamento, serve una scarpa che non scivoli. Chi cammina piano detta il passo, non il contrario.',
         'In fondo la gola si apre e l’acqua cade da una parete coperta di muschio. Ci si ferma lì il tempo che serve: chi vuole entra, chi vuole si siede sulle pietre a guardare. Il ritorno è la stessa strada, in salita, con più calma.',
-        'È l’uscita che consiglio a chi vuole capire come lavoriamo prima di impegnarsi in una giornata intera. Si sta fuori mezza giornata e si torna con un posto in testa che a un’ora da Catanzaro quasi nessuno conosce.',
+        'È l’uscita che consigliamo a chi vuole capire come lavoriamo prima di impegnarsi in una giornata intera. Si sta fuori mezza giornata e si torna con un posto in testa che a un’ora da Catanzaro quasi nessuno conosce.',
       ],
       scheda: [
         { chiave: 'Ritrovo', valore: 'Zagarise (CZ), parcheggio all’imbocco del sentiero' },
@@ -227,7 +230,7 @@ export const eventi: Evento[] = [
     dettaglio: {
       occhiello: 'Due giorni dentro le gole del Lao, con la notte in tenda sul greto del fiume.',
       racconto: [
-        'Questa è l’uscita più selvatica del calendario, e non la propongo a cuor leggero. Si entra nelle gole del Lao dall’alto, si scende il fiume in gommone con le guide fluviali, e la sera si dorme dove si è arrivati.',
+        'Questa è l’uscita più selvatica del calendario, e non la proponiamo a cuor leggero. Si entra nelle gole del Lao dall’alto, si scende il fiume in gommone con le guide fluviali, e la sera si dorme dove si è arrivati.',
         'Il primo giorno è acqua. Rafting sul tratto classico, con i passaggi che fanno urlare tutti e i tratti calmi in cui ci si lascia portare. Non serve saper nuotare in modo particolare né aver mai messo piede su un gommone: l’attrezzatura e il briefing li dà chi le gole le fa da vent’anni.',
         'Il pomeriggio si cambia mezzo. River trekking nella parte stretta della gola, quella dove le pareti si avvicinano e si cammina dentro l’acqua bassa, con qualche tuffo dove il fondale lo permette. È il tratto che la gente vede nelle foto e non sa dove sia.',
         'La notte si monta il campo. Cena semplice, il rumore del fiume che non smette e un cielo che al Pollino, lontano dai paesi, si vede davvero. La mattina dopo si smonta tutto, si risale con calma e si chiude con un pranzo in un posto di Laino dove si mangia quello che c’è.',

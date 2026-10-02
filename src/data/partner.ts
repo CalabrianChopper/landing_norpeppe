@@ -8,7 +8,7 @@ export type Partner = {
   luogo: string;
   esperienza: string;
   descrizione: string;
-  /** Link diretto del partner, se ce l'ha. Altrimenti si passa da WhatsApp. */
+  /** Link diretto del partner, se ce l'ha. Altrimenti si passa dalla mail. */
   url?: string;
 };
 

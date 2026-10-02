@@ -1,5 +1,5 @@
 ---
-import { site } from '../data/site';
+import { scriviMail } from '../data/site';
 import { formattaData, quandoBreve, type Evento } from '../data/eventi';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   variante?: 'grande' | 'riga';
   /**
    * Pagina dell'uscita. Se c'è, tutta la scheda porta lì; se manca, la scheda
-   * apre WhatsApp col messaggio già scritto.
+   * apre una mail con l'oggetto già scritto.
    */
   href?: string;
 }
@@ -16,10 +16,7 @@ interface Props {
 const { evento, variante = 'grande', href } = Astro.props;
 const data = formattaData(evento.data);
 
-const messaggio = encodeURIComponent(
-  `Ciao Xploring! Mi interessa "${evento.titolo}". Mi mandi i dettagli?`
-);
-const scrivi = `https://wa.me/${site.telefonoRaw}?text=${messaggio}`;
+const scrivi = scriviMail(`Informazioni: ${evento.titolo}`);
 const destinazione = href ?? scrivi;
 ---
 
@@ -53,8 +50,6 @@ const destinazione = href ?? scrivi;
       <a
         class="cta"
         href={destinazione}
-        target={href ? undefined : '_blank'}
-        rel={href ? undefined : 'noopener noreferrer'}
       >
         {href ? 'Scopri l’uscita' : 'Voglio esserci'} <span aria-hidden="true">→</span>
       </a>

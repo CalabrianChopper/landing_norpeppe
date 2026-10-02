@@ -5,7 +5,7 @@
 import Layout from '../../layouts/Layout.astro';
 import EventoCard from '../../components/EventoCard.astro';
 import { conPagina, prossimi, quandoBreve, urlEvento, type Evento } from '../../data/eventi';
-import { site, CALABRIA } from '../../data/site';
+import { site, CALABRIA, scriviMail } from '../../data/site';
 import { seo } from '../../data/seo';
 
 export function getStaticPaths() {
@@ -28,11 +28,9 @@ const d = evento.dettaglio ?? {
 const conclusa = evento.stato === 'passato';
 const quando = quandoBreve(evento);
 
-const scrivi = `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(
-  conclusa
-    ? `Ciao Xploring! Ho letto di "${evento.titolo}". Avvisami se lo rifate!`
-    : `Ciao Xploring! Ho letto la pagina di "${evento.titolo}". Mi mandi i dettagli e le date?`
-)}`;
+const scrivi = scriviMail(
+  conclusa ? `Avvisatemi se rifate: ${evento.titolo}` : `Informazioni: ${evento.titolo}`
+);
 
 // Le altre uscite in arrivo, per non lasciare la pagina senza uscite.
 const altre = prossimi.filter((e) => e.slug !== evento.slug);
@@ -182,7 +180,7 @@ const nodi = [
         <aside class="prenota">
           {conclusa ? (
             <p class="prenota-testo">
-              Questa uscita si è già fatta. Scrivimi se vuoi sapere quando la rifacciamo.
+              Questa uscita si è già fatta. Scrivici se vuoi sapere quando la rifacciamo.
             </p>
           ) : (
             <p class="prenota-testo">
@@ -193,8 +191,8 @@ const nodi = [
           )}
           <div class="prenota-azioni">
             {conclusa ? (
-              <a class="btn btn-solid" href={scrivi} target="_blank" rel="noopener noreferrer">
-                Avvisami
+              <a class="btn btn-solid" href={scrivi}>
+                Avvisatemi
               </a>
             ) : (
               <a

@@ -6,15 +6,11 @@ export const site = {
   claim: 'Il mondo è grande. La Calabria è casa.',
   persona: 'Giuseppe Lupis',
   email: 'xploringkalabria@gmail.com',
-  telefono: '+39 320 417 0356',
-  telefonoRaw: '393204170356',
   luogo: 'Calabria, Italia',
   social: {
-    instagram:
-      'https://www.instagram.com/norpeppe?igsh=MTIxeTY3YjJ2dWZmaQ%3D%3D&utm_source=qr',
+    instagram: 'https://www.instagram.com/xploringkalabria',
     facebook: 'https://www.facebook.com/share/1TfBtoMqwZ/?mibextid=wwXIfr',
     tiktok: 'https://www.tiktok.com/@giuseppe.lupis?_r=1&_t=ZG-98O4bUasj9k',
-    whatsapp: 'https://wa.me/+393204170356',
   },
   // TODO CONFERMARE: indirizzo ufficiale di Viaggi Wild (sito o profilo social).
   viaggiWild: {
@@ -25,3 +21,11 @@ export const site = {
 
 // Coordinate del pin sulla Calabria (centro regione, zona Catanzaro).
 export const CALABRIA = { lon: 16.5, lat: 38.9, label: 'Calabria' } as const;
+
+/**
+ * Link per scrivere una mail con l'oggetto già scritto.
+ * I contatti passano solo da qui: niente WhatsApp, così arrivano richieste
+ * scritte e specifiche.
+ */
+export const scriviMail = (oggetto: string) =>
+  `mailto:${site.email}?subject=${encodeURIComponent(oggetto)}`;

@@ -19,11 +19,11 @@ export const perche = [
     chiave: 'L’itinerario',
     titolo: 'Non è un giro che puoi comprare altrove',
     testo:
-      'Gli itinerari nascono dai posti dove sono già stato e dalle persone che ci ho conosciuto. Si dorme dove dormono loro, si mangia dove mangiano loro, si passa dalle porte che di solito restano chiuse.',
+      'Gli itinerari nascono dai posti dove siamo già stati e dalle persone che ci abbiamo conosciuto. Si dorme dove dormono loro, si mangia dove mangiano loro, si passa dalle porte che di solito restano chiuse.',
   },
   {
     chiave: 'L’organizzazione',
-    titolo: 'Tu pensi a partire, al resto penso io',
+    titolo: 'Tu pensi a partire, al resto pensiamo noi',
     testo:
       'Voli, spostamenti, permessi, guide locali, imprevisti. Arrivi in aeroporto con lo zaino e basta: da lì in poi la testa la puoi spegnere.',
   },
@@ -31,7 +31,7 @@ export const perche = [
     chiave: 'Il racconto',
     titolo: 'Torni a casa con il viaggio in mano',
     testo:
-      'Racconto per mestiere. Durante il viaggio giro e fotografo, e alla fine il materiale è anche tuo: non solo il ricordo, ma le immagini per raccontarlo a chi non c’era.',
+      'Raccontare è il nostro mestiere. Durante il viaggio si gira e si fotografa, e alla fine il materiale è anche tuo: non solo il ricordo, ma le immagini per raccontarlo a chi non c’era.',
   },
 ];
 
@@ -39,11 +39,11 @@ export const perche = [
 export const comeFunziona = [
   {
     titolo: 'Scrivi',
-    testo: 'Un messaggio su WhatsApp o una mail. Mi dici cosa ti attira e quando puoi muoverti.',
+    testo: 'Una mail: dicci cosa ti attira e quando puoi muoverti.',
   },
   {
     titolo: 'Ci sentiamo',
-    testo: 'Una chiamata, senza impegno. Ti racconto il viaggio per intero: costi, ritmo, difficoltà, cosa non c’è.',
+    testo: 'Una chiamata, senza impegno. Ti raccontiamo il viaggio per intero: costi, ritmo, difficoltà, cosa non c’è.',
   },
   {
     titolo: 'Prenoti',

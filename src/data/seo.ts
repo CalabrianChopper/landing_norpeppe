@@ -52,7 +52,7 @@ export const faq = [
   {
     domanda: 'Come funzionano i viaggi di gruppo con Xploring?',
     risposta:
-      'I viaggi di gruppo con Xploring sono viaggi organizzati in piccoli gruppi da 8 a 14 persone, verso mete che Giuseppe Lupis ha già percorso di persona. Voli, spostamenti, guide locali e imprevisti sono a carico dell’organizzazione: chi parte porta solo lo zaino. Si prenota con un messaggio su WhatsApp, una chiamata senza impegno e un acconto.',
+      'I viaggi di gruppo con Xploring sono viaggi organizzati in piccoli gruppi da 8 a 14 persone, verso mete già percorse di persona. Voli, spostamenti, guide locali e imprevisti sono a carico dell’organizzazione: chi parte porta solo lo zaino. Si prenota con una mail, una chiamata senza impegno e un acconto.',
   },
   {
     domanda: 'Cosa sono i viaggi in Calabria di Xploring Kalabria?',
@@ -72,11 +72,11 @@ export const faq = [
   {
     domanda: 'Dove si va con i viaggi di gruppo nel mondo?',
     risposta:
-      `Le mete dei viaggi di gruppo nel mondo sono paesi già visitati da Giuseppe Lupis: al momento ${totalePaesi} paesi in ${continenti.length} continenti, con una forte presenza del Nord Europa (Norvegia, Islanda, Lapponia) e itinerari nati dalle persone conosciute sul posto.`,
+      `Le mete dei viaggi di gruppo nel mondo sono paesi già visitati di persona: al momento ${totalePaesi} paesi in ${continenti.length} continenti, con una forte presenza del Nord Europa (Norvegia, Islanda, Lapponia) e itinerari nati dalle persone conosciute sul posto.`,
   },
   {
     domanda: 'Come si prenota un viaggio o un’escursione con Xploring?',
     risposta:
-      `Si scrive su WhatsApp al ${site.telefono} o via email a ${site.email}. Per i viaggi di gruppo nel mondo segue una chiamata con costi, ritmo e difficoltà, poi l’acconto blocca il posto. Per le escursioni in Calabria basta prenotare il singolo evento e presentarsi al punto di ritrovo.`,
+      `Si scrive via email a ${site.email}. Per i viaggi di gruppo nel mondo segue una chiamata con costi, ritmo e difficoltà, poi l’acconto blocca il posto. Per le escursioni in Calabria basta prenotare il singolo evento e presentarsi al punto di ritrovo.`,
   },
 ];

@@ -4,11 +4,9 @@
 import Layout from '../../layouts/Layout.astro';
 import KalabriaHome from '../../components/KalabriaHome.astro';
 import Calendario from '../../components/Calendario.astro';
-import { site } from '../../data/site';
+import { scriviMail } from '../../data/site';
 import { prossimi, passati, prossimaIscrizione } from '../../data/eventi';
 
-const wa = (testo: string) =>
-  `https://wa.me/${site.telefonoRaw}?text=${encodeURIComponent(testo)}`;
 ---
 
 <Layout
@@ -29,13 +27,13 @@ const wa = (testo: string) =>
     prossimi={prossimi}
     passati={passati}
     notaProssimi="Aprine una per leggere com'è fatta la giornata. Se ti convince, il modulo per prenotare è in fondo alla sua pagina."
-    notaPassati="Dove siamo già stati. Se una di queste uscite ti interessa, dimmelo: si rifà quando c'è un gruppo."
+    notaPassati="Dove siamo già stati. Se una di queste uscite ti interessa, scrivici: si rifà quando c'è un gruppo."
     cta={{
       label: 'Voglio esserci alla prossima',
-      // Il modulo d'iscrizione dell'uscita più vicina; se non ce n'è, WhatsApp.
+      // Il modulo d'iscrizione dell'uscita più vicina; se non ce n'è, la mail.
       href:
         prossimaIscrizione?.prenotazione ??
-        wa('Ciao Xploring! Vorrei essere avvisato sui prossimi eventi in Calabria.'),
+        scriviMail('Avvisatemi sulle prossime uscite in Calabria'),
     }}
     conPagina
   />
