@@ -39,7 +39,7 @@ const destinazione = href ?? scrivi;
     </div>
 
     <div class="corpo">
-      <p class="luogo mono">{evento.luogo} · {evento.durata}</p>
+      <p class="luogo mono">{evento.luogo} · {evento.durata}{evento.prezzo ? ` · ${evento.prezzo}` : ''}</p>
       <h3 class="titolo display">{evento.titolo}</h3>
       <p class="sintesi">{evento.sintesi}</p>
 
@@ -51,7 +51,7 @@ const destinazione = href ?? scrivi;
         class="cta"
         href={destinazione}
       >
-        {href ? 'Scopri l’uscita' : 'Voglio esserci'} <span aria-hidden="true">→</span>
+        {href ? (evento.polo === 'mondo' ? 'Scopri il viaggio' : 'Scopri l’uscita') : 'Voglio esserci'} <span aria-hidden="true">→</span>
       </a>
     </div>
   </article>

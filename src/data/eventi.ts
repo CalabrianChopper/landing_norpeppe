@@ -22,6 +22,14 @@ export type DettaglioEvento = {
   portare?: string[];
   /** Avviso in chiusura della pagina, prima del bottone. */
   nota?: string;
+  /** Cosa NON comprende la quota. */
+  nonIncluso?: string[];
+  /** Documenti necessari per partire. */
+  documenti?: string[];
+  /** Indicazioni per la valigia, in un capoverso. */
+  valigia?: string;
+  /** Foto in più, in fondo al racconto. */
+  galleria?: { src: string; alt: string }[];
 };
 
 export type Evento = {
@@ -61,6 +69,14 @@ export type Evento = {
    * Se manca, il bottone apre una mail.
    */
   prenotazione?: string;
+  /** Se vero, `prenotazione` è un link WhatsApp: cambiano testo e bottone. */
+  prenotaWhatsapp?: boolean;
+  /** Quota come la si legge, es. '1.600 €'. */
+  prezzo?: string;
+  /** Quota in numero, per i dati strutturati di Google. */
+  prezzoEuro?: number;
+  /** 'mondo' per i viaggi fuori Calabria: la pagina sta sotto /mondo/. */
+  polo?: 'mondo';
 };
 
 export const eventi: Evento[] = [
@@ -442,9 +458,9 @@ export const prossimaIscrizione = (() => {
 /** Le uscite che hanno una pagina tutta loro: da qui nascono le rotte. Tutte. */
 export const conPagina = eventi;
 
-/** L'indirizzo della pagina di un'uscita in Calabria. */
+/** L'indirizzo della pagina di un'uscita: /kalabria/<slug>/ oppure /mondo/<slug>/. */
 export function urlEvento(e: Evento) {
-  return `/kalabria/${e.slug}/`;
+  return e.polo === 'mondo' ? `/mondo/${e.slug}/` : `/kalabria/${e.slug}/`;
 }
 
 /**

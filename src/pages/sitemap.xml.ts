@@ -3,6 +3,8 @@
 import type { APIRoute } from 'astro';
 import { seo } from '../data/seo';
 import { conPagina } from '../data/eventi';
+import { mondoConPagina } from '../data/viaggiMondo';
+import { urlEvento } from '../data/eventi';
 
 const base = seo.url.replace(/\/$/, '');
 const oggi = new Date().toISOString().slice(0, 10);
@@ -45,9 +47,9 @@ ${immaginiHome
     </image:image>
   </url>`
     ),
-    ...conPagina.map(
+    ...[...conPagina, ...mondoConPagina].map(
       (e) => `  <url>
-    <loc>${base}/kalabria/${e.slug}/</loc>
+    <loc>${base}${urlEvento(e)}</loc>
     <lastmod>${oggi}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>${

@@ -27,5 +27,15 @@ export const CALABRIA = { lon: 16.5, lat: 38.9, label: 'Calabria' } as const;
  * I contatti passano solo da qui: niente WhatsApp, così arrivano richieste
  * scritte e specifiche.
  */
+/**
+ * Numero WhatsApp usato SOLO per prenotare i viaggi nel mondo (es. Lapponia).
+ * Non compare da nessun'altra parte del sito.
+ */
+export const whatsappPrenotazioni = '393204170356';
+
+/** Link WhatsApp con il messaggio già scritto. */
+export const scriviWhatsapp = (testo: string) =>
+  `https://wa.me/${whatsappPrenotazioni}?text=${encodeURIComponent(testo)}`;
+
 export const scriviMail = (oggetto: string) =>
   `mailto:${site.email}?subject=${encodeURIComponent(oggetto)}`;

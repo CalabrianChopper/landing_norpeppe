@@ -63,7 +63,7 @@ const luogoCalabria = {
 // Le uscite calabresi con una pagina propria puntano lì: è l'indirizzo che
 // vogliamo far indicizzare. Le altre restano ancorate alla sezione.
 const viaggio = (e: Evento, area: 'Calabria' | 'mondo') => {
-  const pagina = area === 'Calabria' ? urlEvento(e) : undefined;
+  const pagina = area === 'Calabria' || e.dettaglio ? urlEvento(e) : undefined;
   const ancora = area === 'Calabria' ? 'kalabria/#calendario-kalabria' : 'mondo/#calendario';
   return {
   '@type': 'TouristTrip',

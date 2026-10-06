@@ -1,0 +1,613 @@
+---
+// La pagina di una singola uscita: Calabria o mondo, stessa forma.
+// Nasce da `dettaglio` in src/data/eventi.ts o src/data/viaggiMondo.ts.
+// Se `dettaglio` manca, il racconto è la sintesi della card.
+import Layout from '../layouts/Layout.astro';
+import EventoCard from './EventoCard.astro';
+import { quandoBreve, urlEvento, type Evento } from '../data/eventi';
+import { site, CALABRIA, scriviMail } from '../data/site';
+import { seo } from '../data/seo';
+
+interface Props {
+  evento: Evento;
+  /** Le altre uscite in arrivo dello stesso polo, in fondo alla pagina. */
+  altre: Evento[];
+}
+
+const { evento, altre: tutteAltre } = Astro.props;
+const mondo = evento.polo === 'mondo';
+const d = evento.dettaglio ?? {
+  occhiello: evento.sintesi,
+  racconto: [],
+  scheda: [],
+};
+const conclusa = evento.stato === 'passato';
+const quando = quandoBreve(evento);
+
+const scrivi = scriviMail(
+  conclusa ? `Avvisatemi se rifate: ${evento.titolo}` : `Informazioni: ${evento.titolo}`
+);
+
+// Le altre uscite in arrivo, per non lasciare la pagina senza uscite.
+const altre = tutteAltre.filter((e) => e.slug !== evento.slug);
+
+// Testi che cambiano fra i due poli.
+const polo = mondo
+  ? {
+      pole: 'mondo' as const,
+      sezione: 'Viaggi di gruppo nel mondo',
+      calendario: '/mondo/#calendario',
+      sezioneUrl: '/mondo/',
+      brand: 'Xploring',
+      altreEyebrow: 'Le altre partenze',
+      altreTitolo: 'Altre date in calendario',
+      torna: 'Torna ai viaggi nel mondo',
+      tipo: ['viaggi di gruppo', 'viaggi di gruppo organizzati'],
+    }
+  : {
+      pole: 'kalabria' as const,
+      sezione: 'Trekking ed escursioni in Calabria',
+      calendario: '/kalabria/#calendario-kalabria',
+      sezioneUrl: '/kalabria/',
+      brand: 'Xploring Kalabria',
+      altreEyebrow: 'Le altre uscite in arrivo',
+      altreTitolo: "C'è dell'altro in calendario",
+      torna: 'Torna al calendario della Calabria',
+      tipo: ['trekking in Calabria', 'viaggi in Calabria', 'escursioni in Calabria'],
+    };
+
+const urlBase = seo.url.replace(/\/$/, '');
+const path = urlEvento(evento);
+const titolo = `${evento.titolo} | ${polo.brand}`;
+
+const nodi = [
+  {
+    '@type': 'TouristTrip',
+    '@id': `${urlBase}${path}#uscita`,
+    name: evento.titolo,
+    description: d.occhiello,
+    url: `${urlBase}${path}`,
+    touristType: polo.tipo,
+    itinerary: { '@type': 'Place', name: evento.luogo },
+    provider: { '@id': `${urlBase}/#organizzazione` },
+    ...(evento.prezzoEuro
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: evento.prezzoEuro,
+            priceCurrency: 'EUR',
+            url: `${urlBase}${path}`,
+          },
+        }
+      : {}),
+    ...(mondo
+      ? {}
+      : {
+          areaServed: {
+            '@type': 'Place',
+            name: 'Calabria',
+            address: { '@type': 'PostalAddress', addressRegion: 'Calabria', addressCountry: 'IT' },
+            geo: { '@type': 'GeoCoordinates', latitude: CALABRIA.lat, longitude: CALABRIA.lon },
+          },
+        }),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${urlBase}/` },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: polo.sezione,
+        item: `${urlBase}${polo.sezioneUrl}`,
+      },
+      { '@type': 'ListItem', position: 3, name: evento.titolo },
+    ],
+  },
+];
+---
+
+<Layout
+  title={titolo}
+  description={evento.sintesi}
+  pole={polo.pole}
+  path={path}
+  immagine={evento.immagine}
+  nodi={nodi}
+>
+  <article class="uscita">
+    <header class="testa section">
+      <div class="wrap-narrow">
+        <nav class="briciole" aria-label="Dove ti trovi">
+          <a href={polo.calendario}>{polo.sezione}</a>
+          <span aria-hidden="true">/</span>
+          <span class="qui">{evento.titolo}</span>
+        </nav>
+
+        <p class="eyebrow">{evento.luogo}</p>
+        <h1 class="display titolo">{evento.titolo}</h1>
+        <p class="occhiello">{d.occhiello}</p>
+
+        <dl class="colpo-occhio">
+          <div>
+            <dt class="mono">Quando</dt>
+            <dd>{quando}</dd>
+          </div>
+          <div>
+            <dt class="mono">Durata</dt>
+            <dd>{evento.durata}</dd>
+          </div>
+          <div>
+            <dt class="mono">Dove</dt>
+            <dd>{evento.luogo}</dd>
+          </div>
+          {evento.prezzo && (
+            <div>
+              <dt class="mono">Quota</dt>
+              <dd>{evento.prezzo}</dd>
+            </div>
+          )}
+        </dl>
+
+        <ul class="tag">
+          {evento.tag.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </header>
+
+    <div
+      class:list={['copertina', { 'senza-foto': !evento.immagine }]}
+      style={evento.immagine ? `background-image:url('${evento.immagine}')` : undefined}
+      role={evento.immagine ? 'img' : undefined}
+      aria-label={evento.immagine ? `${evento.titolo}, ${evento.luogo}` : undefined}
+    >
+    </div>
+
+    <div class="corpo section">
+      <div class="wrap-narrow">
+        {d.racconto.map((p) => <p class="testo">{p}</p>)}
+
+        {d.programma && (
+          <section class="blocco">
+            <h2 class="display sottotitolo">Come va la giornata</h2>
+            <ol class="programma">
+              {d.programma.map((t) => (
+                <li>
+                  <span class="quando-tappa mono">{t.quando}</span>
+                  <span class="cosa">{t.cosa}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        {d.scheda.length > 0 && (
+        <section class="blocco">
+          <h2 class="display sottotitolo">In breve</h2>
+          <dl class="scheda">
+            {d.scheda.map((r) => (
+              <div>
+                <dt class="mono">{r.chiave}</dt>
+                <dd>{r.valore}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+        )}
+
+        {(d.incluso || d.portare || d.nonIncluso) && (
+          <section class="blocco due-colonne">
+            {d.incluso && (
+              <div>
+                <h2 class="display sottotitolo">{evento.prezzo ? 'La quota comprende' : "Cos'è compreso"}</h2>
+                <ul class="elenco-punti">
+                  {d.incluso.map((v) => <li>{v}</li>)}
+                </ul>
+              </div>
+            )}
+            {d.nonIncluso && (
+              <div>
+                <h2 class="display sottotitolo">La quota non comprende</h2>
+                <ul class="elenco-punti">
+                  {d.nonIncluso.map((v) => <li>{v}</li>)}
+                </ul>
+              </div>
+            )}
+            {d.portare && (
+              <div>
+                <h2 class="display sottotitolo">Cosa portare</h2>
+                <ul class="elenco-punti">
+                  {d.portare.map((v) => <li>{v}</li>)}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
+
+        {(d.documenti || d.valigia) && (
+          <section class="blocco due-colonne">
+            {d.documenti && (
+              <div>
+                <h2 class="display sottotitolo">Documenti necessari</h2>
+                <ul class="elenco-punti">
+                  {d.documenti.map((v) => <li>{v}</li>)}
+                </ul>
+              </div>
+            )}
+            {d.valigia && (
+              <div>
+                <h2 class="display sottotitolo">Cosa portare in valigia</h2>
+                <p class="testo">{d.valigia}</p>
+              </div>
+            )}
+          </section>
+        )}
+
+        {d.galleria && d.galleria.length > 0 && (
+          <section class="blocco">
+            <div class="galleria-uscita">
+              {d.galleria.map((g) => (
+                <figure>
+                  <img src={g.src} alt={g.alt} loading="lazy" />
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {d.nota && <p class="nota-finale">{d.nota}</p>}
+
+        <aside class="prenota">
+          {conclusa ? (
+            <p class="prenota-testo">
+              Questa uscita si è già fatta. Scrivici se vuoi sapere quando la rifacciamo.
+            </p>
+          ) : evento.prenotaWhatsapp ? (
+            <p class="prenota-testo">
+              Per prenotare scrivici su WhatsApp: ti mandiamo tutti i dettagli per bloccare il
+              posto.
+              <br />
+              Per tutto il resto: <a href={`mailto:${site.email}`}>{site.email}</a>
+            </p>
+          ) : (
+            <p class="prenota-testo">
+              Una volta compilato il form, l’iscrizione è da ritenersi <strong>CONFERMATA</strong>.
+              <br />
+              Vuoi disdire? Scrivici su <a href={`mailto:${site.email}`}>{site.email}</a>
+            </p>
+          )}
+          <div class="prenota-azioni">
+            {conclusa ? (
+              <a class="btn btn-solid" href={scrivi}>
+                Avvisatemi
+              </a>
+            ) : (
+              <a
+                class="btn btn-solid"
+                href={evento.prenotazione ?? scrivi}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {evento.prenotaWhatsapp ? 'Prenota su WhatsApp' : 'Prenota'}
+              </a>
+            )}
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {altre.length > 0 && (
+      <section class="altre section">
+        <div class="wrap">
+          <div class="altre-testa">
+            <p class="eyebrow">{polo.altreEyebrow}</p>
+            <h2 class="display sottotitolo">{polo.altreTitolo}</h2>
+          </div>
+          <div class="griglia">
+            {altre.map((e) => <EventoCard evento={e} href={urlEvento(e)} />)}
+          </div>
+          <a class="link-underline torna" href={polo.calendario}>
+            {polo.torna}
+          </a>
+        </div>
+      </section>
+    )}
+  </article>
+</Layout>
+
+<style>
+  .uscita {
+    /* L'intestazione fissa sta sopra: la pagina comincia più in basso. */
+    padding-top: 3.5rem;
+  }
+
+  .testa {
+    padding-bottom: clamp(2rem, 4vw, 3rem);
+    background:
+      radial-gradient(80% 60% at 10% 0%, rgba(210, 113, 43, 0.13), transparent 70%),
+      var(--color-bg);
+  }
+
+  .briciole {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--color-text-faint);
+    margin-bottom: 1.75rem;
+  }
+
+  .briciole a {
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-accent-dim);
+  }
+
+  .briciole a:hover {
+    border-color: var(--color-accent);
+  }
+
+  .titolo {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    margin-block: 0.5rem 1rem;
+  }
+
+  .occhiello {
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    max-width: 52ch;
+  }
+
+  .colpo-occhio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    margin-top: 1.9rem;
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .colpo-occhio dt {
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .colpo-occhio dd {
+    font-weight: 600;
+  }
+
+  .tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin-top: 1.25rem;
+  }
+
+  .tag li {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-dim);
+    padding: 0.2rem 0.55rem;
+  }
+
+  .copertina {
+    height: clamp(220px, 38vw, 420px);
+    background-size: cover;
+    background-position: center;
+    border-block: 1px solid var(--color-border);
+  }
+
+  /* Senza foto vera resta la piastra di marca, come sulle schede: più bassa,
+     perché una fascia vuota alta quanto una foto è solo un buco. */
+  .copertina.senza-foto {
+    height: clamp(150px, 22vw, 240px);
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        color-mix(in srgb, var(--color-accent) 14%, transparent) 0 1px,
+        transparent 1px 9px
+      ),
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-accent-bright) 26%, transparent),
+        color-mix(in srgb, var(--color-accent-bright) 4%, transparent) 65%
+      ),
+      var(--color-bg-sunk);
+    display: grid;
+    place-items: center;
+  }
+
+  .copertina.senza-foto::before {
+    content: '';
+    width: 86px;
+    aspect-ratio: 193 / 265;
+    background: var(--color-accent-bright);
+    -webkit-mask: url('/images/logo-x.png') center / contain no-repeat;
+    mask: url('/images/logo-x.png') center / contain no-repeat;
+    opacity: 0.45;
+  }
+
+  .corpo {
+    background: var(--color-bg);
+  }
+
+  .testo {
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
+    margin-bottom: 1.1rem;
+    max-width: 62ch;
+  }
+
+  .blocco {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .sottotitolo {
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+    margin-bottom: 1.1rem;
+  }
+
+  .programma {
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .programma li {
+    display: grid;
+    grid-template-columns: minmax(150px, 28%) 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .quando-tappa {
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .scheda {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .scheda > div {
+    display: grid;
+    grid-template-columns: minmax(150px, 28%) 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .scheda dt {
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .due-colonne {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .elenco-punti {
+    list-style: none;
+  }
+
+  .elenco-punti li {
+    position: relative;
+    padding-left: 1.4rem;
+    margin-bottom: 0.55rem;
+    color: var(--color-text-muted);
+  }
+
+  .elenco-punti li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 7px;
+    height: 7px;
+    background: var(--color-accent-bright);
+  }
+
+  .nota-finale {
+    margin-top: clamp(2rem, 4vw, 2.75rem);
+    padding: 0.9rem 1.1rem;
+    border-left: 3px solid var(--color-accent-bright);
+    background: var(--color-bg-sunk);
+    font-weight: 600;
+  }
+
+  .prenota {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-accent-dim);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .prenota-azioni {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .prenota-testo {
+    color: var(--color-text-muted);
+    max-width: 44ch;
+  }
+
+  .prenota-testo strong {
+    color: var(--color-text);
+    letter-spacing: 0.02em;
+  }
+
+  .prenota-testo a {
+    color: var(--color-accent-bright);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .galleria-uscita {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .galleria-uscita figure {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 1px solid var(--color-accent-dim);
+  }
+
+  .galleria-uscita img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .altre {
+    background: var(--color-bg-sunk);
+    border-top: 1px solid var(--color-accent-dim);
+  }
+
+  .altre-testa {
+    margin-bottom: 1.75rem;
+  }
+
+  .griglia {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* Con una sola scheda non si allarga a tutta la pagina. */
+  .griglia:has(> :only-child) {
+    max-width: 420px;
+  }
+
+  .torna {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 560px) {
+    .programma li,
+    .scheda > div {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

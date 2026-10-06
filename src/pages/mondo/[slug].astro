@@ -1,0 +1,22 @@
+---
+// La pagina di un viaggio nel mondo. Ce l'hanno solo i viaggi con `dettaglio`
+// in src/data/viaggiMondo.ts; gli altri restano alla card.
+import PaginaUscita from '../../components/PaginaUscita.astro';
+import { prossimiMondo, mondoConPagina } from '../../data/viaggiMondo';
+import type { Evento } from '../../data/eventi';
+
+export function getStaticPaths() {
+  return mondoConPagina.map((evento) => ({
+    params: { slug: evento.slug },
+    props: { evento },
+  }));
+}
+
+interface Props {
+  evento: Evento;
+}
+
+const { evento } = Astro.props;
+---
+
+<PaginaUscita evento={evento} altre={prossimiMondo} />

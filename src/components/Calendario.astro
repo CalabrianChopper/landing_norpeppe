@@ -19,7 +19,7 @@ interface Props {
   /** Riga in coda alle schede in arrivo, accanto al bottone. */
   notaProssimi: string;
   cta: { label: string; href: string };
-  /** Se vero, schede e righe portano alla pagina dell'uscita invece che alla mail. */
+  /** Se vero, tutte le schede portano alla pagina dell'uscita. Se no, solo quelle con `dettaglio`; le altre aprono la mail. */
   conPagina?: boolean;
 }
 
@@ -77,7 +77,7 @@ const idPassati = `pannello-${id}-passati`;
     <div class="pannello" id={idProssimi} role="tabpanel" aria-labelledby={`tab-${id}-prossimi`}>
       <div class="griglia reveal-stagger">
         {prossimi.map((e) => (
-          <EventoCard evento={e} href={conPagina ? urlEvento(e) : undefined} />
+          <EventoCard evento={e} href={conPagina || e.dettaglio ? urlEvento(e) : undefined} />
         ))}
       </div>
 
@@ -98,7 +98,7 @@ const idPassati = `pannello-${id}-passati`;
       <p class="nota nota-alta">{notaPassati}</p>
       <div class="elenco reveal">
         {passati.map((e) => (
-          <EventoCard evento={e} variante="riga" href={conPagina ? urlEvento(e) : undefined} />
+          <EventoCard evento={e} variante="riga" href={conPagina || e.dettaglio ? urlEvento(e) : undefined} />
         ))}
       </div>
     </div>
