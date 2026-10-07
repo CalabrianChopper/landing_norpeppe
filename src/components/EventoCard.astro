@@ -11,9 +11,11 @@ interface Props {
    * apre una mail con l'oggetto già scritto.
    */
   href?: string;
+  /** Colore della scheda, per distinguere a colpo d'occhio uscite vicine. */
+  tinta?: 'arancio' | 'verde' | 'giallo';
 }
 
-const { evento, variante = 'grande', href } = Astro.props;
+const { evento, variante = 'grande', href, tinta } = Astro.props;
 const data = formattaData(evento.data);
 
 const scrivi = scriviMail(`Informazioni: ${evento.titolo}`);
@@ -21,7 +23,7 @@ const destinazione = href ?? scrivi;
 ---
 
 {variante === 'grande' ? (
-  <article class:list={['card', { 'card-link': !!href }]}>
+  <article class:list={['card', { 'card-link': !!href }, tinta && `tinta tinta-${tinta}`]}>
     <div
       class:list={['foto', { 'senza-foto': !evento.immagine }]}
       style={evento.immagine ? `background-image:url('${evento.immagine}')` : undefined}
@@ -81,6 +83,37 @@ const destinazione = href ?? scrivi;
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-soft);
     transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Tinte: ogni scheda riscrive l'accento del polo. Si vedono nel filetto in
+     alto, nella data, nei tag, nel link e nella piastra senza foto. */
+  .tinta-arancio {
+    --color-accent: var(--c-kalabria-deep);
+    --color-accent-bright: var(--c-kalabria);
+    --color-accent-dim: var(--c-kalabria-dim);
+    --color-accent-soft: var(--c-kalabria-soft);
+  }
+
+  .tinta-verde {
+    --color-accent: var(--c-mondo-deep);
+    --color-accent-bright: var(--c-mondo);
+    --color-accent-dim: var(--c-mondo-dim);
+    --color-accent-soft: var(--c-mondo-soft);
+  }
+
+  .tinta-giallo {
+    --color-accent: var(--c-giallo-deep);
+    --color-accent-bright: var(--c-giallo);
+    --color-accent-dim: var(--c-giallo-dim);
+    --color-accent-soft: var(--c-giallo-soft);
+  }
+
+  .tinta {
+    border-top: 5px solid var(--color-accent-bright);
+  }
+
+  .tinta .corpo {
+    background: color-mix(in srgb, var(--color-accent-soft) 45%, var(--color-bg-raised));
   }
 
   .card:hover {

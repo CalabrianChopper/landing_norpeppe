@@ -26,6 +26,13 @@
   --c-mondo-soft: #e3ddc0;
   --c-mondo-ink: #f6f0e0;
 
+  /* Giallo — terza tinta, solo per distinguere le card in calendario */
+  --c-giallo: #d9a521;
+  --c-giallo-deep: #85600c;
+  --c-giallo-dim: #e8cd84;
+  --c-giallo-soft: #f5e6b6;
+  --c-giallo-ink: #fdf8e6;
+
   /* Polo KALABRIA — arancio */
   --c-kalabria: #d2712b;
   --c-kalabria-deep: #a24e17;

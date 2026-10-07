@@ -39,6 +39,7 @@ const lapponia: DettaglioEvento = {
   valigia:
     'Dopo la prenotazione riceverai una mail con tutte le indicazioni dettagliate, insieme al link di invito al gruppo WhatsApp del viaggio.',
   galleria: [
+    { src: '/images/lapponia-aurora.jpg', alt: 'Aurora boreale verde e rosa sopra un lago ghiacciato in Lapponia' },
     { src: '/images/lapponia-stelle.jpg', alt: 'Cielo stellato sopra la foresta lappone, con l’aurora all’orizzonte' },
     { src: '/images/lapponia-strada.jpg', alt: 'Aurora boreale sopra una strada innevata tra gli abeti in Lapponia' },
   ],

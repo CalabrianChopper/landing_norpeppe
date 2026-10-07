@@ -1,0 +1,76 @@
+---
+// Cookie Policy. Il sito oggi non usa cookie: se un giorno si aggiungono
+// statistiche o pixel, questa pagina va aggiornata e serve un banner di consenso.
+import PaginaLegale from '../components/PaginaLegale.astro';
+import { legale } from '../data/legale';
+---
+
+<PaginaLegale
+  titolo="Cookie Policy"
+  descrizione="Il sito Xploring non usa cookie: niente statistiche, niente profilazione, niente pubblicità."
+  path="/cookie/"
+>
+  <h2>In breve</h2>
+  <p>
+    <strong>Questo sito non usa cookie.</strong> Né tecnici, né di statistica, né di profilazione o
+    pubblicità, e non salva informazioni nella memoria del tuo browser. Per questo non trovi
+    nessun banner da accettare.
+  </p>
+
+  <h2>Cosa sono i cookie</h2>
+  <p>
+    I cookie sono piccoli file di testo che un sito può salvare nel tuo browser per ricordare
+    qualcosa, ad esempio una preferenza, o per seguire la tua navigazione. Secondo le Linee guida
+    del Garante privacy del 10 giugno 2021, i cookie tecnici non richiedono consenso, mentre quelli
+    di statistica di terze parti e quelli di profilazione si possono usare solo dopo che l’utente
+    ha acconsentito.
+  </p>
+
+  <h2>Servizi esterni usati dal sito</h2>
+  <h3>Google Fonts</h3>
+  <p>
+    I caratteri del sito vengono scaricati dai server di Google (Google Fonts). Google Fonts non
+    installa cookie, ma per inviarti i caratteri il tuo browser comunica a Google il tuo indirizzo
+    IP. Maggiori informazioni nella
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+      >privacy policy di Google</a
+    >.
+  </p>
+
+  <h3>Link esterni</h3>
+  <p>
+    Il sito contiene semplici link, non contenuti incorporati, verso Instagram, Facebook, TikTok,
+    WhatsApp e i moduli di iscrizione su Google Forms. Finché non li apri, quei servizi non
+    ricevono nulla da questo sito. Quando li apri, entri nei loro siti e valgono le loro cookie
+    policy:
+  </p>
+  <ul>
+    <li>
+      <a href="https://privacycenter.instagram.com/policies/cookies/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      e <a href="https://www.facebook.com/privacy/policies/cookies/" target="_blank" rel="noopener noreferrer">Facebook</a> (Meta)
+    </li>
+    <li><a href="https://www.whatsapp.com/legal/cookies" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+    <li><a href="https://www.tiktok.com/legal/page/eea/cookie-policy/it" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+    <li><a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer">Google (Google Forms)</a></li>
+  </ul>
+
+  <h2>Come gestire i cookie nel browser</h2>
+  <p>
+    Anche se questo sito non ne usa, puoi sempre vedere e cancellare i cookie degli altri siti
+    dalle impostazioni del tuo browser, alla voce “Privacy” o “Cookie e dati dei siti”, e scegliere
+    di bloccarli.
+  </p>
+
+  <h2>Se cambia qualcosa</h2>
+  <p>
+    Se in futuro aggiungeremo strumenti di statistica o altri servizi che usano cookie,
+    aggiorneremo questa pagina e, dove la legge lo richiede, ti chiederemo prima il consenso con
+    un banner.
+  </p>
+
+  <h2>Contatti</h2>
+  <p>
+    Per qualsiasi domanda: <a href={`mailto:${legale.email}`}>{legale.email}</a>. Per sapere come
+    trattiamo i dati personali leggi la <a href="/privacy/">Privacy Policy</a>.
+  </p>
+</PaginaLegale>

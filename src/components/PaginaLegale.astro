@@ -1,0 +1,89 @@
+---
+// Impaginato comune di Privacy Policy e Cookie Policy: testo lungo, una colonna.
+import Layout from '../layouts/Layout.astro';
+import { legale } from '../data/legale';
+
+interface Props {
+  titolo: string;
+  descrizione: string;
+  path: string;
+}
+
+const { titolo, descrizione, path } = Astro.props;
+---
+
+<Layout title={`${titolo} | Xploring`} description={descrizione} path={path} nodi={[]} noindex>
+  <article class="legale section">
+    <div class="wrap-narrow">
+      <p class="eyebrow">Informazioni legali</p>
+      <h1 class="display titolo">{titolo}</h1>
+      <p class="aggiornata mono">Ultimo aggiornamento: {legale.aggiornamento}</p>
+      <div class="testo-legale">
+        <slot />
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .legale {
+    padding-top: calc(var(--pad-section) + 3rem);
+  }
+
+  .titolo {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    margin-top: 0.5rem;
+  }
+
+  .aggiornata {
+    margin-top: 0.75rem;
+    font-size: 0.72rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+
+  .testo-legale {
+    margin-top: 2.5rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  .testo-legale :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--color-text);
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+    text-transform: uppercase;
+    margin: 2.5rem 0 0.75rem;
+  }
+
+  .testo-legale :global(h3) {
+    color: var(--color-text);
+    font-size: 1rem;
+    margin: 1.5rem 0 0.4rem;
+  }
+
+  .testo-legale :global(p),
+  .testo-legale :global(ul) {
+    margin: 0 0 1rem;
+  }
+
+  .testo-legale :global(ul) {
+    padding-left: 1.2rem;
+  }
+
+  .testo-legale :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .testo-legale :global(strong) {
+    color: var(--color-text);
+  }
+
+  .testo-legale :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

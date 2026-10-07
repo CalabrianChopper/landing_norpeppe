@@ -38,6 +38,9 @@ const {
 } = Astro.props;
 
 const idProssimi = `pannello-${id}-prossimi`;
+
+// In Calabria le uscite in arrivo hanno un colore ciascuna, a rotazione.
+const tinte = ['arancio', 'verde', 'giallo'] as const;
 const idPassati = `pannello-${id}-passati`;
 ---
 
@@ -76,8 +79,12 @@ const idPassati = `pannello-${id}-passati`;
 
     <div class="pannello" id={idProssimi} role="tabpanel" aria-labelledby={`tab-${id}-prossimi`}>
       <div class="griglia reveal-stagger">
-        {prossimi.map((e) => (
-          <EventoCard evento={e} href={conPagina || e.dettaglio ? urlEvento(e) : undefined} />
+        {prossimi.map((e, i) => (
+          <EventoCard
+            evento={e}
+            href={conPagina || e.dettaglio ? urlEvento(e) : undefined}
+            tinta={pole === 'kalabria' ? tinte[i % tinte.length] : undefined}
+          />
         ))}
       </div>
 

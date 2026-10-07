@@ -1,0 +1,168 @@
+---
+// Privacy Policy. I dati del titolare stanno in src/data/legale.ts.
+import PaginaLegale from '../components/PaginaLegale.astro';
+import { legale } from '../data/legale';
+
+const mail = `mailto:${legale.email}`;
+---
+
+<PaginaLegale
+  titolo="Privacy Policy"
+  descrizione="Come Xploring tratta i dati personali di chi visita il sito, scrive o si iscrive a un'uscita o a un viaggio."
+  path="/privacy/"
+>
+  <p>
+    Questa pagina spiega quali dati personali trattiamo quando visiti il sito, ci scrivi o ti
+    iscrivi a un’uscita in Calabria o a un viaggio nel mondo, perché lo facciamo e quali diritti
+    hai. È scritta ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 (“GDPR”) e del
+    D.lgs. 196/2003 (Codice privacy).
+  </p>
+
+  <h2>1. Chi è il titolare del trattamento</h2>
+  <p>
+    Il titolare del trattamento è <strong>{legale.titolare}</strong>{legale.indirizzo && <>, {legale.indirizzo}</>}{legale.piva && <>, P.IVA / C.F. {legale.piva}</>}.
+    <br />
+    Per qualsiasi domanda sulla privacy puoi scrivere a <a href={mail}>{legale.email}</a>.
+  </p>
+
+  <h2>2. Quali dati trattiamo</h2>
+
+  <h3>Dati di navigazione</h3>
+  <p>
+    Come ogni sito, anche questo registra automaticamente alcuni dati tecnici quando lo visiti:
+    indirizzo IP, tipo di browser e dispositivo, pagine richieste, data e ora. Li conserva il
+    fornitore che ospita il sito{legale.hosting && <> ({legale.hosting})</>}, servono solo a far
+    funzionare il sito e a proteggerlo, e non li usiamo per identificarti.
+  </p>
+  <p>
+    Il sito <strong>non usa cookie</strong>, né strumenti di statistica o di profilazione: i
+    dettagli sono nella <a href="/cookie/">Cookie Policy</a>.
+  </p>
+
+  <h3>Dati che ci invii via email</h3>
+  <p>
+    Se ci scrivi a {legale.email} trattiamo il tuo indirizzo email, il nome e quello che scegli
+    di raccontarci nel messaggio, per risponderti.
+  </p>
+
+  <h3>Iscrizioni alle uscite in Calabria</h3>
+  <p>
+    Le iscrizioni alle uscite passano da un modulo Google (Google Forms). Trattiamo i dati che il
+    modulo ti chiede, ad esempio nome, cognome, email e numero di telefono, per gestire la tua
+    iscrizione e mandarti le informazioni pratiche, come orario e punto di incontro il giorno
+    prima dell’evento. Ti chiediamo di non inserire nel modulo dati che non servono.
+  </p>
+
+  <h3>Prenotazioni dei viaggi nel mondo</h3>
+  <p>
+    I viaggi nel mondo si prenotano scrivendoci su WhatsApp. In quel caso trattiamo il tuo numero
+    di telefono, il nome e i messaggi che ci mandi, e poi i dati necessari a organizzare il
+    viaggio: nome e cognome come da documento, recapiti e i dati del documento d’identità quando
+    servono per i voli e gli alloggi.
+  </p>
+  <p>
+    Dopo la prenotazione ti invitiamo nel gruppo WhatsApp del viaggio: lì il tuo nome e il tuo
+    numero sono visibili agli altri partecipanti e agli accompagnatori. Entrare nel gruppo è una
+    tua scelta; se preferisci di no, le informazioni ti arrivano per email.
+  </p>
+
+  <h2>3. Perché trattiamo i dati e su quale base</h2>
+  <ul>
+    <li>
+      <strong>Rispondere alle tue richieste</strong> di informazioni: misure precontrattuali
+      richieste da te (art. 6.1.b GDPR).
+    </li>
+    <li>
+      <strong>Gestire iscrizioni e prenotazioni</strong>, organizzare l’uscita o il viaggio e
+      tenerti aggiornato: esecuzione del contratto (art. 6.1.b GDPR).
+    </li>
+    <li>
+      <strong>Adempiere agli obblighi di legge</strong>, ad esempio fiscali e contabili: obbligo
+      legale (art. 6.1.c GDPR).
+    </li>
+    <li>
+      <strong>Far funzionare il sito e proteggerlo</strong> da abusi: legittimo interesse del
+      titolare (art. 6.1.f GDPR).
+    </li>
+  </ul>
+  <p>
+    Non usiamo i tuoi dati per pubblicità, non li vendiamo e non facciamo profilazione. Se un
+    giorno vorremo mandarti una newsletter, te lo chiederemo prima e solo con il tuo consenso.
+  </p>
+
+  <h2>4. Quanto tempo li conserviamo</h2>
+  <ul>
+    <li>Richieste via email o WhatsApp: il tempo necessario a risponderti e, al massimo, 12 mesi.</li>
+    <li>
+      Iscrizioni e prenotazioni: fino a 12 mesi dopo la fine dell’uscita o del viaggio, per
+      gestire eventuali richieste successive.
+    </li>
+    <li>
+      Documenti contabili e fiscali: 10 anni, come richiesto dalla legge (art. 2220 del Codice
+      civile).
+    </li>
+    <li>Dati di navigazione: per il tempo previsto dal fornitore di hosting, di norma pochi giorni o settimane.</li>
+  </ul>
+
+  <h2>5. Chi può ricevere i dati</h2>
+  <p>I dati non vengono diffusi. Li possono trattare, solo per quanto serve:</p>
+  <ul>
+    <li>
+      i fornitori dei servizi che usiamo: Google (Gmail, Google Forms, Google Fonts), WhatsApp
+      (Meta) e il fornitore di hosting del sito, che agiscono come responsabili del trattamento o
+      come titolari autonomi secondo le loro condizioni;
+    </li>
+    <li>
+      i partner che rendono possibile l’uscita o il viaggio: guide, strutture, compagnie aeree,
+      noleggi e fornitori di attività, ai quali passiamo solo i dati necessari (ad esempio il
+      nominativo per una prenotazione);
+    </li>
+    <li>le autorità, quando la legge lo richiede.</li>
+  </ul>
+
+  <h2>6. Trasferimenti fuori dall’Unione europea</h2>
+  <p>
+    Google e Meta possono trattare alcuni dati anche negli Stati Uniti. Questi trasferimenti
+    avvengono sulla base dell’EU-U.S. Data Privacy Framework (decisione di adeguatezza della
+    Commissione europea del 10 luglio 2023) o delle clausole contrattuali standard approvate
+    dalla Commissione.
+  </p>
+
+  <h2>7. Minori</h2>
+  <p>
+    Le uscite e i viaggi indicati come “18+” sono riservati ai maggiorenni. Non raccogliamo
+    consapevolmente dati di minori: se ti accorgi che un minore ci ha inviato i suoi dati,
+    scrivici e li cancelleremo.
+  </p>
+
+  <h2>8. Link ad altri siti</h2>
+  <p>
+    Il sito contiene link a Instagram, Facebook, TikTok, WhatsApp e Google Forms. Quando li apri
+    lasci questo sito: da quel momento valgono le informative e le cookie policy di quei servizi.
+  </p>
+
+  <h2>9. I tuoi diritti</h2>
+  <p>In qualsiasi momento puoi chiederci di:</p>
+  <ul>
+    <li>sapere quali dati abbiamo su di te e riceverne una copia (art. 15);</li>
+    <li>correggerli o completarli (art. 16);</li>
+    <li>cancellarli (art. 17) o limitarne l’uso (art. 18);</li>
+    <li>riceverli in un formato leggibile per portarli altrove (art. 20);</li>
+    <li>opporti al trattamento basato sul legittimo interesse (art. 21).</li>
+  </ul>
+  <p>
+    Basta una mail a <a href={mail}>{legale.email}</a>: ti rispondiamo entro un mese. Se ritieni
+    che i tuoi dati siano trattati in modo non corretto, puoi anche presentare reclamo al Garante
+    per la protezione dei dati personali (<a
+      href="https://www.garanteprivacy.it"
+      target="_blank"
+      rel="noopener noreferrer">www.garanteprivacy.it</a
+    >).
+  </p>
+
+  <h2>10. Modifiche</h2>
+  <p>
+    Possiamo aggiornare questa informativa, ad esempio se cambiano i servizi che usiamo. La data
+    dell’ultimo aggiornamento è indicata in cima alla pagina.
+  </p>
+</PaginaLegale>

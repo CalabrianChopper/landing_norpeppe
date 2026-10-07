@@ -33,7 +33,7 @@ ${immaginiHome
   .join('\n')}
   </url>`,
     ...[
-      ['/kalabria/', '/images/to-calabria.jpg', 'Trekking ed escursioni in Calabria con Xploring Kalabria'],
+      ['/kalabria/', '/images/kalabria-gruppo.jpg', 'Trekking ed escursioni in Calabria con Xploring Kalabria'],
       ['/mondo/', '/images/from-calabria.jpg', 'Viaggi di gruppo organizzati nel mondo con Xploring'],
     ].map(
       ([pagina, src, titolo]) => `  <url>
