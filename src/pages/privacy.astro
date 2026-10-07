@@ -20,7 +20,7 @@ const mail = `mailto:${legale.email}`;
 
   <h2>1. Chi è il titolare del trattamento</h2>
   <p>
-    Il titolare del trattamento è <strong>{legale.titolare}</strong>{legale.indirizzo && <>, {legale.indirizzo}</>}{legale.piva && <>, P.IVA / C.F. {legale.piva}</>}.
+    Il titolare del trattamento è <strong>{legale.titolare}</strong>{legale.indirizzo && <>, {legale.indirizzo}</>}{legale.piva && <>, P.IVA {legale.piva}</>}.
     <br />
     Per qualsiasi domanda sulla privacy puoi scrivere a <a href={mail}>{legale.email}</a>.
   </p>
