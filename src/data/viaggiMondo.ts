@@ -18,12 +18,13 @@ const lapponia: DettaglioEvento = {
   scheda: [
     { chiave: 'Durata', valore: '6 giorni' },
     { chiave: 'Quota', valore: '1.600 € a persona' },
-    { chiave: 'Volo', valore: 'A/R dall’Italia, con bagaglio a mano' },
+    { chiave: 'Acconto', valore: '500 €' },
+    { chiave: 'Volo', valore: 'Incluso, con bagaglio a mano' },
     { chiave: 'Spostamenti', valore: 'Van a noleggio, carburante compreso' },
     { chiave: 'Accompagnamento', valore: 'Guida artica e cacciatore di aurore boreali' },
   ],
   incluso: [
-    'Volo A/R dall’Italia (con bagaglio a mano)',
+    'Volo A/R dall’Italia - Milano (con bagaglio a mano)',
     'Alloggio',
     'Visita al villaggio di Babbo Natale',
     'Husky safari',
@@ -34,7 +35,11 @@ const lapponia: DettaglioEvento = {
     'Noleggio van e carburante',
     'Accompagnamento per l’intero viaggio con guida artica e cacciatore di aurore boreali',
   ],
-  nonIncluso: ['Pasti e bevande', 'Quanto non indicato alla voce “La quota comprende”'],
+  nonIncluso: [
+    'Pasti e bevande',
+    'Bagaglio da stiva',
+    'Quanto non indicato alla voce “La quota comprende”',
+  ],
   documenti: ['Passaporto o carta d’identità elettronica'],
   valigia:
     'Dopo la prenotazione riceverai una mail con tutte le indicazioni dettagliate, insieme al link di invito al gruppo WhatsApp del viaggio.',
