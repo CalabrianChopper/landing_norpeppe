@@ -154,7 +154,7 @@ export const eventi: Evento[] = [
   },
   {
     slug: 'foliage-monte-covello',
-    prenotazione: 'https://forms.gle/R5WpUW4HN9ovUQoF9',
+    prenotazione: 'https://forms.gle/wN7yxYhCdVxJG1vUA',
     titolo: 'Foliage sul Monte Covello',
     luogo: 'Monte Covello, Girifalco (CZ)',
     data: '2026-10-31',
