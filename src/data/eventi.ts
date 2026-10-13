@@ -91,7 +91,7 @@ export const eventi: Evento[] = [
     tag: ['Trekking', 'Cascate', 'Gratuito'],
     sintesi:
       'Anello di 7 km nei boschi della Sila Piccola, fino a due cascate. Evento gratuito: il nostro grazie alla Community.',
-    stato: 'prossimo',
+    stato: 'passato',
     dettaglio: {
       occhiello: 'Evento gratuito: un anello tra due cascate della Sila Piccola, per festeggiare insieme la Community.',
       racconto: [
