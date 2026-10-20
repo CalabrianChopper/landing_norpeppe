@@ -12,8 +12,8 @@ export type DettaglioEvento = {
   occhiello: string;
   /** Il racconto, un elemento per capoverso. */
   racconto: string[];
-  /** Scheda tecnica: ritrovo, difficoltà, dislivello, quando. */
-  scheda: { chiave: string; valore: string }[];
+  /** Scheda tecnica: ritrovo, difficoltà, dislivello, quando. `link` rende il valore cliccabile. */
+  scheda: { chiave: string; valore: string; link?: string }[];
   /** Come si svolge la giornata, tappa per tappa. */
   programma?: { quando: string; cosa: string }[];
   /** Cosa comprende la quota. */
@@ -127,7 +127,7 @@ export const eventi: Evento[] = [
     tag: ['Trekking', 'Aspromonte'],
     sintesi:
       'Un anello di 7 km in Aspromonte, per fermarsi un giorno in quota. Percorso medio-facile.',
-    stato: 'prossimo',
+    stato: 'passato',
     dettaglio: {
       occhiello: 'Una giornata per staccare e prendersi una pausa, in cima all’Aspromonte.',
       racconto: [
@@ -185,6 +185,59 @@ export const eventi: Evento[] = [
         'Occhiali, cappellino e crema solare',
       ],
       nota: 'Riceverai una mail con orario e punto di incontro esatti il giorno prima dell’evento.',
+    },
+  },
+  {
+    slug: 'foliage-alta-valle-del-tacina',
+    prenotazione: 'https://forms.gle/AJBmUwGeXsmmoQBu5',
+    titolo: 'Foliage – Alta Valle del Tacina con Lo_Yag Escursioni',
+    luogo: 'Valle del Tacina, Taverna (CZ)',
+    data: '2026-11-01',
+    durata: 'Circa 4 ore',
+    tag: ['Trekking', 'Foliage', 'Sila'],
+    sintesi:
+      'Escursione naturalistica nel Parco Nazionale della Sila: 7 km andata e ritorno fino al laghetto dell’Alta Valle del Tacina, con guida AIGAE.',
+    stato: 'prossimo',
+    prezzo: '20 € in loco',
+    prezzoEuro: 20,
+    immagine: '/images/tacina-foliage.jpg',
+    dettaglio: {
+      occhiello: 'Il foliage della Sila, fino al laghetto dell’Alta Valle del Tacina, con una guida certificata AIGAE.',
+      racconto: [
+        'Domenica 1 novembre andiamo a vedere i colori dell’autunno nel Parco Nazionale della Sila, insieme a Lo_Yag Escursioni.',
+        'Il percorso è di andata e ritorno: 7 km in tutto, con 288 metri di dislivello, tra i 1455 e i 1609 metri di quota, fino al laghetto dell’Alta Valle del Tacina. Difficoltà E, medio-facile.',
+      ],
+      scheda: [
+        { chiave: 'Quando', valore: 'Domenica 1 novembre, dalle ore 09.30' },
+        {
+          chiave: 'Ritrovo',
+          valore: 'Il Semaforo, Località Pantane (Sila) – apri in Maps',
+          link: 'https://maps.app.goo.gl/9M7pcpLwEFMHBdWx6',
+        },
+        { chiave: 'Durata', valore: 'Circa 4 ore' },
+        { chiave: 'Lunghezza', valore: '7 km totali' },
+        { chiave: 'Tipo', valore: 'Andata e ritorno' },
+        { chiave: 'Dislivello', valore: '288 metri positivi / negativi' },
+        { chiave: 'Quota', valore: 'Massima 1609 m, minima 1455 m' },
+        { chiave: 'Arrivo', valore: 'Laghetto dell’Alta Valle del Tacina' },
+        { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+        { chiave: 'Contributo', valore: '20 €, da corrispondere in loco' },
+        {
+          chiave: 'Guida',
+          valore: 'Giacomo Canino, guida certificata AIGAE – @loyagescursioni',
+          link: 'https://www.instagram.com/loyagescursioni',
+        },
+      ],
+      incluso: ['Guida certificata AIGAE: Giacomo Canino'],
+      nonIncluso: ['Pranzo (porta il pranzo al sacco)'],
+      portare: [
+        'Abbigliamento outdoor a strati (maglia, pile, guscio)',
+        'Scarpe da trekking',
+        'Acqua (almeno 1,5 litri)',
+        'Occhiali, cappellino e crema solare',
+        'Eventuali snack',
+        'Pranzo al sacco (pranzo non incluso)',
+      ],
     },
   },
   // ─── GIÀ FATTI ───────────────────────────────────────────────────────────

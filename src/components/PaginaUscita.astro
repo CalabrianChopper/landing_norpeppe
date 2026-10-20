@@ -188,7 +188,13 @@ const nodi = [
             {d.scheda.map((r) => (
               <div>
                 <dt class="mono">{r.chiave}</dt>
-                <dd>{r.valore}</dd>
+                <dd>
+                  {r.link ? (
+                    <a href={r.link} target="_blank" rel="noopener noreferrer">{r.valore}</a>
+                  ) : (
+                    r.valore
+                  )}
+                </dd>
               </div>
             ))}
           </dl>
@@ -492,6 +498,12 @@ const nodi = [
   .scheda dt {
     text-transform: uppercase;
     color: var(--color-accent);
+  }
+
+  .scheda dd a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .due-colonne {
