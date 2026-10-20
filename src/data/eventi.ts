@@ -221,6 +221,7 @@ export const eventi: Evento[] = [
         { chiave: 'Quota', valore: 'Massima 1609 m, minima 1455 m' },
         { chiave: 'Arrivo', valore: 'Laghetto dell’Alta Valle del Tacina' },
         { chiave: 'Difficoltà', valore: 'E (medio-facile)' },
+        { chiave: 'Età', valore: '18+' },
         { chiave: 'Contributo', valore: '20 €, da corrispondere in loco' },
         {
           chiave: 'Guida',
