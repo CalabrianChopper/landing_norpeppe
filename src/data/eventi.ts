@@ -162,7 +162,7 @@ export const eventi: Evento[] = [
     tag: ['Trekking', 'Foliage', 'Sentiero Italia'],
     sintesi:
       'I colori dell’autunno sulle orme del Sentiero Italia: anello di 9 km sul Monte Covello.',
-    stato: 'prossimo',
+    stato: 'passato',
     dettaglio: {
       occhiello: 'Sulle orme del Sentiero Italia, dentro i colori dell’autunno.',
       racconto: [
@@ -197,7 +197,7 @@ export const eventi: Evento[] = [
     tag: ['Trekking', 'Foliage', 'Sila'],
     sintesi:
       'Escursione naturalistica nel Parco Nazionale della Sila: 7 km andata e ritorno fino al laghetto dell’Alta Valle del Tacina, con guida AIGAE.',
-    stato: 'prossimo',
+    stato: 'passato',
     prezzo: '20 € in loco',
     prezzoEuro: 20,
     immagine: '/images/tacina-foliage.jpg',
@@ -240,6 +240,19 @@ export const eventi: Evento[] = [
         'Pranzo al sacco (pranzo non incluso)',
       ],
     },
+  },
+  {
+    // ⚠️ DA COMPLETARE: luogo, orario, durata e dettagli dell'uscita.
+    slug: 'micotrekking-funghi',
+    prenotazione: 'https://forms.gle/6wgGgzbcY59LhiaY9',
+    titolo: 'Micotrekking – Alla scoperta dei funghi',
+    luogo: 'Calabria',
+    data: '2026-11-07',
+    durata: 'Giornata',
+    tag: ['Trekking', 'Funghi'],
+    sintesi: 'Un trekking nel bosco d’autunno alla scoperta dei funghi.',
+    stato: 'prossimo',
+    immagine: '/images/micotrekking-funghi.jpg',
   },
   // ─── GIÀ FATTI ───────────────────────────────────────────────────────────
   {
