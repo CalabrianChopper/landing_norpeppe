@@ -251,7 +251,7 @@ export const eventi: Evento[] = [
     durata: 'Giornata',
     tag: ['Trekking', 'Funghi'],
     sintesi: 'Un trekking nel bosco d’autunno alla scoperta dei funghi.',
-    stato: 'prossimo',
+    stato: 'passato',
     immagine: '/images/micotrekking-funghi.jpg',
   },
   // ─── GIÀ FATTI ───────────────────────────────────────────────────────────

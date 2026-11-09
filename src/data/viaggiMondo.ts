@@ -50,34 +50,63 @@ const lapponia: DettaglioEvento = {
   ],
 };
 
-const partenzaLapponia = (slug: string, data: string, dataFine: string, date: string): Evento => ({
+type OpzioniPartenza = {
+  /** Quota in euro: 1600 se non indicata. */
+  prezzoEuro?: number;
+  /** 'passato' per una partenza chiusa (es. sold out). */
+  stato?: Evento['stato'];
+  /** Etichette in più, es. 'Sold out'. */
+  tagExtra?: string[];
+};
+
+/** 1600 → '1.600 €' (a mano: in italiano Intl non separa le migliaia sotto 10.000). */
+const euro = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €`;
+
+const partenzaLapponia = (
+  slug: string,
+  data: string,
+  dataFine: string,
+  date: string,
+  { prezzoEuro = 1600, stato = 'prossimo', tagExtra = [] }: OpzioniPartenza = {}
+): Evento => ({
   slug,
   titolo: 'Lapponia: caccia all’aurora boreale',
   luogo: 'Lapponia, Finlandia',
   data,
   dataFine,
   durata: '6 giorni',
-  tag: ['Aurora boreale', 'Husky', 'Motoslitta'],
+  tag: [...tagExtra, 'Aurora boreale', 'Husky', 'Motoslitta'],
   sintesi: `${date}: aurora boreale, husky safari, motoslitta e due parchi nazionali, con guida artica. Volo dall’Italia compreso.`,
-  stato: 'prossimo',
+  stato,
   polo: 'mondo',
-  prezzo: '1.600 €',
-  prezzoEuro: 1600,
+  prezzo: euro(prezzoEuro),
+  prezzoEuro,
   immagine: '/images/lapponia-aurora.jpg',
   prenotazione: scriviWhatsapp(`Ciao Xploring! Vorrei prenotare "Lapponia: caccia all’aurora boreale" (${date}).`),
   prenotaWhatsapp: true,
   dettaglio: {
     ...lapponia,
-    scheda: [{ chiave: 'Quando', valore: date }, ...lapponia.scheda],
+    scheda: [
+      { chiave: 'Quando', valore: date },
+      ...lapponia.scheda.map((r) =>
+        r.chiave === 'Quota' ? { ...r, valore: `${euro(prezzoEuro)} a persona` } : r
+      ),
+    ],
   },
 });
 
 export const viaggiMondo: Evento[] = [
   // ─── PROSSIMI ────────────────────────────────────────────────────────────
-  partenzaLapponia('lapponia-aurora-boreale-novembre-2026', '2026-11-23', '2026-11-28', '23–28 novembre 2026'),
   partenzaLapponia('lapponia-aurora-boreale-dicembre-2026', '2026-12-19', '2026-12-24', '19–24 dicembre 2026'),
+  partenzaLapponia('lapponia-aurora-boreale-marzo-2027', '2027-03-01', '2027-03-06', '1–6 marzo 2027', {
+    prezzoEuro: 1800,
+  }),
 
   // ─── PASSATI ─────────────────────────────────────────────────────────────
+  partenzaLapponia('lapponia-aurora-boreale-novembre-2026', '2026-11-23', '2026-11-28', '23–28 novembre 2026', {
+    stato: 'passato',
+    tagExtra: ['Sold out'],
+  }),
   // Spostati dagli "in arrivo" il 06/10/2026.
   {
     slug: 'norvegia-lofoten',
@@ -137,7 +166,9 @@ export const viaggiMondo: Evento[] = [
 export const prossimiMondo = viaggiMondo
   .filter((e) => e.stato === 'prossimo')
   .sort((a, b) => (a.data ?? '9999').localeCompare(b.data ?? '9999'));
-export const passatiMondo = viaggiMondo.filter((e) => e.stato === 'passato');
+export const passatiMondo = viaggiMondo
+  .filter((e) => e.stato === 'passato')
+  .sort((a, b) => (b.data ?? '0000').localeCompare(a.data ?? '0000'));
 
 /** I viaggi che hanno una pagina tutta loro: quelli con `dettaglio`. */
 export const mondoConPagina = viaggiMondo.filter((e) => e.dettaglio);

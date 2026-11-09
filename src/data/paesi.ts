@@ -2,7 +2,7 @@
 // Il codice è l'ISO 3166-1 numerico a 3 cifre (quello usato da Natural Earth).
 // Per aggiungere o togliere un paese basta aggiungere/rimuovere una riga:
 // il contatore, i continenti e il globo si aggiornano da soli.
-// L'Italia non è nella lista: è "casa", il punto arancione sulla Calabria.
+// Anche l'Italia è accesa; il punto arancione resta sulla Calabria, "casa".
 //
 // Isole troppo piccole per la mappa (Malta, Canarie, Madeira, Faroe): hanno
 // `punto` [lon, lat] e il globo le disegna come un pallino.
@@ -21,6 +21,7 @@ export type Paese = {
 
 export const paesiVisitati: Paese[] = [
   // Europa
+  { id: '380', nome: 'Italia', continente: 'Europa' },
   { id: '246', nome: 'Finlandia', continente: 'Europa' },
   { id: '752', nome: 'Svezia', continente: 'Europa' },
   { id: '578', nome: 'Norvegia (Capo Nord e Lofoten)', continente: 'Europa' },
@@ -44,6 +45,10 @@ export const paesiVisitati: Paese[] = [
   { id: '233', nome: 'Estonia', continente: 'Europa' },
   { id: '428', nome: 'Lettonia', continente: 'Europa' },
   { id: '440', nome: 'Lituania', continente: 'Europa' },
+  { id: '056', nome: 'Belgio', continente: 'Europa' },
+  { id: '528', nome: 'Paesi Bassi', continente: 'Europa' },
+  { id: '040', nome: 'Austria', continente: 'Europa' },
+  { id: '756', nome: 'Svizzera', continente: 'Europa' },
 
   // Territori: un punto sul globo, ma non contano come paesi a sé.
   { nome: 'Canarie (Fuerteventura, Lanzarote, Tenerife)', continente: 'Europa', punto: [-15.50, 28.30], territorio: true },
@@ -54,6 +59,7 @@ export const paesiVisitati: Paese[] = [
   { id: '504', nome: 'Marocco', continente: 'Africa' },
   { id: '818', nome: 'Egitto', continente: 'Africa' },
   { id: '450', nome: 'Madagascar', continente: 'Africa' },
+  { id: '108', nome: 'Burundi', continente: 'Africa' },
 
   // Asia
   { id: '792', nome: 'Turchia', continente: 'Asia' },

@@ -22,6 +22,7 @@ const d = evento.dettaglio ?? {
   scheda: [],
 };
 const conclusa = evento.stato === 'passato';
+const soldOut = evento.tag.some((t) => t.toLowerCase() === 'sold out');
 const quando = quandoBreve(evento);
 
 const scrivi = scriviMail(
@@ -272,7 +273,9 @@ const nodi = [
         <aside class="prenota">
           {conclusa ? (
             <p class="prenota-testo">
-              Questa uscita si è già fatta. Scrivici se vuoi sapere quando la rifacciamo.
+              {soldOut
+                ? 'Questa partenza è sold out. Scrivici se vuoi sapere quando si riparte.'
+                : 'Questa uscita si è già fatta. Scrivici se vuoi sapere quando la rifacciamo.'}
             </p>
           ) : evento.prenotaWhatsapp ? (
             <p class="prenota-testo">
