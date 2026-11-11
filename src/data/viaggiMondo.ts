@@ -57,6 +57,8 @@ type OpzioniPartenza = {
   stato?: Evento['stato'];
   /** Etichette in più, es. 'Sold out'. */
   tagExtra?: string[];
+  /** Righe in più nella scheda "In breve", dopo l'acconto (es. cassa comune). */
+  schedaExtra?: { chiave: string; valore: string }[];
 };
 
 /** 1600 → '1.600 €' (a mano: in italiano Intl non separa le migliaia sotto 10.000). */
@@ -67,7 +69,7 @@ const partenzaLapponia = (
   data: string,
   dataFine: string,
   date: string,
-  { prezzoEuro = 1600, stato = 'prossimo', tagExtra = [] }: OpzioniPartenza = {}
+  { prezzoEuro = 1600, stato = 'prossimo', tagExtra = [], schedaExtra = [] }: OpzioniPartenza = {}
 ): Evento => ({
   slug,
   titolo: 'Lapponia: caccia all’aurora boreale',
@@ -88,8 +90,12 @@ const partenzaLapponia = (
     ...lapponia,
     scheda: [
       { chiave: 'Quando', valore: date },
-      ...lapponia.scheda.map((r) =>
-        r.chiave === 'Quota' ? { ...r, valore: `${euro(prezzoEuro)} a persona` } : r
+      ...lapponia.scheda.flatMap((r) =>
+        r.chiave === 'Quota'
+          ? [{ ...r, valore: `${euro(prezzoEuro)} a persona` }]
+          : r.chiave === 'Acconto'
+            ? [r, ...schedaExtra]
+            : [r]
       ),
     ],
   },
@@ -97,7 +103,9 @@ const partenzaLapponia = (
 
 export const viaggiMondo: Evento[] = [
   // ─── PROSSIMI ────────────────────────────────────────────────────────────
-  partenzaLapponia('lapponia-aurora-boreale-dicembre-2026', '2026-12-19', '2026-12-24', '19–24 dicembre 2026'),
+  partenzaLapponia('lapponia-aurora-boreale-dicembre-2026', '2026-12-19', '2026-12-24', '19–24 dicembre 2026', {
+    schedaExtra: [{ chiave: 'Cassa comune', valore: '100 €' }],
+  }),
   partenzaLapponia('lapponia-aurora-boreale-marzo-2027', '2027-03-01', '2027-03-06', '1–6 marzo 2027', {
     prezzoEuro: 1800,
   }),

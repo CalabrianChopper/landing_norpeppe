@@ -254,6 +254,19 @@ export const eventi: Evento[] = [
     stato: 'passato',
     immagine: '/images/micotrekking-funghi.jpg',
   },
+  {
+    // ⚠️ DA COMPLETARE: orario, ritrovo, durata e dettagli dell'uscita.
+    slug: 'anello-rifugio-leone-grandinetti',
+    prenotazione: 'https://forms.gle/hiAro7QUGXjw5naE9',
+    titolo: 'Anello al Rifugio C.A.I. Leone Grandinetti',
+    luogo: 'Tirivolo, Parco Nazionale della Sila',
+    data: '2026-11-15',
+    durata: 'Giornata',
+    tag: ['Trekking', 'Anello', 'Sila'],
+    sintesi:
+      'Un giro ad anello verso il Rifugio C.A.I. Leone Grandinetti, a Tirivolo, nel Parco Nazionale della Sila.',
+    stato: 'prossimo',
+  },
   // ─── GIÀ FATTI ───────────────────────────────────────────────────────────
   {
     slug: 'cascata-del-litrello',
