@@ -47,6 +47,13 @@ const lapponia: DettaglioEvento = {
     { src: '/images/lapponia-aurora.jpg', alt: 'Aurora boreale verde e rosa sopra un lago ghiacciato in Lapponia' },
     { src: '/images/lapponia-stelle.jpg', alt: 'Cielo stellato sopra la foresta lappone, con l’aurora all’orizzonte' },
     { src: '/images/lapponia-strada.jpg', alt: 'Aurora boreale sopra una strada innevata tra gli abeti in Lapponia' },
+    { src: '/images/lapponia-01.jpg', alt: 'Husky safari: la slitta trainata dai cani nel bosco innevato' },
+    { src: '/images/lapponia-02.jpg', alt: 'Sulla slitta degli husky tra gli alberi coperti di neve' },
+    { src: '/images/lapponia-03.jpg', alt: 'Tour in motoslitta su una pista nella foresta lappone' },
+    { src: '/images/lapponia-04.jpg', alt: 'Aurora boreale viola sopra una strada innevata, con una persona in controluce' },
+    { src: '/images/lapponia-05.jpg', alt: 'Il gruppo seduto nella neve davanti a una cascata ghiacciata' },
+    { src: '/images/lapponia-06.jpg', alt: 'Il gruppo guarda in alto l’aurora boreale verde e viola' },
+    { src: '/images/lapponia-07.jpg', alt: 'Il gruppo in motoslitta su un lago ghiacciato al tramonto' },
   ],
 };
 
