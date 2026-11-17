@@ -265,7 +265,52 @@ export const eventi: Evento[] = [
     tag: ['Trekking', 'Anello', 'Sila'],
     sintesi:
       'Un giro ad anello verso il Rifugio C.A.I. Leone Grandinetti, a Tirivolo, nel Parco Nazionale della Sila.',
+    stato: 'passato',
+  },
+  {
+    slug: 'anello-monte-reventino',
+    prenotazione: 'https://forms.gle/nZgAC62XrcZKpqZ57',
+    titolo: 'Anello del Monte Reventino',
+    luogo: 'Monte Reventino, Platania (CZ)',
+    data: '2026-11-21',
+    durata: 'Circa 4 ore',
+    tag: ['Trekking', 'Anello', 'Reventino'],
+    sintesi:
+      'Escursione ad anello sul Monte Reventino: 11 km tra i 1000 e i 1400 metri, con partenza e arrivo nello stesso punto.',
     stato: 'prossimo',
+    prezzo: '20 € in loco',
+    prezzoEuro: 20,
+    immagine: '/images/reventino.jpg',
+    dettaglio: {
+      occhiello: 'Un anello di 11 km sul Monte Reventino, tra i 1000 e i 1400 metri di quota.',
+      racconto: [
+        'Sabato 21 novembre saliamo sul Monte Reventino, sopra Platania, per un’escursione ad anello: si parte e si torna nello stesso punto.',
+        'Il percorso è di 11 km con 390 metri di dislivello, tra i 1000 e i 1400 metri di quota. Difficoltà media, circa quattro ore di cammino pause escluse.',
+      ],
+      scheda: [
+        { chiave: 'Quando', valore: 'Sabato 21 novembre, ore 09.00' },
+        {
+          chiave: 'Ritrovo',
+          valore: 'Area grigliate Acqua Spernuzzata – apri in Maps',
+          link: 'https://maps.app.goo.gl/c1UUSnLtzbPAYYhV7',
+        },
+        { chiave: 'Durata', valore: 'Circa 4 ore, pause escluse' },
+        { chiave: 'Lunghezza', valore: '11 km' },
+        { chiave: 'Tipo', valore: 'Anello' },
+        { chiave: 'Dislivello', valore: '390 metri' },
+        { chiave: 'Quota', valore: 'Massima 1400 m, minima 1000 m' },
+        { chiave: 'Difficoltà', valore: 'Media' },
+        { chiave: 'Età', valore: '18+' },
+        { chiave: 'Contributo', valore: '20 €, da corrispondere in loco' },
+      ],
+      portare: [
+        'Abbigliamento outdoor a strati (maglia, pile, guscio)',
+        'Scarpe da trekking',
+        'Acqua (almeno 1,5 litri)',
+        'Occhiali, cappellino e crema solare',
+        'Pranzo al sacco',
+      ],
+    },
   },
   // ─── GIÀ FATTI ───────────────────────────────────────────────────────────
   {
